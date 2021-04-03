@@ -12,6 +12,8 @@ const NavBar = () =>{
                     Coder<span>Media</span>
                 </Typography>
                 <div className={classes.buttons}>
+
+                <Button component={Link} to='/carrers' variant="contained"className={classes.button}>Carrers</Button>
                 <Button component={Link} to='/auth/login' variant="contained"className={classes.button}>Login</Button>
                 <Button component={Link} to='/auth/register' variant="contained"className={classes.button}>Sign Up</Button>
                 </div>

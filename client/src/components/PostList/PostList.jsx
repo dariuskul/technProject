@@ -2,7 +2,7 @@ import { Container, Grid } from '@material-ui/core'
 import React from 'react'
 import Post from './Post/Post'
 import useStyles from './styles'
-const posts = [{"creator": "Test1","title": "My little ponny", "description": "My little ponny and Petasiusasdasdasdasdasdasdasdadasdasdasdasdadadada", "createdAt":"2017-08-09"},{"creator": "Test1","title": "My little ponny", "description": "My little ponny and Petasiusasdasdasdasdasdasdasdadasdasdasdasdadadada", "createdAt":"2017-08-09"}];
+const posts = [{"creator": "Test1","title": "My little ponny", "description": "My little ponny", "createdAt":"2017-08-09"},{"creator": "Test1","title": "My little ponny", "description": "My little ponny and someone", "createdAt":"2017-08-09"}];
 const PostList = () => {
     const classes = useStyles();
     return(
@@ -12,10 +12,7 @@ const PostList = () => {
         <Post title={posts[0].title} description={posts[0].description} createdAt={posts[0].createdAt}/>
         </Grid>
         <Grid item lg={6} xs={12}>
-        <Post title={posts[0].title} description={posts[0].description} createdAt={posts[0].createdAt}/>
-        </Grid>
-        <Grid item lg={6} xs={12}>
-        <Post title={posts[0].title} description={posts[0].description} createdAt={posts[0].createdAt}/>
+        <Post title={posts[0].title} description={posts[1].description} createdAt={posts[1].createdAt}/>
         </Grid>
     </Grid>
     </Container>

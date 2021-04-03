@@ -4,6 +4,7 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import Login from "./components/Auth/Login/Login";
 import Register from "./components/Auth/Register/Register";
 import PostList from "./components/PostList/PostList";
+import JobsList from "./components/JobsList/JobsList";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route exact path='/' component={PostList}/>
         <Route path='/auth/login' component={Login}/>
         <Route path='/auth/register' component={Register}/>
+        <Route path='/carrers' component={JobsList}/>
       </Switch>
       </Container>
       </BrowserRouter>
