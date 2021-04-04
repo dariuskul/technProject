@@ -8,7 +8,7 @@ const Job = (props) =>{
         <Card className={classes.card}>
             <CardHeader
             title={props.title}
-            subheader={props.company}
+            subheader={props.createdAt}
             />
         </Card>
     )

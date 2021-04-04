@@ -6,7 +6,7 @@ export default makeStyles((theme) => ({
       marginTop: '4em',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
   },
   circular:{
     display: 'flex',
@@ -18,5 +18,24 @@ export default makeStyles((theme) => ({
     width: '100%',
     color: 'black',
     backgroundColor: 'white'
+  },
+  sorting:{
+    display: 'flex',
+    width: '100%',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    marginBottom: '1em',
+    '& .MuiInputLabel-root':{
+      marginRight: '1em',
+      fontSize: '25px',
+      color: 'black',
+      fontWeight: 'bolder'
+    },
+    '& .MuiSelect-root':{
+      fontSize: '50px',
+      color: 'black',
+      fontSize: 'bolder'
+    }
   }
+
 }));
