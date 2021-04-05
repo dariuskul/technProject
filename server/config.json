@@ -1,0 +1,19 @@
+{
+    "database": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "",
+        "database": "CoderMedia"
+    },
+    "secret": "BET KAS REALIAI",
+    "emailFrom": "sojusesu@gmail.com",
+    "smtpOptions": {
+        "host": "smtp.gmail.com",
+        "port": 587,
+        "auth": {
+            "user": "sojusesu@gmail.com",
+            "pass": "siandienyra22"
+        }
+    }
+}
