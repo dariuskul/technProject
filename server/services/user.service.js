@@ -30,3 +30,8 @@ async function login({username, password}){
     const token = jwt.sign({sub: user.id},config.secret, {expiresIn: '1d'});
     return {...omitHash(user.get()), token};
 }
+
+function omitHash(user) {
+    const { hash, ...userWithoutHash } = user;
+    return userWithoutHash;
+}

@@ -2,21 +2,34 @@ import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import useStyles from './style'
 import { Button, Toolbar, Typography } from '@material-ui/core'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { logOut } from '../../redux/actions'
 const NavBar = () =>{
     const classes = useStyles()
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch();
+    const history = useHistory();
+   const handleClick = () =>{
+        dispatch(logOut(history))
+    }
     return(
         <AppBar position="static" color="inherit" className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <Typography component={Link} to='/' className={classes.heading}>
                     Coder<span>Media</span>
                 </Typography>
-                <div className={classes.buttons}>
+                {user ?
+                <div className={classes.buttons}> 
+                    <Button variant="contained" className={classes.button} onClick={handleClick}>Log out</Button> 
+                </div>: 
 
-                <Button component={Link} to='/carrers' variant="contained"className={classes.button}>Carrers</Button>
-                <Button component={Link} to='/auth/login' variant="contained"className={classes.button}>Login</Button>
-                <Button component={Link} to='/auth/register' variant="contained"className={classes.button}>Sign Up</Button>
-                </div>
+                <div className={classes.buttons}>
+                    <Button component={Link} to='/carrers' variant="contained"className={classes.button}>Carrers</Button>
+                    <Button component={Link} to='/auth/login' variant="contained"className={classes.button}>Login</Button>
+                    <Button component={Link} to='/auth/register' variant="contained"className={classes.button}>Sign Up</Button>
+                </div>}
+            
             </Toolbar>
         </AppBar>
     )

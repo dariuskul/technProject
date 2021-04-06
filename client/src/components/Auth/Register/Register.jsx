@@ -2,12 +2,22 @@ import React from 'react'
 import { Button, Container, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import { useFormik } from 'formik';
 import useStyles from './style'
+import { useDispatch } from 'react-redux';
 const Register = () => {
     const classes = useStyles();
+    const dispatch = useDispatch()
     const form = useFormik({
         initialValues: {
-            email: '',
+            username: '',
             password: '',
+            firstName: '',
+            lastName: '',
+            dateOfBirth: '',
+            role: 'User',
+            isSuspended: false
+        },
+        onSubmit: values => {
+            dispatch(loginAction(values))
         }
     })
     return(
@@ -24,34 +34,44 @@ const Register = () => {
                             size="normal"
                             label="First name"
                             variant="outlined"
+                            id="firstName"
+                            name="firstName"
+                            value={form.values.firstName}
+                            onChange={form.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                             variant="outlined"
-                            label="Second name"
+                            label="Last name"
                             fullWidth
+                            id="lastName"
+                            name="lastName"
+                            value={form.values.lastName}
+                            onChange={form.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
                             variant="outlined"
-                            label="Email adress"
+                            label="Username"
                             fullWidth
+                            id="username"
+                            name="username"
+                            value={form.values.username}
+                            onChange={form.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
                             variant="outlined"
                             label="Password"
+                            type="passwrod"
                             fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                            variant="outlined"
-                            label="Repeat password"
-                            fullWidth
+                            id="password"
+                            name="password"
+                            value={form.values.password}
+                            onChange={form.handleChange}
                             />
                         </Grid>
                     </Grid>

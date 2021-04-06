@@ -2,12 +2,20 @@ import { Button, Container, Grid, Paper, TextField, Typography } from '@material
 import React from 'react'
 import { useFormik } from 'formik';
 import useStyles from './style'
+import { loginAction } from '../../../redux/actions';
+import {useDispatch} from 'react-redux'
+import { useHistory } from 'react-router';
 const Login = () => {
     const classes = useStyles();
+    const dispatch = useDispatch()
+    const history = useHistory()
     const form = useFormik({
         initialValues: {
-            email: '',
+            username: '',
             password: '',
+        },
+        onSubmit: values =>{
+           dispatch(loginAction(values,history))
         }
     })
     return(
@@ -22,22 +30,31 @@ const Login = () => {
                             <TextField
                             fullWidth
                             size="normal"
-                            label="Email adress"
+                            label="Username"
                             variant="outlined"
+                            id="username"
+                            name="username"
+                            value={form.values.username}
+                            onChange={form.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12}>
                             <TextField
                             variant="outlined"
                             label="Password"
+                            type="password"
                             fullWidth
+                            id="password"
+                            name="password"
+                            value={form.values.password}
+                            onChange={form.handleChange}
                             />
                         </Grid>
                     </Grid>
 
                     <Grid container spacing = {2}>
                         <Grid item xs={12} alignItems="center">
-                            <Button className={classes.button} variant="contained" color="primary">Login</Button>
+                            <Button className={classes.button} type="submit" variant="contained" color="primary">Login</Button>
                         </Grid>
                     </Grid>
                 </form>

@@ -5,7 +5,8 @@ import Login from "./components/Auth/Login/Login";
 import Register from "./components/Auth/Register/Register";
 import PostList from "./components/PostList/PostList";
 import JobsList from "./components/JobsList/JobsList";
-
+import PublicRoute from "./components/Routes/PublicRoute/PublicRoute";
+//localStorage.removeItem('currentUser')
 function App() {
   return (
     <div>
@@ -14,10 +15,9 @@ function App() {
       <NavBar/>
       <Container maxWidth="lg">    
       <Switch>
-        <Route exact path='/' component={PostList}/>
-        <Route path='/auth/login' component={Login}/>
-        <Route path='/auth/register' component={Register}/>
-        <Route path='/carrers' component={JobsList}/>
+        <PublicRoute restricted={false} exact path='/' component={PostList}/>
+        <PublicRoute restricted={true} path='/auth/login' component={Login}/>
+        <PublicRoute restricted={true} component={Register}/>
       </Switch>
       </Container>
       </BrowserRouter>
