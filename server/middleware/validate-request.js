@@ -1,6 +1,6 @@
 module.exports = validateRequest;
 
-function validateRequest(req, next, schema) {
+function validateRequest(req, res, next, schema) {
     const options = {
         abortEarly: false, // include all errors
         allowUnknown: true, // ignore unknown props
@@ -8,7 +8,9 @@ function validateRequest(req, next, schema) {
     };
     const { error, value } = schema.validate(req.body, options);
     if (error) {
-        next(`Validation error: ${error.details.map(x => x.message).join(', ')}`);
+        res.status(400).json({
+            message: `Validation error: ${error.details.map(x => x.message).join(', ')}`
+        })
     } else {
         req.body = value;
         next();

@@ -3,6 +3,7 @@ import { Button, Container, Grid, Paper, TextField, Typography } from '@material
 import { useFormik } from 'formik';
 import useStyles from './style'
 import { useDispatch } from 'react-redux';
+import { loginAction } from '../../../redux/actions';
 const Register = () => {
     const classes = useStyles();
     const dispatch = useDispatch()
