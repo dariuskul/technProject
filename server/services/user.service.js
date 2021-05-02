@@ -6,12 +6,12 @@ module.exports = {
     register,
     login,
     update,
-    _delete,
-    getAll,
-    getById
+    deleteUser,
+    getAllUsers,
+    getUserById
 }
+
 async function register(params){
-    console.log(params)
     if(await db.user.findOne({ where: { username: params.username}}))
         throw 'Provided username is already taken'
     // if (await db.user.findOne({ where: { email: params.email } }))
@@ -34,7 +34,7 @@ async function login({username, password}){
 }
 
 async function update(id, params) {
-    const user = await getById(id)
+    const user = await getUserById(id)
     if (params.username && user.username != params.username && await db.user.findOne({ where: { username: params.username } }))
         throw 'Username ' + params.username + ' is already taken'
     if (params.email && user.email !== params.email && await db.user.findOne({ where: { email: params.email } }))
@@ -49,17 +49,19 @@ async function update(id, params) {
     return { ...omitHash(user.get()) }
 }
 
-async function _delete(id) {
-    const user = await getById(id)
+//TODO use postService to delete posts and other post relationships...
+async function deleteUser(id) {
+    const user = await getUserById(id)
+    await db.post.destroy({ where: { userId: id } })
     await user.destroy()
 }
 
-async function getAll() {
+async function getAllUsers() {
     const users = await db.user.findAll()
     return users
 }
 
-async function getById(id) {
+async function getUserById(id) {
     const user = await db.user.scope('withHash').findByPk(id)
     if (!user) throw 'User not found'
     return user

@@ -60,26 +60,26 @@ function updateSchema(req, res, next) {
 function update(req, res, next) {
     userService.update(req.params.id, req.body)
         .then(user => res.json({ ...user }))
-        .catch(error => res.status(404).json({  message: error }))
+        .catch(error => res.status(400).json({  message: error }))
 }
 
 //TODO Check if admin
 function _delete(req, res, next) {
-    userService._delete(req.params.id)
+    userService.deleteUser(req.params.id)
         .then(() => res.json({ message: 'User removed' }))
         .catch(error => res.status(404).json({ message: error }))
 }
 
 //TODO Check if admin
 function getAll(req, res, next) {
-    userService.getAll()
+    userService.getAllUsers()
         .then(users => res.json({ users }))
-        .catch(error => res.status(400).json({ message: error }))
+        .catch(error => res.status(500).json({ message: error }))
 }
 
 //TODO check if admin or user
 function getById(req, res, next) {
-    userService.getById(req.params.id)
+    userService.getUserById(req.params.id)
         .then(user => res.json({ ...user.get() }))
         .catch(error => res.status(404).json({ message: error }))
 }
