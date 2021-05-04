@@ -9,9 +9,8 @@ function model(sequelize){
         firstName: {type: DataTypes.STRING, allowNull: false},
         lastName: {type: DataTypes.STRING, allowNull: false},
         dateOfBirth: {type: DataTypes.DATE, allowNull: false},
-        role: {type: DataTypes.STRING, allowNull: false},
-        isSuspended: {type: DataTypes.BOOLEAN, default: false, allowNull: false}
-
+        role: {type: DataTypes.STRING, defaultValue: "User", allowNull: false},
+        isSuspended: {type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false}
     };
 
     const options ={

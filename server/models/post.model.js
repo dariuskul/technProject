@@ -8,7 +8,8 @@ function model(sequelize){
         description: { type: DataTypes.STRING, allowNull: false },
         photoUrl: { type: DataTypes.TEXT, allowNull: true },
         content: { type: DataTypes.STRING, allowNull: false },
-        isSuspended: { type: DataTypes.BOOLEAN, default: false, allowNull: false }
+        isHidden: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull:false },
+        isSuspended: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false }
     }
 
     return sequelize.define('post', attributes)

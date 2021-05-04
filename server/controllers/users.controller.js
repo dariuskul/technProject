@@ -4,12 +4,13 @@ const userService = require('../services/user.service')
 const Joi = require('joi');
 const validateRequest = require('../middleware/validate-request')
 const authorize = require('../middleware/authorize')
+const roles = require('../_helpers/roles')
 router.post('/register', registerSchema,register)
 router.post('/login', loginSchema, login)
-router.put('/update/:id', updateSchema, update)
-router.delete('/delete/:id', _delete)
-router.get('/getAll', getAll)
-router.get('/getById/:id', getById)
+router.put('/update/:id', authorize(), updateSchema, update)
+router.delete('/delete/:id', authorize(roles.Admin), _delete)
+router.get('/getAll', authorize(roles.Admin), getAll)
+router.get('/getById/:id', authorize(), getById)
 module.exports = router
 
 //TODO Add more validation parameters with custom messages, add email
@@ -19,9 +20,7 @@ function registerSchema(req, res, next) {
         lastName: Joi.string().required().min(3).max(32),
         username: Joi.string().required().min(3).max(32),
         password: Joi.string().required().min(6).max(32),
-        dateOfBirth: Joi.date().required(),
-        role: Joi.string().required(),
-        isSuspended: Joi.boolean().required()
+        dateOfBirth: Joi.date().required()
     });
     validateRequest(req, res, next, schema);
 }
@@ -56,29 +55,31 @@ function updateSchema(req, res, next) {
     validateRequest(req, res, next, schema)
 }
 
-//TODO add auth
 function update(req, res, next) {
+    if (Number(req.params.id) != req.user.id)
+        return res.status(401).json({ message: "Unauthorized, must be a user with same id"})
+
     userService.update(req.params.id, req.body)
         .then(user => res.json({ ...user }))
         .catch(error => res.status(400).json({  message: error }))
 }
 
-//TODO Check if admin
 function _delete(req, res, next) {
     userService.deleteUser(req.params.id)
         .then(() => res.json({ message: 'User removed' }))
         .catch(error => res.status(404).json({ message: error }))
 }
 
-//TODO Check if admin
 function getAll(req, res, next) {
     userService.getAllUsers()
         .then(users => res.json({ users }))
         .catch(error => res.status(500).json({ message: error }))
 }
 
-//TODO check if admin or user
 function getById(req, res, next) {
+    if (Number(req.params.id) != req.user.id && req.user.role != roles.Admin)
+        return res.status(401).json({ message: "Unauthorized, must be a user with same id or admin"})
+
     userService.getUserById(req.params.id)
         .then(user => res.json({ ...user.get() }))
         .catch(error => res.status(404).json({ message: error }))
