@@ -73,10 +73,10 @@ async function getAllUsers() {
 async function getUserById(id) {
   const user = await db.user.scope("withHash").findByPk(id);
   if (!user) throw "User not found";
-  return user;
+  return { ...omitHash(user.get()) };
 }
 
 function omitHash(user) {
-  const { hash, ...userWithoutHash } = user;
+  const { passwordHash, ...userWithoutHash } = user;
   return userWithoutHash;
 }

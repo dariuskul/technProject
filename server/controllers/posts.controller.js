@@ -86,7 +86,7 @@ function changeVisibility(req, res, next) {
 }
 
 function getByTitle(req, res, next) {
-    postService.getPostsByTitle(req.body)
+    postService.getPostsByTitle(req.query)
         .then(posts => res.json({ posts }))
         .catch(error => res.status(500).json({ message: error }))
 }

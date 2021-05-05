@@ -81,6 +81,6 @@ function getById(req, res, next) {
         return res.status(401).json({ message: "Unauthorized, must be a user with same id or admin"})
 
     userService.getUserById(req.params.id)
-        .then(user => res.json({ ...user.get() }))
+        .then(user => res.json({ ...user }))
         .catch(error => res.status(404).json({ message: error }))
 }
