@@ -20,7 +20,7 @@ import useStyles from "./styles";
 const PostList = () => {
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user);
   const posts = useSelector((state) => state?.posts?.initialState?.posts);
   const dispatch = useDispatch();
   const [created, setCreated] = useState(false);

@@ -5,7 +5,6 @@ const Joi = require('Joi')
 const validateRequest = require('../middleware/validate-request')
 const authorize = require('../middleware/authorize')
 const roles = require('../_helpers/roles')
-const reactions = require('../_helpers/reactions')
 router.post('/create', createSchema, create)
 router.post('/hide/:id', authorize(), changeVisibility)
 router.post('/comment', authorize(), commentSchema, createComment)
@@ -15,8 +14,11 @@ router.get('/getAll', getAll)
 router.get('/getById/:id', getById)
 router.get('/getByUser/:id', getByUser)
 router.get('/getByTitle', getByTitle)
+router.get('/comments/:id', getComments)
 router.put('/update/:id', authorize(), updateSchema, update)
 router.delete('/delete/:id', authorize(), _delete)
+router.delete('/commentReact/:id', authorize(), deleteCommentReact)
+router.delete('/postReact/:id', authorize(), deletePostReact)
 module.exports = router
 
 function createSchema(req, res, next) {
@@ -106,6 +108,12 @@ function createComment(req, res, next) {
         .catch(error => res.status(400).json({ message: error }))
 }
 
+function getComments(req, res, next) {
+    postService.getAllComments(req.params.id)
+        .then(comments => res.json({ comments }))
+        .catch(error => res.status(500).json({ message: error }))
+}
+
 function postReactSchema(req, res, next) {
     const schema = Joi.object({
         reaction: Joi.string().required().valid('Smile', 'Like', 'Heart', 'Laugh', 'Surprised'),
@@ -121,6 +129,12 @@ function createPostReact(req, res, next) {
         .catch(error => res.status(400).json({ message: error }))
 }
 
+function deletePostReact(req, res, next) {
+    postService.deletePostReactById(req.params.id, req.user.id)
+        .then(() => res.json({ message: 'React removed from post.' }))
+        .catch(error => res.status(404).json({ message: error }))
+}
+
 function commentReactSchema(req, res, next) {
     const schema = Joi.object({
         reaction: Joi.string().required().valid('Smile', 'Like', 'Heart', 'Laugh', 'Surprised'),
@@ -134,4 +148,10 @@ function createCommentReact(req, res, next) {
     postService.createCommentReact(req.body, req.user.id)
         .then(() => res.json({ message: 'React added to comment' }))
         .catch(error => res.status(400).json({ message: error }))
+}
+
+function deleteCommentReact(req, res, next) {
+    postService.deleteCommentReactById(req.params.id, req.user.id)
+        .then(() => res.json({ message: 'React removed from comment.' }))
+        .catch(error => res.status(404).json({ message: error }))
 }

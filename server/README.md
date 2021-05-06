@@ -634,8 +634,23 @@ This request does not have validations.
             "updatedAt": "2021-05-05T19:04:24.000Z",
             "userId": 2,
             "user": {
-                "username": "username"
-            }
+                "username": "username",
+                "firstName": "firstName",
+                "lastName": "lastName"
+            },
+            "reacts": [
+                {
+                    "id": 2,
+                    "reaction": "Smile",
+                    "createdAt": "2021-05-05T19:17:10.000Z",
+                    "updatedAt": "2021-05-05T19:17:10.000Z",
+                    "userId": 2,
+                    "postId": 2,
+                    "user": {
+                        "username": "username"
+                    }
+                }
+            ]
         }
     ]
 }
@@ -753,6 +768,97 @@ This request requires a jwt to authenticate the user.
     "message": "React added to comment"
 }
 ```
+
+---
+
+### GET Get post comments
+
+**Description**
+
+Fetches the post's comments with it's reactions by the post's id.
+
+**Example request**
+
+`http://localhost:2000/post/comments/{post_id}`
+
+**Example response**
+
+```
+{
+    "comments": [
+        {
+            "id": 1,
+            "content": "This is a comment",
+            "isSuspended": false,
+            "createdAt": "2021-05-05T19:09:24.000Z",
+            "updatedAt": "2021-05-05T19:09:24.000Z",
+            "userId": 2,
+            "postId": 2,
+            "user": {
+                "username": "username"
+            },
+            "reactions": [
+                {
+                    "id": 1,
+                    "reaction": "Smile",
+                    "createdAt": "2021-05-05T19:20:19.000Z",
+                    "updatedAt": "2021-05-05T19:20:19.000Z",
+                    "userId": 2,
+                    "commentId": 1,
+                    "user": {
+                        "username": "username"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "content": "Comment two",
+            "isSuspended": false,
+            "createdAt": "2021-05-06T13:34:31.000Z",
+            "updatedAt": "2021-05-06T13:34:31.000Z",
+            "userId": 2,
+            "postId": 2,
+            "user": {
+                "username": "username"
+            },
+            "reactions": []
+        }
+    ]
+}
+```
+
+---
+
+### DELETE Remove a post react
+
+**Description**
+
+Removes a reaction from the post by the reaction's id.
+
+**Example request**
+
+`http://localhost:2000/post/postReact/{react_id}`
+
+**Authentication**
+
+This request requires a jwt that contains the same `userId` as the react.
+
+---
+
+### DELETE Remove a comment react
+
+**Description**
+
+Removes a reaction from the comment by the reaction's id.
+
+**Example request**
+
+`http://localhost:2000/post/commentReact/{react_id}`
+
+**Authentication**
+
+This request requires a jwt that contains the same `userId` as the react.
 
 ---
 

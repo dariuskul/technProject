@@ -13,7 +13,10 @@ module.exports = {
     getPostsByTitle,
     createComment,
     createPostReact,
-    createCommentReact
+    createCommentReact,
+    getAllComments,
+    deleteCommentReactById,
+    deletePostReactById
 }
 
 async function createPost(params) {
@@ -21,13 +24,21 @@ async function createPost(params) {
 }
 
 async function getAllPosts() {
-    const posts = await db.post.findAll({ include: [{
-        model: db.user,
-        as: "user",
-        required: true,
-        attributes: ['username']
-    }]})
-    return posts
+    let posts = await db.post.findAll({
+        include: [{
+            model: db.user,
+            required: true,
+            attributes: ['username', 'firstName', 'lastName']
+        }]
+    })
+    posts = posts.map(post => post.get({ plain: true }))
+
+    return Promise.all(
+        posts.map(async post => {
+            const reacts = await getAllPostReacts(post.id)
+            return { ...post, reacts }
+        })
+    )
 }
 
 async function getPostById(id) {
@@ -106,4 +117,70 @@ async function createPostReact(params, userId) {
 
 async function createCommentReact(params, userId) {
     await db.commentReact.create({ ...params, userId })
+}
+
+async function getAllComments(postId) {
+    let comments = await db.comment.findAll({ 
+        where: { postId },
+        include: [{
+            model: db.user,
+            as: "user",
+            required: true,
+            attributes: ['username']
+        }]
+     })
+
+     comments = comments.map(comment => comment.get({ plain: true }))
+     return Promise.all(
+         comments.map(async comment => {
+             const reactions = await getAllCommentReacts(comment.id)
+             return { ...comment, reactions }
+         })
+     )
+}
+
+async function getAllPostReacts(postId) {
+    const reacts = await db.postReact.findAll({
+        where: { postId },
+        include: [{
+            model: db.user,
+            as: "user",
+            required: true,
+            attributes: ['username']
+        }]
+    })
+
+    return reacts
+}
+
+async function getAllCommentReacts(commentId) {
+    const reacts = await db.commentReact.findAll({
+        where: { commentId },
+        include: [{
+            model: db.user,
+            as: "user",
+            required: true,
+            attributes: ['username']
+        }]
+    })
+
+    return reacts
+}
+
+async function deleteCommentReactById(reactId, userId) {
+    const react = await db.commentReact.findByPk(reactId)
+    if (!react) 
+        throw 'React not found'
+    if (react.userId != userId)
+        throw 'User id must match react\'s owner id'
+    await react.destroy()
+}
+
+async function deletePostReactById(reactId, userId) {
+    const react = await db.postReact.findByPk(reactId)
+    if (!react) 
+        throw 'React not found'
+    if (react.userId != userId)
+        throw 'User id must match react\'s owner id'
+    await react.destroy()
 }
