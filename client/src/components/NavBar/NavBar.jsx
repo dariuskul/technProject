@@ -19,7 +19,7 @@ const NavBar = () => {
         <Typography component={Link} to="/" className={classes.heading}>
           Coder<span>Media</span>
         </Typography>
-        {user ? (
+        {user.user.id ? (
           <div className={classes.buttons}>
             <Button
               component={Link}

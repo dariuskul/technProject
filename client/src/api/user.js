@@ -23,5 +23,5 @@ export const login = async (params) => {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-  return await response;
+  return await response.json();
 };

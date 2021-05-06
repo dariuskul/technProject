@@ -11,30 +11,26 @@ import {
   TextField,
   DialogActions,
 } from "@material-ui/core";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPosts } from "../../redux/actions";
+import ModalForm from "../ModalForm/ModalForm";
 import Post from "./Post/Post";
 import useStyles from "./styles";
-const posts = [
-  {
-    creator: "Test1",
-    title: "My little ponny",
-    description: "My little ponny",
-    createdAt: "2017-08-09",
-  },
-  {
-    creator: "Test1",
-    title: "My little ponny",
-    description: "My little ponny and someone",
-    createdAt: "2017-08-09",
-  },
-];
-
 const PostList = () => {
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
-  const toggleModal = (openModal) => setOpenModal(!openModal);
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user.user);
+  const posts = useSelector((state) => state?.posts?.initialState?.posts);
+  const dispatch = useDispatch();
+  const [created, setCreated] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(fetchPosts());
+    };
+    fetchData();
+  }, [dispatch]);
+  console.log(user);
   return (
     <div className={classes.container}>
       <Container className={classes.inputContainer} maxWidth="xl">
@@ -49,70 +45,20 @@ const PostList = () => {
           </Button>
         )}
       </Container>
-      <Container maxWidth="xl">
-        <Grid container spacing={2}>
-          <Grid item lg={6} xs={12}>
-            <Post
-              title={posts[0].title}
-              description={posts[0].description}
-              createdAt={posts[0].createdAt}
-            />
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <Post
-              title={posts[0].title}
-              description={posts[1].description}
-              createdAt={posts[1].createdAt}
-            />
-          </Grid>
+      <Container maxWidth="lg">
+        <Grid container spacing={3}>
+          {posts?.map((post) => (
+            <Grid key={post.id} item xs={12} sm={6}>
+              <Post post={post} creator={user?.id} />
+            </Grid>
+          ))}
         </Grid>
-        <Dialog
-          onClose={toggleModal}
-          aria-labelledby="simple-dialog-title"
+        <ModalForm
           open={openModal}
-          className={classes.modal}
-        >
-          <DialogTitle>Create new post</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please fill the form below to create your own post!
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="title"
-              label="Post title"
-              type="text"
-              fullWidth
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="description"
-              label="Description"
-              type="text"
-              fullWidth
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="content"
-              label="Write what you think..."
-              multiline
-              rows={4}
-              type="text"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={toggleModal} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={() => {}} color="primary">
-              Create post
-            </Button>
-          </DialogActions>
-        </Dialog>
+          setOpen={setOpenModal}
+          userId={user.id}
+          setCreated={setCreated}
+        />
       </Container>
     </div>
   );
