@@ -13,13 +13,14 @@ const NavBar = () => {
   const handleClick = () => {
     dispatch(logOut(history));
   };
+  console.log(JSON.parse(localStorage.getItem("currentUser")));
   return (
     <AppBar position="static" color="inherit" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <Typography component={Link} to="/" className={classes.heading}>
           Coder<span>Media</span>
         </Typography>
-        {user.user? (
+        {user.user?.id ? (
           <div className={classes.buttons}>
             <Button
               component={Link}

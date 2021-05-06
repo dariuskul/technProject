@@ -11,20 +11,28 @@ import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { newPost } from "../../api/post";
 import FileBase64 from "react-file-base64";
-const ModalForm = ({ open, setOpen, userId, setCreated, values }) => {
+import { createPost, updatePost } from "../../redux/actions";
+const ModalForm = ({ open, setOpen, userId, setCreated, updateValues }) => {
   const toggleModal = (open) => setOpen(!open);
   const dispatch = useDispatch();
   const form = useFormik({
     initialValues: {
-      title: values?.title || "",
-      description: values?.description || "",
-      content: values?.content || "",
-      photoUrl: values?.photoUrl || "",
+      title: updateValues?.title || "",
+      description: updateValues?.description || "",
+      content: updateValues?.content || "",
+      photoUrl: updateValues?.photoUrl || "",
       userId: userId,
     },
     onSubmit: (values) => {
-      dispatch(newPost(values));
-      setCreated(true);
+      if (updateValues) {
+        dispatch(updatePost(values, updateValues.id));
+        setCreated(new Date());
+        setOpen(false);
+      } else {
+        dispatch(createPost(values));
+        setCreated(new Date());
+        setOpen(false);
+      }
     },
   });
   return (
@@ -34,7 +42,9 @@ const ModalForm = ({ open, setOpen, userId, setCreated, values }) => {
         aria-labelledby="post-create-modal"
         open={open}
       >
-        <DialogTitle>{values ? "Updating post" : "Create post"}</DialogTitle>
+        <DialogTitle>
+          {updateValues ? "Updating post" : "Create post"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please fill the form below to create your own post!

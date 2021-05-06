@@ -23,3 +23,19 @@ export const newPost = async (data) => {
   console.log(data);
   return response;
 };
+
+export const updatePostRequest = async (data, id) => {
+  const response = await fetch(`${URL}/update/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+
+  return response.json();
+};

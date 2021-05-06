@@ -6,13 +6,17 @@ import Register from "./components/Auth/Register/Register";
 import PostList from "./components/PostList/PostList";
 import JobsList from "./components/JobsList/JobsList";
 import PublicRoute from "./components/Routes/PublicRoute/PublicRoute";
+import { useSelector } from "react-redux";
+import Alert from "@material-ui/lab/Alert";
 //localStorage.removeItem('currentUser')
 function App() {
+  const notifs = useSelector((state) => state?.notif?.notifications);
   return (
     <div>
       <BrowserRouter>
         <CssBaseline />
         <NavBar />
+        {notifs && <h1>{notifs}</h1>}
         <Container maxWidth="lg">
           <Switch>
             <PublicRoute

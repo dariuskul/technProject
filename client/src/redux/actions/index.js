@@ -1,4 +1,4 @@
-import { fetchAll } from "../../api/post";
+import { fetchAll, newPost, updatePostRequest } from "../../api/post";
 import { login, register } from "../../api/user";
 
 export const loginAction = (payload, history) => async (dispatch) => {
@@ -32,6 +32,26 @@ export const fetchPosts = () => async (dispatch) => {
     const posts = await fetchAll();
     console.log(posts);
     dispatch({ type: "FETCH_ALL", payload: posts });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const createPost = (data) => async (dispatch) => {
+  try {
+    const post = await newPost(data);
+    dispatch({ type: "NEW_POST", payload: post });
+    dispatch({ type: "CREATED", payload: "Post was created successfully" });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const updatePost = (data, id) => async (dispatch) => {
+  try {
+    const post = await updatePostRequest(data, id);
+    console.log("AAAAAAAAAAAAAAAAAAAAA", post);
+    dispatch({ type: "UPDATE", payload: post });
   } catch (error) {
     alert(error);
   }

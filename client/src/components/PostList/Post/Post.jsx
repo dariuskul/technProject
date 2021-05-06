@@ -51,7 +51,7 @@ const Post = ({ post, creator }) => {
       </CardActions>
       <ModalForm
         userId={creator}
-        values={post}
+        updateValues={post}
         open={openModal}
         setOpen={setOpenModal}
       />

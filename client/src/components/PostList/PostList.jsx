@@ -20,16 +20,16 @@ import useStyles from "./styles";
 const PostList = () => {
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user?.user);
   const posts = useSelector((state) => state?.posts?.initialState?.posts);
   const dispatch = useDispatch();
-  const [created, setCreated] = useState(false);
+  const [created, setCreated] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       dispatch(fetchPosts());
     };
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, created]);
   console.log(user);
   return (
     <div className={classes.container}>
@@ -56,7 +56,7 @@ const PostList = () => {
         <ModalForm
           open={openModal}
           setOpen={setOpenModal}
-          userId={user.id}
+          userId={user?.id}
           setCreated={setCreated}
         />
       </Container>
