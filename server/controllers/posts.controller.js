@@ -48,7 +48,10 @@ function getAll(req, res, next) {
 
 function getById(req, res, next) {
     postService.getPostById(req.params.id)
-        .then(post => res.json({ ...post.get() }))
+        .then(postData => {
+            const { post, comments, reacts } = postData
+            return res.json({ ...post.get(), comments, reacts })
+        })
         .catch(error => res.status(404).json({ message: error }))
 }
 
@@ -104,7 +107,7 @@ function commentSchema(req, res, next) {
 
 function createComment(req, res, next) {
     postService.createComment(req.body, req.user.id)
-        .then(() => res.json({ message: 'Comment created' }))
+        .then(comment => res.json({ comment, message: 'Comment created' }))
         .catch(error => res.status(400).json({ message: error }))
 }
 

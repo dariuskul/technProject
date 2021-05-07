@@ -52,32 +52,37 @@ async function getPostById(id) {
             model: db.user,
             as: "user",
             required: true,
-            attributes: ['username']
+            attributes: ['username', 'firstName', 'lastName']
         }]
     })
     if (!post) throw 'Post not found'
-    return post
+
+    const reacts = await getAllPostReacts(id)
+    const comments = await getAllComments(id)
+    return { post, reacts, comments }
 }
 
 async function deletePost(id, user) {
-    const post = await getPostById(id)
+    const post = await db.post.findByPk(id)
+    if (!post)
+        throw 'Post not found'
     if (user.id != post.userId && user.role != roles.Admin)
         throw 'Unauthorized, user must be owner of the post or admin'
     await post.destroy()
 }
 
 async function updatePost(id, params, userId) {
-    const post = await getPostById(id)
+    const { post, reacts, comments } = await getPostById(id)
     if (userId != post.userId)
         throw 'Unauthorized, user must be owner of the post'
     Object.assign(post, params)
     post.updated = Date.now()
     await post.save()
-    return post.get()
+    return { ...post.get(), reacts, comments }
 }
 
 async function getPostsByUser(id) {
-    const posts = await db.post.findAll({ 
+    var posts = await db.post.findAll({ 
         where: { userId: id },
         include: [{
             model: db.user,
@@ -86,7 +91,15 @@ async function getPostsByUser(id) {
             attributes: ['username']
         }]
     })
-    return posts
+    posts = posts.map(post => post.get({ plain: true }))
+
+    return Promise.all(
+        posts.map(async post => {
+            const reacts = await getAllPostReacts(post.id)
+            const comments = await getAllComments(post.id)
+            return { ...post, comments, reacts }
+        })
+    )
 }
 
 async function changePostVisibility(id, userId) {
@@ -105,7 +118,7 @@ async function getPostsByTitle({title}) {
             model: db.user,
             as: "user",
             required: true,
-            attributes: ['username']
+            attributes: ['username', 'firstName', 'lastName']
         }]
     })
     posts = posts.map(post => post.get({ plain: true }))
@@ -113,13 +126,16 @@ async function getPostsByTitle({title}) {
     return Promise.all(
         posts.map(async post => {
             const reacts = await getAllPostReacts(post.id)
-            return { ...post, reacts }
+            const comments = await getAllComments(post.id)
+            return { ...post, comments, reacts }
         })
     )
 }
 
 async function createComment(params, userId) {
-    await db.comment.create({ ...params, userId })
+    const comment = await db.comment.create({ ...params, userId })
+    const { username, firstName, lastName } = await getUserById(userId)
+    return { ...comment.get(), user: { username, firstName, lastName }, reacts: []}
 }
 
 async function createPostReact(params, userId) {
