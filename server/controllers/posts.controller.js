@@ -5,7 +5,7 @@ const Joi = require('Joi')
 const validateRequest = require('../middleware/validate-request')
 const authorize = require('../middleware/authorize')
 const roles = require('../_helpers/roles')
-router.post('/create', createSchema, create)
+router.post('/create', authorize(), createSchema, create)
 router.post('/hide/:id', authorize(), changeVisibility)
 router.post('/comment', authorize(), commentSchema, createComment)
 router.post('/postReact', authorize(), postReactSchema, createPostReact)
@@ -36,7 +36,7 @@ function createSchema(req, res, next) {
 //TODO maybe get id from token, not body
 function create(req, res, next) {
     postService.createPost(req.body)
-        .then(() => res.json({ message: 'Post created successfully'}))
+        .then(post => res.json({ post, message: 'Post created successfully'}))
         .catch(error => res.status(400).json({ message: error }))
 }
 

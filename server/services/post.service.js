@@ -20,7 +20,8 @@ module.exports = {
 }
 
 async function createPost(params) {
-    await db.post.create(params)
+    const post = await db.post.create(params)
+    return post
 }
 
 async function getAllPosts() {
@@ -95,7 +96,7 @@ async function changePostVisibility(id, userId) {
 }
 
 async function getPostsByTitle({title}) {
-    const posts = await db.post.findAll({ 
+    var posts = await db.post.findAll({ 
         where: { title: { [Op.substring]: title }},
         include: [{
             model: db.user,
@@ -104,7 +105,14 @@ async function getPostsByTitle({title}) {
             attributes: ['username']
         }]
     })
-    return posts
+    posts = posts.map(post => post.get({ plain: true }))
+
+    return Promise.all(
+        posts.map(async post => {
+            const reacts = await getAllPostReacts(post.id)
+            return { ...post, reacts }
+        })
+    )
 }
 
 async function createComment(params, userId) {
