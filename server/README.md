@@ -301,7 +301,7 @@ This request requires a jwt token to authenticate the user.
     "description": "This is the description",
     "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
     "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    "userId": 2
+    "userId": 2,
 }
 ```
 
@@ -319,14 +319,16 @@ This request requires a jwt token to authenticate the user.
     "post": {
         "isHidden": false,
         "isSuspended": false,
-        "id": 8,
+        "id": 11,
         "title": "Mano skelbimas",
         "description": "Cia yra skelbimo apibudinimas",
-        "photoUrl": "https://i.kym-cdn.com/entries/icons/original/000/036/141/Drip_Goku.jpg",
+        "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
         "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         "userId": 2,
-        "updatedAt": "2021-05-07T10:22:04.299Z",
-        "createdAt": "2021-05-07T10:22:04.299Z"
+        "updatedAt": "2021-05-07T10:53:21.861Z",
+        "createdAt": "2021-05-07T10:53:21.861Z",
+        "reacts": [],
+        "comments": []
     },
     "message": "Post created successfully"
 }
@@ -379,19 +381,39 @@ This request does not have validations.
                 "firstName": "firstName",
                 "lastName": "lastName"
             },
-            "reacts": [
+            "comments": [
                 {
-                    "id": 2,
-                    "reaction": "Smile",
-                    "createdAt": "2021-05-05T19:17:10.000Z",
-                    "updatedAt": "2021-05-05T19:17:10.000Z",
+                    "id": 1,
+                    "content": "This is a comment",
+                    "isSuspended": false,
+                    "createdAt": "2021-05-05T19:09:24.000Z",
+                    "updatedAt": "2021-05-05T19:09:24.000Z",
                     "userId": 2,
                     "postId": 2,
                     "user": {
-                        "username": "username"
-                    }
+                        "username": "username",
+                        "firstName": "firstName",
+                        "lastName": "lastName"
+                    },
+                    "reacts": []
+                },
+                {
+                    "id": 2,
+                    "content": "Comment two",
+                    "isSuspended": false,
+                    "createdAt": "2021-05-06T13:34:31.000Z",
+                    "updatedAt": "2021-05-06T13:34:31.000Z",
+                    "userId": 2,
+                    "postId": 2,
+                    "user": {
+                        "username": "username",
+                        "firstName": "firstName",
+                        "lastName": "lastName"
+                    },
+                    "reacts": []
                 }
-            ]
+            ],
+            "reacts": []
         }
     ]
 }

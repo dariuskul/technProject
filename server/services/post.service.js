@@ -21,7 +21,7 @@ module.exports = {
 
 async function createPost(params) {
     const post = await db.post.create(params)
-    return post
+    return { ...post.get(), reacts: [], comments: [] }
 }
 
 async function getAllPosts() {
@@ -37,7 +37,8 @@ async function getAllPosts() {
     return Promise.all(
         posts.map(async post => {
             const reacts = await getAllPostReacts(post.id)
-            return { ...post, reacts }
+            const comments = await getAllComments(post.id)
+            return { ...post, comments, reacts }
         })
     )
 }
@@ -134,15 +135,15 @@ async function getAllComments(postId) {
             model: db.user,
             as: "user",
             required: true,
-            attributes: ['username']
+            attributes: ['username', 'firstName', 'lastName']
         }]
      })
 
      comments = comments.map(comment => comment.get({ plain: true }))
      return Promise.all(
          comments.map(async comment => {
-             const reactions = await getAllCommentReacts(comment.id)
-             return { ...comment, reactions }
+             const reacts = await getAllCommentReacts(comment.id)
+             return { ...comment, reacts }
          })
      )
 }
@@ -154,7 +155,7 @@ async function getAllPostReacts(postId) {
             model: db.user,
             as: "user",
             required: true,
-            attributes: ['username']
+            attributes: ['username', 'firstName', 'lastName']
         }]
     })
 
@@ -168,7 +169,7 @@ async function getAllCommentReacts(commentId) {
             model: db.user,
             as: "user",
             required: true,
-            attributes: ['username']
+            attributes: ['username', 'firstName', 'lastName']
         }]
     })
 
