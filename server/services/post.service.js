@@ -1,6 +1,7 @@
 const { Op } = require('sequelize')
 const db = require('../_helpers/db.js')
 const roles = require('../_helpers/roles')
+const { getUserById } = require('./user.service')
 
 module.exports = {
     createPost,
@@ -21,7 +22,8 @@ module.exports = {
 
 async function createPost(params) {
     const post = await db.post.create(params)
-    return { ...post.get(), reacts: [], comments: [] }
+    const { username, firstName, lastName } = await getUserById(params.userId)
+    return { ...post.get(), user: { username, firstName, lastName }, reacts: [], comments: [] }
 }
 
 async function getAllPosts() {
