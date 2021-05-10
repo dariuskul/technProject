@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const db = require('../_helpers/db.js')
 const roles = require('../_helpers/roles')
 const { getUserById } = require('./user.service')
+const { RequestError } = require('../_helpers/request-error')
 
 module.exports = {
     createPost,
@@ -17,7 +18,8 @@ module.exports = {
     createCommentReact,
     getAllComments,
     deleteCommentReactById,
-    deletePostReactById
+    deletePostReactById,
+    getHiddenPosts
 }
 
 async function createPost(params) {
@@ -28,6 +30,10 @@ async function createPost(params) {
 
 async function getAllPosts() {
     let posts = await db.post.findAll({
+        where : {
+            isSuspended: false,
+            isHidden: false
+        },
         include: [{
             model: db.user,
             required: true,
@@ -47,7 +53,11 @@ async function getAllPosts() {
 
 async function getPostById(id) {
     const post = await db.post.findOne({
-         where: { id },
+         where: { 
+             id,
+             isSuspended: false,
+             isHidden: false
+          },
          include: [{
             model: db.user,
             as: "user",
@@ -55,7 +65,7 @@ async function getPostById(id) {
             attributes: ['username', 'firstName', 'lastName']
         }]
     })
-    if (!post) throw 'Post not found'
+    if (!post) throw new RequestError('Post not found', 404)
 
     const reacts = await getAllPostReacts(id)
     const comments = await getAllComments(id)
@@ -65,16 +75,16 @@ async function getPostById(id) {
 async function deletePost(id, user) {
     const post = await db.post.findByPk(id)
     if (!post)
-        throw 'Post not found'
+        throw new RequestError('Post not found', 404)
     if (user.id != post.userId && user.role != roles.Admin)
-        throw 'Unauthorized, user must be owner of the post or admin'
+        throw new RequestError('Forbidden, user must be owner of the post or admin', 403)
     await post.destroy()
 }
 
 async function updatePost(id, params, userId) {
     const { post, reacts, comments } = await getPostById(id)
     if (userId != post.userId)
-        throw 'Unauthorized, user must be owner of the post'
+        throw new RequestError('Forbidden, user must be owner of the post', 403)
     Object.assign(post, params)
     post.updated = Date.now()
     await post.save()
@@ -83,7 +93,11 @@ async function updatePost(id, params, userId) {
 
 async function getPostsByUser(id) {
     var posts = await db.post.findAll({ 
-        where: { userId: id },
+        where: { 
+            userId: id,
+            isSuspended: false,
+            isHidden: false
+         },
         include: [{
             model: db.user,
             as: "user",
@@ -103,17 +117,21 @@ async function getPostsByUser(id) {
 }
 
 async function changePostVisibility(id, userId) {
-    const post = await getPostById(id)
+    const { post, reacts, comments } = await getPostById(id)
     if (userId != post.userId)
-        throw 'Unauthorized, user must be owner of the post'
+        throw new RequestError('Forbidden, user must be owner of the post', 403)
     post.isHidden = !post.isHidden
     await post.save()
-    return post.isHidden
+    return { ...post.get(), reacts, comments }
 }
 
 async function getPostsByTitle({title}) {
     var posts = await db.post.findAll({ 
-        where: { title: { [Op.substring]: title }},
+        where: { 
+            title: { [Op.substring]: title },
+            isSuspended: false,
+            isHidden: false
+        },
         include: [{
             model: db.user,
             as: "user",
@@ -139,16 +157,23 @@ async function createComment(params, userId) {
 }
 
 async function createPostReact(params, userId) {
-    await db.postReact.create({ ...params, userId })
+    const react = await db.postReact.create({ ...params, userId })
+    const { username, firstName, lastName } = await getUserById(userId)
+    return { ...react.get(), user: { username, firstName, lastName } }
 }
 
 async function createCommentReact(params, userId) {
-    await db.commentReact.create({ ...params, userId })
+    const react = await db.commentReact.create({ ...params, userId })
+    const { username, firstName, lastName } = await getUserById(userId)
+    return { ...react.get(), user: { username, firstName, lastName } }
 }
 
 async function getAllComments(postId) {
     let comments = await db.comment.findAll({ 
-        where: { postId },
+        where: { 
+            postId,
+            isSuspended: false 
+        },
         include: [{
             model: db.user,
             as: "user",
@@ -197,7 +222,7 @@ async function getAllCommentReacts(commentId) {
 async function deleteCommentReactById(reactId, userId) {
     const react = await db.commentReact.findByPk(reactId)
     if (!react) 
-        throw 'React not found'
+        throw new RequestError('React not found', 404)
     if (react.userId != userId)
         throw 'User id must match react\'s owner id'
     await react.destroy()
@@ -206,8 +231,33 @@ async function deleteCommentReactById(reactId, userId) {
 async function deletePostReactById(reactId, userId) {
     const react = await db.postReact.findByPk(reactId)
     if (!react) 
-        throw 'React not found'
+        throw new RequestError('React not found', 404)
     if (react.userId != userId)
-        throw 'User id must match react\'s owner id'
+        throw new RequestError('Forbidden, user id must match react\'s owner id', 403)
     await react.destroy()
+}
+
+async function getHiddenPosts(userId) {
+    var posts = await db.post.findAll({ 
+        where: { 
+            userId, 
+            isHidden: true,
+            isSuspended: false 
+        },
+        include: [{
+            model: db.user,
+            as: "user",
+            required: true,
+            attributes: ['username']
+        }]
+    })
+    posts = posts.map(post => post.get({ plain: true }))
+
+    return Promise.all(
+        posts.map(async post => {
+            const reacts = await getAllPostReacts(post.id)
+            const comments = await getAllComments(post.id)
+            return { ...post, comments, reacts }
+        })
+    )
 }

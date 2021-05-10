@@ -2,6 +2,7 @@ const config = require("../config.json");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const db = require("../_helpers/db.js");
+const { RequestError } = require('../_helpers/request-error')
 module.exports = {
   register,
   login,
@@ -14,7 +15,7 @@ module.exports = {
 async function register(params) {
   console.log(params);
   if (await db.user.findOne({ where: { username: params.username } }))
-    throw new Error("Provided username is already taken");
+    throw new RequestError("Provided username is already taken", 400);
   // if (await db.user.findOne({ where: { email: params.email } }))
   //     throw 'Provided email is already taken'
   if (params.password)
@@ -27,8 +28,10 @@ async function login({ username, password }) {
   const user = await db.user.scope("withHash").findOne({ where: { username } });
 
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-    throw "Credentials Invalid";
+    throw new RequestError("Credentials Invalid", 401);
   }
+
+  if (user.isSuspended) throw new RequestError("User account is suspended", 403)
 
   const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: "1d" });
   return { ...omitHash(user.get()), token };
@@ -41,13 +44,13 @@ async function update(id, params) {
     user.username != params.username &&
     (await db.user.findOne({ where: { username: params.username } }))
   )
-    throw "Username " + params.username + " is already taken";
+    throw new RequestError("Username " + params.username + " is already taken", 400);
   if (
     params.email &&
     user.email !== params.email &&
     (await db.user.findOne({ where: { email: params.email } }))
   )
-    throw "Email " + params.email + " is already taken";
+    throw new RequestError("Email " + params.email + " is already taken", 400)
 
   if (params.password)
     params.passwordHash = await bcrypt.hash(params.password, 10);
@@ -72,7 +75,7 @@ async function getAllUsers() {
 
 async function getUserById(id) {
   const user = await db.user.scope("withHash").findByPk(id);
-  if (!user) throw "User not found";
+  if (!user) throw new RequestError("User not found", 404)
   return { ...omitHash(user.get()) };
 }
 

@@ -5,8 +5,8 @@ const Joi = require('Joi')
 const validateRequest = require('../middleware/validate-request')
 const authorize = require('../middleware/authorize')
 const roles = require('../_helpers/roles')
+const { handleError } = require('../_helpers/request-error')
 router.post('/create', authorize(), createSchema, create)
-router.post('/hide/:id', authorize(), changeVisibility)
 router.post('/comment', authorize(), commentSchema, createComment)
 router.post('/postReact', authorize(), postReactSchema, createPostReact)
 router.post('/commentReact', authorize(), commentReactSchema, createCommentReact)
@@ -15,7 +15,9 @@ router.get('/getById/:id', getById)
 router.get('/getByUser/:id', getByUser)
 router.get('/getByTitle', getByTitle)
 router.get('/comments/:id', getComments)
+router.get('/getHidden/:id', authorize(), getHidden)
 router.put('/update/:id', authorize(), updateSchema, update)
+router.put('/hide/:id', authorize(), changeVisibility)
 router.delete('/delete/:id', authorize(), _delete)
 router.delete('/commentReact/:id', authorize(), deleteCommentReact)
 router.delete('/postReact/:id', authorize(), deletePostReact)
@@ -37,13 +39,13 @@ function createSchema(req, res, next) {
 function create(req, res, next) {
     postService.createPost(req.body)
         .then(post => res.json({ post, message: 'Post created successfully'}))
-        .catch(error => res.status(400).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function getAll(req, res, next) {
     postService.getAllPosts()
         .then(posts => res.json({ posts }))
-        .catch(error => res.status(500).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function getById(req, res, next) {
@@ -52,7 +54,7 @@ function getById(req, res, next) {
             const { post, comments, reacts } = postData
             return res.json({ ...post.get(), comments, reacts })
         })
-        .catch(error => res.status(404).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function updateSchema(req, res, next) {
@@ -69,31 +71,40 @@ function updateSchema(req, res, next) {
 function update(req, res, next) {
     postService.updatePost(req.params.id, req.body, req.user.id)
         .then(post => res.json({ ...post }))
-        .catch(error => res.status(404).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function _delete(req, res, next) {
     postService.deletePost(req.params.id, req.user)
         .then(() => res.json({ message: 'Post removed'}))
-        .catch(error => res.status(404).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function getByUser(req, res, next) {
     postService.getPostsByUser(req.params.id)
         .then(posts => res.json({ posts }))
-        .catch(error => res.status(500).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function changeVisibility(req, res, next) {
     postService.changePostVisibility(req.params.id, req.user.id)
-        .then(status => res.json({ message: status? 'Post was hidden' : 'Post was unhidden' }))
-        .catch(error => res.status(404).json({ message: error }))
+        .then(post => res.json({ ...post }))
+        .catch(error => handleError(error, res))
+}
+
+function getHidden(req, res, next) {
+    if (Number(req.params.id) != req.user.id && req.user.role != roles.Admin)
+        return res.status(403).json({ message: "Forbidden, must be a user with same id or admin"})
+
+    postService.getHiddenPosts(req.params.id)
+        .then(posts => res.json({ posts }))
+        .catch(error => handleError(error, res))
 }
 
 function getByTitle(req, res, next) {
     postService.getPostsByTitle(req.query)
         .then(posts => res.json({ posts }))
-        .catch(error => res.status(500).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function commentSchema(req, res, next) {
@@ -108,13 +119,13 @@ function commentSchema(req, res, next) {
 function createComment(req, res, next) {
     postService.createComment(req.body, req.user.id)
         .then(comment => res.json({ comment, message: 'Comment created' }))
-        .catch(error => res.status(400).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function getComments(req, res, next) {
     postService.getAllComments(req.params.id)
         .then(comments => res.json({ comments }))
-        .catch(error => res.status(500).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function postReactSchema(req, res, next) {
@@ -128,14 +139,14 @@ function postReactSchema(req, res, next) {
 
 function createPostReact(req, res, next) {
     postService.createPostReact(req.body, req.user.id)
-        .then(() => res.json({ message: 'React added to post' }))
-        .catch(error => res.status(400).json({ message: error }))
+        .then(react => res.json({ ...react }))
+        .catch(error => handleError(error, res))
 }
 
 function deletePostReact(req, res, next) {
     postService.deletePostReactById(req.params.id, req.user.id)
         .then(() => res.json({ message: 'React removed from post.' }))
-        .catch(error => res.status(404).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function commentReactSchema(req, res, next) {
@@ -149,12 +160,12 @@ function commentReactSchema(req, res, next) {
 
 function createCommentReact(req, res, next) {
     postService.createCommentReact(req.body, req.user.id)
-        .then(() => res.json({ message: 'React added to comment' }))
-        .catch(error => res.status(400).json({ message: error }))
+        .then(react => res.json({ ...react }))
+        .catch(error => handleError(error, res))
 }
 
 function deleteCommentReact(req, res, next) {
     postService.deleteCommentReactById(req.params.id, req.user.id)
         .then(() => res.json({ message: 'React removed from comment.' }))
-        .catch(error => res.status(404).json({ message: error }))
+        .catch(error => handleError(error, res))
 }

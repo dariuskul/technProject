@@ -652,7 +652,7 @@ This request does not have validations.
 
 ---
 
-### POST Hide/Unhide post
+### PUT Hide/Unhide post
 
 **Description**
 
@@ -680,13 +680,23 @@ This request does not have validations.
 
 ```
 {
-    "message": "Post was hidden"
-}
-
-Or
-
-{
-    "message": "Post was unhidden"
+    "id": 2,
+    "title": "Post title",
+    "description": "This is the description",
+    "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i",
+    "isHidden": true,
+    "isSuspended": false,
+    "createdAt": "2021-05-09T15:33:21.000Z",
+    "updatedAt": "2021-05-09T15:38:43.029Z",
+    "userId": 1,
+    "user": {
+        "username": "username",
+        "firstName": "firstName",
+        "lastName": "lastName"
+    },
+    "reacts": [],
+    "comments": []
 }
 ```
 
@@ -754,6 +764,58 @@ This request does not have validations.
                     "reacts": []
                 }
             ],
+            "reacts": []
+        }
+    ]
+}
+```
+
+---
+
+### GET Get user's hidden posts
+
+**Description**
+
+Fetches all user's hidden posts by the user's id.
+
+**Example request**
+
+`http://localhost:2000/post/getHidden/{userId}`
+
+**Authentication**
+
+This request requires a jwt with the same `userId` or `role` of **admin**.
+
+**Example request body**
+
+```
+This request does not require a body.
+```
+
+**Validations**
+
+This request does not have validations.
+
+**Example response**
+
+```
+{
+    "posts": [
+        {
+            "id": 2,
+            "title": "Post title",
+            "description": "This is the description",
+            "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
+            "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i",
+            "isHidden": true,
+            "isSuspended": false,
+            "createdAt": "2021-05-09T15:33:21.000Z",
+            "updatedAt": "2021-05-09T15:38:43.000Z",
+            "userId": 1,
+            "user": {
+                "username": "username"
+            },
+            "comments": [],
             "reacts": []
         }
     ]
@@ -840,13 +902,23 @@ This request requires a jwt to authenticate the user.
 **Validations**
 
 -   Every field is **required**.
--   Field `reaction` must be one of the following values: 'Smile', 'Like', 'Heart', 'Laugh', 'Surprised'.
+-   Field `reaction` must be one of the following values: `'Smile', 'Like', 'Heart', 'Laugh', 'Surprised'`.
 
 **Example response**
 
 ```
 {
-    "message": "React added to post"
+    "id": 4,
+    "reaction": "Smile",
+    "postId": 2,
+    "userId": 2,
+    "updatedAt": "2021-05-07T18:19:05.879Z",
+    "createdAt": "2021-05-07T18:19:05.879Z",
+    "user": {
+        "username": "username",
+        "firstName": "firstName",
+        "lastName": "lastName"
+    }
 }
 ```
 
@@ -878,13 +950,23 @@ This request requires a jwt to authenticate the user.
 **Validations**
 
 -   Every field is **required**.
--   Field `reaction` must be one of the following values: 'Smile', 'Like', 'Heart', 'Laugh', 'Surprised'.
+-   Field `reaction` must be one of the following values: `'Smile', 'Like', 'Heart', 'Laugh', 'Surprised'`.
 
 **Example response**
 
 ```
 {
-    "message": "React added to comment"
+    "id": 3,
+    "reaction": "Smile",
+    "commentId": 1,
+    "userId": 2,
+    "updatedAt": "2021-05-07T18:30:20.675Z",
+    "createdAt": "2021-05-07T18:30:20.675Z",
+    "user": {
+        "username": "username",
+        "firstName": "firstName",
+        "lastName": "lastName"
+    }
 }
 ```
 
@@ -983,4 +1065,294 @@ This request requires a jwt that contains the same `userId` as the react.
 
 ## Admin Controller
 
-**SOON<sup>TM<sup>**
+Admin controller api url `http://localhost:2000/admin`
+
+---
+
+### GET Get all suspensions
+
+**Description**
+
+Fetches all user, post and comment suspensions.
+
+**Example request**
+
+`http://localhost:2000/admin/suspensions`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example response**
+
+```
+{
+    "users": [
+        {
+            "id": 2,
+            "username": "baduser",
+            "firstName": "firstName",
+            "lastName": "lastName",
+            "dateOfBirth": "1999-01-01T00:00:00.000Z",
+            "role": "User",
+            "isSuspended": true,
+            "createdAt": "2021-05-09T19:12:15.000Z",
+            "updatedAt": "2021-05-10T18:21:02.000Z",
+            "user_suspensions": [
+                {
+                    "reason": "Fraud",
+                    "validUntil": null,
+                    "createdAt": "2021-05-10T18:21:02.000Z",
+                    "adminId": 1,
+                    "admin": {
+                        "username": "username",
+                        "firstName": "firstName",
+                        "lastName": "lastName",
+                        "createdAt": "2021-05-09T15:33:07.000Z"
+                    }
+                }
+            ]
+        }
+    ],
+    "posts": [
+        {
+            "id": 5,
+            "title": "Post title",
+            "description": "This is the description",
+            "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
+            "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i",
+            "isHidden": false,
+            "isSuspended": true,
+            "createdAt": "2021-05-09T19:13:32.000Z",
+            "updatedAt": "2021-05-09T19:14:08.000Z",
+            "userId": 2,
+            "post_suspensions": [
+                {
+                    "reason": "Fraud",
+                    "createdAt": "2021-05-09T19:14:08.000Z",
+                    "userId": 1,
+                    "user": {
+                        "username": "username",
+                        "firstName": "firstName",
+                        "lastName": "lastName",
+                        "createdAt": "2021-05-09T15:33:07.000Z"
+                    }
+                }
+            ]
+        }
+    ],
+    "comments": [
+        {
+            "id": 2,
+            "content": "This is a comment",
+            "isSuspended": true,
+            "createdAt": "2021-05-09T15:45:56.000Z",
+            "updatedAt": "2021-05-10T18:34:57.000Z",
+            "userId": 1,
+            "postId": 2,
+            "comment_suspensions": [
+                {
+                    "reason": "Inappropriate",
+                    "createdAt": "2021-05-10T18:34:57.000Z",
+                    "userId": 1,
+                    "user": {
+                        "username": "username",
+                        "firstName": "firstName",
+                        "lastName": "lastName",
+                        "createdAt": "2021-05-09T15:33:07.000Z"
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+
+---
+
+### POST Suspend user
+
+**Description**
+
+Suspends the user and all of his posts.
+
+**Example request**
+
+`http://localhost:2000/admin/suspend/user`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example request body**
+
+```
+{
+    "reason": "Fraud",
+    "validUntill": null
+    "userId": 2
+}
+```
+
+**Validations**
+
+-   Fields `reason` and `userId` are **required**, `validUntil` is **optional**
+-   Field `reason` must be one of the following: `'Fraud', 'Inappropriate', 'Violence', 'Spam', 'Hate speech'`
+
+**Example response**
+
+```
+{
+    "message": "User suspended"
+}
+```
+
+---
+
+### POST Suspend post
+
+**Description**
+
+Suspends the post.
+
+**Example request**
+
+`http://localhost:2000/admin/suspend/post`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example request body**
+
+```
+{
+    "reason": "Fraud"
+    "postId": 2
+}
+```
+
+**Validations**
+
+-   All fields are **required**
+-   Field `reason` must be one of the following: `'Fraud', 'Inappropriate', 'Violence', 'Spam', 'Hate speech'`
+
+**Example response**
+
+```
+{
+    "message": "Post suspended"
+}
+```
+
+---
+
+### POST Suspend comment
+
+**Description**
+
+Suspends the comment.
+
+**Example request**
+
+`http://localhost:2000/admin/suspend/comment`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example request body**
+
+```
+{
+    "reason": "Fraud"
+    "commentId": 2
+}
+```
+
+**Validations**
+
+-   All fields are **required**
+-   Field `reason` must be one of the following: `'Fraud', 'Inappropriate', 'Violence', 'Spam', 'Hate speech'`
+
+**Example response**
+
+```
+{
+    "message": "Comment suspended"
+}
+```
+
+---
+
+### PUT Unsuspend user
+
+**Description**
+
+Removes the user's suspension by the user's id.
+
+**Example request**
+
+`http://localhost:2000/admin/unsuspend/user/{userId}`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example response**
+
+```
+{
+    "message": "User unsuspended"
+}
+```
+
+---
+
+### PUT Unsuspend post
+
+**Description**
+
+Removes the post's suspension by the post's id.
+
+**Example request**
+
+`http://localhost:2000/admin/unsuspend/post/{postId}`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example response**
+
+```
+{
+    "message": "Post unsuspended"
+}
+```
+
+---
+
+### PUT Unsuspend comment
+
+**Description**
+
+Removes the comment's suspension by the comment's id.
+
+**Example request**
+
+`http://localhost:2000/admin/unsuspend/comment/{commentId}`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example response**
+
+```
+{
+    "message": "Comment unsuspended"
+}
+```
+
+---

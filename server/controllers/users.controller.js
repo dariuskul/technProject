@@ -5,6 +5,7 @@ const Joi = require('joi');
 const validateRequest = require('../middleware/validate-request')
 const authorize = require('../middleware/authorize')
 const roles = require('../_helpers/roles')
+const { handleError } = require('../_helpers/request-error')
 router.post('/register', registerSchema,register)
 router.post('/login', loginSchema, login)
 router.put('/update/:id', authorize(), updateSchema, update)
@@ -27,7 +28,7 @@ function registerSchema(req, res, next) {
 function register(req, res, next) {
     userService.register(req.body)
         .then(()=> res.json({ message: 'Registration successful'} ))
-        .catch(error => res.status(400).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function loginSchema(req, res, next) {
@@ -41,7 +42,7 @@ function loginSchema(req, res, next) {
 function login(req, res, next) {
     userService.login(req.body)
         .then(user => res.json(user))
-        .catch(error => res.status(401).json({ message: error }));
+        .catch(error => handleError(error, res))
 }
 
 function updateSchema(req, res, next) {
@@ -57,30 +58,31 @@ function updateSchema(req, res, next) {
 
 function update(req, res, next) {
     if (Number(req.params.id) != req.user.id)
-        return res.status(401).json({ message: "Unauthorized, must be a user with same id"})
+        return res.status(403).json({ message: "Forbidden, must be a user with same id"})
 
     userService.update(req.params.id, req.body)
         .then(user => res.json({ ...user }))
-        .catch(error => res.status(400).json({  message: error }))
+        .catch(error => res.status(error.statusCode? error.statusCode : 500)
+                            .json({  message: error.message }))
 }
 
 function _delete(req, res, next) {
     userService.deleteUser(req.params.id)
         .then(() => res.json({ message: 'User removed' }))
-        .catch(error => res.status(404).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function getAll(req, res, next) {
     userService.getAllUsers()
         .then(users => res.json({ users }))
-        .catch(error => res.status(500).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
 
 function getById(req, res, next) {
     if (Number(req.params.id) != req.user.id && req.user.role != roles.Admin)
-        return res.status(401).json({ message: "Unauthorized, must be a user with same id or admin"})
+        return res.status(403).json({ message: "Forbidden, must be a user with same id or admin"})
 
     userService.getUserById(req.params.id)
         .then(user => res.json({ ...user }))
-        .catch(error => res.status(404).json({ message: error }))
+        .catch(error => handleError(error, res))
 }
