@@ -9,7 +9,10 @@ module.exports = {
     unsuspendCommentById,
     unsuspendPostById,
     unsuspendUserById,
-    getAllSuspensions
+    getAllSuspensions,
+    getAllUserSuspensions,
+    getAllPostSuspensions,
+    getAllCommentSuspensions
 }
 
 async function suspendCommentById(params) {
@@ -142,51 +145,99 @@ async function unsuspendUser(user) {
 }
 
 async function getAllSuspensions() {
-    const userSuspensions = await db.user.findAll({
+    const userSuspensions = await getAllUserSuspensions()
+    const postSuspensions = await getAllPostSuspensions()
+    const commentSuspensions = await getAllCommentSuspensions()
+    
+    return { users: userSuspensions, posts: postSuspensions, comments: commentSuspensions }
+}
+
+async function getAllUserSuspensions() {
+    var suspensions = await db.user.findAll({
         where: { isSuspended: true },
+        attributes: { exclude: ['updatedAt', 'dateOfBirth', 'isSuspended'] },
         include: [{
             model: db.userSuspension,
             required: true,
-            attributes: ['reason', 'validUntil', 'createdAt', 'adminId'],
+            attributes: ['reason', 'validUntil', 'createdAt'],
             where: { isValid: true },
             include: [{
                 model: db.user,
                 as: 'admin',
                 required: true,
-                attributes: ['username', 'firstName', 'lastName', 'createdAt']
+                attributes: ['username', 'firstName', 'lastName']
             }]
         }]
+    })
+    suspensions = suspensions.map(suspension => {
+        const { user_suspensions, ...rest } = suspension.get({ plain: true })
+        return { ...rest, ...user_suspensions[0] }
     })
 
-    const postSuspensions = await db.post.findAll({
+    return suspensions
+}
+
+async function getAllPostSuspensions() {
+    var suspensions = await db.post.findAll({
         where: { isSuspended: true },
-        include: [{
-            model: db.postSuspension,
-            required: true,
-            attributes: ['reason', 'createdAt', 'userId'],
-            where: { isValid: true },
-            include: [{
+        attributes: { exclude: ['createdAt', 'updatedAt', 'isSuspended', 'userId'] },
+        include: [
+            {
+                model: db.postSuspension,
+                required: true,
+                attributes: ['reason', 'createdAt'],
+                where: { isValid: true },
+                include: [{
+                    model: db.user,
+                    required: true,
+                    attributes: ['username', 'firstName', 'lastName']
+                }]
+            },
+            {
                 model: db.user,
                 required: true,
-                attributes: ['username', 'firstName', 'lastName', 'createdAt']
-            }]
-        }]
+                attributes: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt', 'isSuspended']
+            }
+        ]
+    })
+    console.log(suspensions)
+    suspensions = suspensions.map(suspension => {
+        var { user: creator, post_suspensions, ...rest } = suspension.get({ plain: true })
+        var { user, ...rest } = { ...rest, ...post_suspensions[0] }
+        return { ...rest, creator, admin: user }
     })
 
-    const commentSuspensions = await db.comment.findAll({
+    return suspensions
+}
+
+async function getAllCommentSuspensions() {
+    var suspensions = await db.comment.findAll({
         where: { isSuspended: true },
-        include: [{
-            model: db.commentSuspension,
-            required: true,
-            attributes: ['reason', 'createdAt', 'userId'],
-            where: { isValid: true },
-            include: [{
+        attributes: { exclude: ['createdAt', 'updatedAt', 'isSuspended', 'userId'] },
+        include: [
+            {
+                model: db.commentSuspension,
+                required: true,
+                attributes: ['reason', 'createdAt'],
+                where: { isValid: true },
+                include: [{
+                    model: db.user,
+                    required: true,
+                    attributes: ['username', 'firstName', 'lastName']
+                }]
+            },
+            {
                 model: db.user,
                 required: true,
-                attributes: ['username', 'firstName', 'lastName', 'createdAt']
-            }]
-        }]
+                attributes: ['id', 'username', 'firstName', 'lastName', 'role', 'createdAt', 'isSuspended']
+            }
+        ]
     })
-    
-    return { users: userSuspensions, posts: postSuspensions, comments: commentSuspensions }
+    suspensions = suspensions.map(suspension => {
+        var { user: creator, comment_suspensions, ...rest } = suspension.get({ plain: true })
+        var { user, ...rest } = { ...rest, ...comment_suspensions[0] }
+        return { ...rest, creator, admin: user }
+    })
+
+    return suspensions
 }

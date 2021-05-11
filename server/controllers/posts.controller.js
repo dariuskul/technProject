@@ -13,7 +13,7 @@ router.post('/commentReact', authorize(), commentReactSchema, createCommentReact
 router.get('/getAll', getAll)
 router.get('/getById/:id', getById)
 router.get('/getByUser/:id', getByUser)
-router.get('/getByTitle', getByTitle)
+router.get('/getBySearch', getBySearch)
 router.get('/comments/:id', getComments)
 router.get('/getHidden/:id', authorize(), getHidden)
 router.put('/update/:id', authorize(), updateSchema, update)
@@ -101,8 +101,8 @@ function getHidden(req, res, next) {
         .catch(error => handleError(error, res))
 }
 
-function getByTitle(req, res, next) {
-    postService.getPostsByTitle(req.query)
+function getBySearch(req, res, next) {
+    postService.getPostsBySearch(req.query.value)
         .then(posts => res.json({ posts }))
         .catch(error => handleError(error, res))
 }

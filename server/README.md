@@ -245,7 +245,7 @@ Fetches a specific user's data by the user's id.
 
 **Authentication**
 
-This request requires a jwt with the same `userId` or `role` of **admin**.
+This request requires no authentication.
 
 **Example request body**
 
@@ -702,15 +702,15 @@ This request does not have validations.
 
 ---
 
-### GET Get posts by title
+### GET Get posts by search
 
 **Description**
 
-Fetches all posts that have a similar title to the provided post title.
+Fetches all posts that have a similar title or post creator's username to the provided post search value.
 
 **Example request**
 
-`http://localhost:2000/post/getByTitl?title={post_title}`
+`http://localhost:2000/post/getBySearch?value={post_title|username}`
 
 **Authentication**
 
@@ -1069,6 +1069,135 @@ Admin controller api url `http://localhost:2000/admin`
 
 ---
 
+### GET Get all user suspensions
+
+**Description**
+
+Fetches all user suspensions.
+
+**Example request**
+
+`http://localhost:2000/admin/suspensions/user`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example response**
+
+```
+[
+    {
+        "id": 2,
+        "username": "baduser",
+        "firstName": "firstName",
+        "lastName": "lastName",
+        "role": "User",
+        "createdAt": "2021-05-10T18:51:07.000Z",
+        "reason": "Fraud",
+        "validUntil": null,
+        "admin": {
+            "username": "username",
+            "firstName": "firstName",
+            "lastName": "lastName"
+        }
+    }
+]
+```
+
+---
+
+### GET Get all post suspensions
+
+**Description**
+
+Fetches all post suspensions.
+
+**Example request**
+
+`http://localhost:2000/admin/suspensions/post`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example response**
+
+```
+[
+    {
+        "id": 6,
+        "title": "Post title",
+        "description": "This is the description",
+        "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i",
+        "isHidden": false,
+        "reason": "Fraud",
+        "createdAt": "2021-05-09T19:14:08.000Z",
+        "creator": {
+            "id": 2,
+            "username": "baduser",
+            "firstName": "firstName",
+            "lastName": "lastName",
+            "role": "User",
+            "createdAt": "2021-05-09T19:12:15.000Z",
+            "isSuspended": true
+        },
+        "admin": {
+            "username": "username",
+            "firstName": "firstName",
+            "lastName": "lastName"
+        }
+    }
+]
+```
+
+---
+
+### GET Get all comment suspensions
+
+**Description**
+
+Fetches all comment suspensions.
+
+**Example request**
+
+`http://localhost:2000/admin/suspensions/comment`
+
+**Authentication**
+
+This request requires a jwt with the `role` of **admin**.
+
+**Example response**
+
+```
+[
+    {
+        "id": 2,
+        "content": "This is a comment",
+        "postId": 2,
+        "reason": "Inappropriate",
+        "createdAt": "2021-05-10T18:34:57.000Z",
+        "creator": {
+            "id": 1,
+            "username": "username",
+            "firstName": "firstName",
+            "lastName": "lastName",
+            "role": "Admin",
+            "createdAt": "2021-05-09T15:33:07.000Z",
+            "isSuspended": false
+        },
+        "admin": {
+            "username": "username",
+            "firstName": "firstName",
+            "lastName": "lastName"
+        }
+    }
+]
+```
+
+---
+
 ### GET Get all suspensions
 
 **Description**
@@ -1093,76 +1222,64 @@ This request requires a jwt with the `role` of **admin**.
             "username": "baduser",
             "firstName": "firstName",
             "lastName": "lastName",
-            "dateOfBirth": "1999-01-01T00:00:00.000Z",
             "role": "User",
-            "isSuspended": true,
-            "createdAt": "2021-05-09T19:12:15.000Z",
-            "updatedAt": "2021-05-10T18:21:02.000Z",
-            "user_suspensions": [
-                {
-                    "reason": "Fraud",
-                    "validUntil": null,
-                    "createdAt": "2021-05-10T18:21:02.000Z",
-                    "adminId": 1,
-                    "admin": {
-                        "username": "username",
-                        "firstName": "firstName",
-                        "lastName": "lastName",
-                        "createdAt": "2021-05-09T15:33:07.000Z"
-                    }
-                }
-            ]
+            "createdAt": "2021-05-10T18:51:07.000Z",
+            "reason": "Fraud",
+            "validUntil": null,
+            "admin": {
+                "username": "username",
+                "firstName": "firstName",
+                "lastName": "lastName"
+            }
         }
     ],
     "posts": [
         {
-            "id": 5,
+            "id": 6,
             "title": "Post title",
             "description": "This is the description",
             "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
             "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i",
             "isHidden": false,
-            "isSuspended": true,
-            "createdAt": "2021-05-09T19:13:32.000Z",
-            "updatedAt": "2021-05-09T19:14:08.000Z",
-            "userId": 2,
-            "post_suspensions": [
-                {
-                    "reason": "Fraud",
-                    "createdAt": "2021-05-09T19:14:08.000Z",
-                    "userId": 1,
-                    "user": {
-                        "username": "username",
-                        "firstName": "firstName",
-                        "lastName": "lastName",
-                        "createdAt": "2021-05-09T15:33:07.000Z"
-                    }
-                }
-            ]
+            "reason": "Fraud",
+            "createdAt": "2021-05-09T19:14:08.000Z",
+            "creator": {
+                "id": 2,
+                "username": "baduser",
+                "firstName": "firstName",
+                "lastName": "lastName",
+                "role": "User",
+                "createdAt": "2021-05-09T19:12:15.000Z",
+                "isSuspended": true
+            },
+            "admin": {
+                "username": "username",
+                "firstName": "firstName",
+                "lastName": "lastName"
+            }
         }
     ],
     "comments": [
         {
             "id": 2,
             "content": "This is a comment",
-            "isSuspended": true,
-            "createdAt": "2021-05-09T15:45:56.000Z",
-            "updatedAt": "2021-05-10T18:34:57.000Z",
-            "userId": 1,
             "postId": 2,
-            "comment_suspensions": [
-                {
-                    "reason": "Inappropriate",
-                    "createdAt": "2021-05-10T18:34:57.000Z",
-                    "userId": 1,
-                    "user": {
-                        "username": "username",
-                        "firstName": "firstName",
-                        "lastName": "lastName",
-                        "createdAt": "2021-05-09T15:33:07.000Z"
-                    }
-                }
-            ]
+            "reason": "Inappropriate",
+            "createdAt": "2021-05-10T18:34:57.000Z",
+            "creator": {
+                "id": 1,
+                "username": "username",
+                "firstName": "firstName",
+                "lastName": "lastName",
+                "role": "Admin",
+                "createdAt": "2021-05-09T15:33:07.000Z",
+                "isSuspended": false
+            },
+            "admin": {
+                "username": "username",
+                "firstName": "firstName",
+                "lastName": "lastName"
+            }
         }
     ]
 }

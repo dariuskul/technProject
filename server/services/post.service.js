@@ -12,7 +12,7 @@ module.exports = {
     updatePost,
     getPostsByUser,
     changePostVisibility,
-    getPostsByTitle,
+    getPostsBySearch,
     createComment,
     createPostReact,
     createCommentReact,
@@ -125,10 +125,13 @@ async function changePostVisibility(id, userId) {
     return { ...post.get(), reacts, comments }
 }
 
-async function getPostsByTitle({title}) {
+async function getPostsBySearch(value) {
     var posts = await db.post.findAll({ 
         where: { 
-            title: { [Op.substring]: title },
+            [Op.or]: [
+                { title: { [Op.substring]: value } },
+                db.sequelize.where(db.sequelize.col("user.username"), "LIKE", `%${value}%`)
+            ],
             isSuspended: false,
             isHidden: false
         },

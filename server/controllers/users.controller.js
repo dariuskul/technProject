@@ -11,7 +11,7 @@ router.post('/login', loginSchema, login)
 router.put('/update/:id', authorize(), updateSchema, update)
 router.delete('/delete/:id', authorize(roles.Admin), _delete)
 router.get('/getAll', authorize(roles.Admin), getAll)
-router.get('/getById/:id', authorize(), getById)
+router.get('/getById/:id', getById)
 module.exports = router
 
 //TODO Add more validation parameters with custom messages, add email

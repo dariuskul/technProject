@@ -14,10 +14,31 @@ router.put('/unsuspend/comment/:id', authorize(roles.Admin), unsuspendComment)
 router.put('/unsuspend/post/:id', authorize(roles.Admin), unsuspendPost)
 router.put('/unsuspend/user/:id', authorize(roles.Admin), unsuspendUser)
 router.get('/suspensions', authorize(roles.Admin), getAll)
+router.get('/suspensions/user', authorize(roles.Admin), getAllUser)
+router.get('/suspensions/post', authorize(roles.Admin), getAllPost)
+router.get('/suspensions/comment', authorize(roles.Admin), getAllComment)
 module.exports = router
 
 function getAll(req, res, next) {
     adminService.getAllSuspensions()
+        .then(suspensions => res.json(suspensions))
+        .catch(error => handleError(error, res))
+}
+
+function getAllUser(req, res, next) {
+    adminService.getAllUserSuspensions()
+        .then(suspensions => res.json(suspensions))
+        .catch(error => handleError(error, res))
+}
+
+function getAllPost(req, res, next) {
+    adminService.getAllPostSuspensions()
+        .then(suspensions => res.json(suspensions))
+        .catch(error => handleError(error, res))
+}
+
+function getAllComment(req, res, next) {
+    adminService.getAllCommentSuspensions()
         .then(suspensions => res.json(suspensions))
         .catch(error => handleError(error, res))
 }
