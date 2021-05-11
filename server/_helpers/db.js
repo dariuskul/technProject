@@ -22,6 +22,7 @@ async function initialize(){
     db.userSuspension = require('../models/user_suspension.model')(sequelize)
     db.postSuspension = require('../models/post_suspension.model')(sequelize)
     db.commentSuspension = require('../models/comment_suspension.model')(sequelize)
+    db.followedUser = sequelize.define('followed_user', {})
 
     //Table relationships
     db.user.hasMany(db.post)
@@ -32,6 +33,8 @@ async function initialize(){
     db.user.hasMany(db.userSuspension)
     db.user.hasMany(db.postSuspension)
     db.user.hasMany(db.commentSuspension)
+    db.user.hasMany(db.followedUser)
+    db.user.hasMany(db.followedUser)
     db.post.belongsTo(db.user)
     db.post.hasMany(db.comment)
     db.post.hasMany(db.postReact)
@@ -50,6 +53,8 @@ async function initialize(){
     db.postSuspension.belongsTo(db.post)
     db.commentSuspension.belongsTo(db.user)
     db.commentSuspension.belongsTo(db.comment)
+    db.followedUser.belongsTo(db.user, { as: 'follower', foreignKey: 'followerId' })
+    db.followedUser.belongsTo(db.user, { as: 'followee', foreignKey: 'followeeId' })
 
     await sequelize.sync();
 }
