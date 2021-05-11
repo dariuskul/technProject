@@ -16,12 +16,33 @@ import ModalForm from "../../ModalForm/ModalForm";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Comments from "../../CommentList/CommentList";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+import { useFormik } from "formik";
+import { FacebookCounter, FacebookSelector } from "react-reactions";
 const Post = ({ post, creator, role, removePost, created }) => {
   const [readMore, setReadMore] = useState(false);
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  console.log("NEW POST", post);
+  const emojiTypes = {
+    Like: "Like",
+    Heart: "Heart",
+    Laugh: "Laugh",
+    Surprised: "Surprised",
+  };
+  const form = useFormik({
+    initialValues: {
+      emoji: "",
+    },
+    onSubmit: (values) => {
+      alert(values);
+    },
+  });
+  const counters = [
+    {
+      emoji: "like", // String name of reaction
+      by: "Case Sandberg", // String of persons name
+    },
+  ];
   return (
     <Card>
       <CardHeader
@@ -71,7 +92,11 @@ const Post = ({ post, creator, role, removePost, created }) => {
         <IconButton onClick={() => setShowComments(true)}>
           <ChatBubbleOutlineIcon />
         </IconButton>
+        <div style={{ width: "100%" }}>
+          <FacebookCounter counters={counters} />
+        </div>
       </CardActions>
+
       <ModalForm
         userId={creator}
         updateValues={post}
