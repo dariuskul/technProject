@@ -1473,3 +1473,147 @@ This request requires a jwt with the `role` of **admin**.
 ```
 
 ---
+
+## Communication Controller
+
+Communication controller api url `http://localhost:2000/communication`
+
+---
+
+### POST Follow user
+
+**Description**
+
+Follows another user.
+
+**Example request**
+
+`http://localhost:2000/communication/follow`
+
+**Authentication**
+
+This request requires a jwt.
+
+**Example request body**
+
+```
+{
+    "followeeId": 2
+}
+```
+
+**Validations**
+
+-   Field `followeeId` is **required**.
+
+**Example response**
+
+```
+{
+    "id": 1,
+    "userId": 2,
+    "username": "username2",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "dateOfBirth": "1999-01-01T00:00:00.000Z",
+    "role": "User",
+    "isSuspended": false,
+    "createdAt": "2021-05-09T19:12:15.000Z",
+    "updatedAt": "2021-05-10T18:51:07.000Z",
+    "followingSince": "2021-05-11T14:41:25.402Z"
+}
+```
+
+---
+
+### DELETE Unfollow user
+
+**Description**
+
+Unfollows another user.
+
+**Example request**
+
+`http://localhost:2000/communication/unfollow/{follow_id}`
+
+**Authentication**
+
+This request requires a jwt.
+
+---
+
+### POST Follow user
+
+**Description**
+
+Follows another user.
+
+**Example request**
+
+`http://localhost:2000/communication/follow`
+
+**Authentication**
+
+This request requires a jwt.
+
+**Example request body**
+
+```
+{
+    "followeeId": 2
+}
+```
+
+**Validations**
+
+-   Field `followeeId` is **required**.
+
+**Example response**
+
+```
+{
+    "id": 1,
+    "userId": 2,
+    "username": "username2",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "dateOfBirth": "1999-01-01T00:00:00.000Z",
+    "role": "User",
+    "isSuspended": false,
+    "createdAt": "2021-05-09T19:12:15.000Z",
+    "updatedAt": "2021-05-10T18:51:07.000Z",
+    "followingSince": "2021-05-11T14:41:25.402Z"
+}
+```
+
+---
+
+### GET Get user's followed users list
+
+**Description**
+
+Fetches all user's followed users list
+
+**Example request**
+
+`http://localhost:2000/communication/follows/{user_id}`
+
+**Authentication**
+
+This request requires a jwt.
+
+**Example response**
+
+```
+[
+    {
+        "id": 16,
+        "createdAt": "2021-05-11T14:45:12.000Z",
+        "username": "username2",
+        "firstName": "firstName",
+        "lastName": "lastName"
+    }
+]
+```
+
+---

@@ -12,6 +12,7 @@ app.use(cors());
 app.use("/user", require("./controllers/users.controller"))
 app.use("/post", require("./controllers/posts.controller"))
 app.use("/admin", require("./controllers/admin.controller"))
+app.use("/communication", require("./controllers/communication.controller"))
 
 app.listen(port, () => {
   console.log(`Server is running on: http://localhost:${port}`)

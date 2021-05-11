@@ -9,7 +9,7 @@ module.exports = {
   update,
   deleteUser,
   getAllUsers,
-  getUserById,
+  getUserById
 };
 
 async function register(params) {
@@ -38,7 +38,7 @@ async function login({ username, password }) {
 }
 
 async function update(id, params) {
-  const user = await getUserById(id);
+  const user = await getUser(id);
   if (
     params.username &&
     user.username != params.username &&
@@ -63,7 +63,7 @@ async function update(id, params) {
 
 //TODO use postService to delete posts and other post relationships...
 async function deleteUser(id) {
-  const user = await getUserById(id);
+  const user = await getUser(id);
   await db.post.destroy({ where: { userId: id } });
   await user.destroy();
 }
@@ -74,9 +74,15 @@ async function getAllUsers() {
 }
 
 async function getUserById(id) {
-  const user = await db.user.scope("withHash").findByPk(id);
+  const user = await getUser(id)
+  return { ...omitHash(user.get()) }
+}
+
+async function getUser(id) {
+  const user = await db.user.scope("withHash")
+                            .findOne({ where: { id, isSuspended: false } })
   if (!user) throw new RequestError("User not found", 404)
-  return { ...omitHash(user.get()) };
+  return user
 }
 
 function omitHash(user) {

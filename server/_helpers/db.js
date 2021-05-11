@@ -55,7 +55,6 @@ async function initialize(){
     db.postSuspension.belongsTo(db.post)
     db.commentSuspension.belongsTo(db.user)
     db.commentSuspension.belongsTo(db.comment)
-    db.followedUser.belongsTo(db.user, { as: 'follower', foreignKey: 'followerId' })
     db.followedUser.belongsTo(db.user, { as: 'followee', foreignKey: 'followeeId' })
 
     await sequelize.sync();
