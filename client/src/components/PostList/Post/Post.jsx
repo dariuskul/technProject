@@ -16,7 +16,7 @@ import ModalForm from "../../ModalForm/ModalForm";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Comments from "../../CommentList/CommentList";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-const Post = ({ post, creator, role, removePost }) => {
+const Post = ({ post, creator, role, removePost, created }) => {
   const [readMore, setReadMore] = useState(false);
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
@@ -45,7 +45,13 @@ const Post = ({ post, creator, role, removePost }) => {
         )}
 
         {showComments && (
-          <Comments comments={post?.comments} post={post} open={showComments} />
+          <Comments
+            comments={post?.comments}
+            post={post}
+            open={showComments}
+            setOpen={setShowComments}
+            created={created}
+          />
         )}
       </CardContent>
       <CardActions disableSpacing>
