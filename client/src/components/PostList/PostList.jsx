@@ -58,6 +58,7 @@ const PostList = () => {
                 creator={user?.id}
                 role={user?.role}
                 removePost={deletePost}
+                created={setCreated}
               />
             </Grid>
           ))}

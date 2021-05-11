@@ -5,7 +5,7 @@ import {
   removePostRequest,
 } from "../../api/post";
 import { login, register } from "../../api/user";
-
+import { newComment } from "../../api/comment";
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
     const user = await login(payload);
@@ -67,4 +67,11 @@ export const removePost = (id) => async (dispatch) => {
   } catch (error) {
     alert(error);
   }
+};
+
+export const addComent = (content, id) => async (dispatch) => {
+  try {
+    const post = await newComment(content, id);
+    dispatch({ type: "UPDATE", payload: post });
+  } catch (error) {}
 };
