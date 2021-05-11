@@ -96,7 +96,7 @@ const ModalForm = ({ open, setOpen, userId, setCreated, updateValues }) => {
             Cancel
           </Button>
           <Button onClick={form.handleSubmit} color="primary">
-            Create post
+            {updateValues ? "Update post" : "Create post"}
           </Button>
         </DialogActions>
       </Dialog>

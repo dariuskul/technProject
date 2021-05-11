@@ -6,6 +6,10 @@ export default function notificationsReducer(state = notifications, action) {
       return {
         notifications: action.payload,
       };
+    case "REMOVED":
+      return {
+        notifications: action.payload,
+      };
     case "CLEAR":
       return [];
     default:

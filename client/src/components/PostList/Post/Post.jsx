@@ -13,10 +13,15 @@ import EditIcon from "@material-ui/icons/Edit";
 import React, { useState } from "react";
 import useStyles from "./styles";
 import ModalForm from "../../ModalForm/ModalForm";
-const Post = ({ post, creator }) => {
+import DeleteIcon from "@material-ui/icons/Delete";
+import Comments from "../../CommentList/CommentList";
+import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
+const Post = ({ post, creator, role, removePost }) => {
   const [readMore, setReadMore] = useState(false);
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  console.log("NEW POST", post);
   return (
     <Card>
       <CardHeader
@@ -38,6 +43,10 @@ const Post = ({ post, creator }) => {
             {readMore ? "Read less" : "Read more"}
           </Button>
         )}
+
+        {showComments && (
+          <Comments comments={post?.comments} post={post} open={showComments} />
+        )}
       </CardContent>
       <CardActions disableSpacing>
         <IconButton>
@@ -48,6 +57,14 @@ const Post = ({ post, creator }) => {
             <EditIcon />
           </IconButton>
         )}
+        {(post.userId === creator || role === "Admin") && (
+          <IconButton onClick={() => removePost(post.id)}>
+            <DeleteIcon />
+          </IconButton>
+        )}
+        <IconButton onClick={() => setShowComments(true)}>
+          <ChatBubbleOutlineIcon />
+        </IconButton>
       </CardActions>
       <ModalForm
         userId={creator}

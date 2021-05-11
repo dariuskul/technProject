@@ -1,4 +1,9 @@
-import { fetchAll, newPost, updatePostRequest } from "../../api/post";
+import {
+  fetchAll,
+  newPost,
+  updatePostRequest,
+  removePostRequest,
+} from "../../api/post";
 import { login, register } from "../../api/user";
 
 export const loginAction = (payload, history) => async (dispatch) => {
@@ -30,7 +35,6 @@ export const logOut = () => (dispatch) => {
 export const fetchPosts = () => async (dispatch) => {
   try {
     const posts = await fetchAll();
-    console.log(posts);
     dispatch({ type: "FETCH_ALL", payload: posts });
   } catch (error) {
     alert(error);
@@ -50,8 +54,16 @@ export const createPost = (data) => async (dispatch) => {
 export const updatePost = (data, id) => async (dispatch) => {
   try {
     const post = await updatePostRequest(data, id);
-    console.log("AAAAAAAAAAAAAAAAAAAAA", post);
     dispatch({ type: "UPDATE", payload: post });
+  } catch (error) {
+    alert(error);
+  }
+};
+export const removePost = (id) => async (dispatch) => {
+  try {
+    await removePostRequest(id);
+    dispatch({ type: "REMOVE_POST", payload: id });
+    dispatch({ type: "REMOVED", payload: "Post removed succesfully" });
   } catch (error) {
     alert(error);
   }
