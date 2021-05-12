@@ -22,6 +22,16 @@ const NavBar = () => {
         </Typography>
         {user.user?.id ? (
           <div className={classes.buttons}>
+            {user.user?.role === "Admin" && (
+              <Button
+                component={Link}
+                to="/admin"
+                variant="contained"
+                className={classes.button}
+              >
+                Admin zone
+              </Button>
+            )}
             <Button
               component={Link}
               to="/posts"

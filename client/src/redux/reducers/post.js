@@ -1,17 +1,5 @@
 export default function postReducer(posts = [], action) {
   // The reducer normally looks at the action type field to decide what happens
-  const test = () => {
-    return posts.map((post) =>
-      post.id === action.payload.postId
-        ? {
-            ...post,
-            reacts: [...post.reacts, action.payload],
-          }
-        : post
-    );
-  };
-  console.log(test());
-  console.log(posts);
   switch (action.type) {
     case "FETCH_ALL":
       return action.payload;

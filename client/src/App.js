@@ -1,6 +1,12 @@
 import { Container, CssBaseline } from "@material-ui/core";
 import NavBar from "./components/NavBar/NavBar";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Redirect,
+  useLocation,
+} from "react-router-dom";
 import Login from "./components/Auth/Login/Login";
 import Register from "./components/Auth/Register/Register";
 import PostList from "./components/PostList/PostList";
@@ -8,6 +14,9 @@ import JobsList from "./components/JobsList/JobsList";
 import PublicRoute from "./components/Routes/PublicRoute/PublicRoute";
 import { useSelector } from "react-redux";
 import Alert from "@material-ui/lab/Alert";
+import PrivateRoute from "./components/Routes/PrivateRoute/PrivateRoute";
+import AdminDashboard from "./components/Admin/AdminDashboard";
+import { Role } from "./utils/Role";
 //localStorage.removeItem('currentUser')
 function App() {
   const notifs = useSelector((state) => state?.notif?.notifications);
@@ -19,6 +28,12 @@ function App() {
         {notifs && <h1>{notifs}</h1>}
         <Container maxWidth="lg">
           <Switch>
+            <PrivateRoute
+              path="/admin"
+              roles={Role.Admin}
+              component={AdminDashboard}
+              exact
+            />
             <PublicRoute
               restricted={false}
               exact
@@ -36,7 +51,11 @@ function App() {
               path="/auth/login"
               component={Login}
             />
-            <PublicRoute restricted={true} component={Register} />
+            <PublicRoute
+              path="/auth/register"
+              restricted={true}
+              component={Register}
+            />
           </Switch>
         </Container>
       </BrowserRouter>

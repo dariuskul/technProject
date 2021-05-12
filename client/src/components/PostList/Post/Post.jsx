@@ -28,7 +28,7 @@ import { reactionIdByUser } from "../../../utils/getReactionIdByUser";
 const Post = ({ post, creator, role, removePost, created }) => {
   const [readMore, setReadMore] = useState(false);
   const classes = useStyles();
-  const user = useSelector((state) => state.user.user.id);
+  const user = useSelector((state) => state?.user?.user?.id);
   const [openModal, setOpenModal] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const dispatch = useDispatch();
@@ -40,7 +40,6 @@ const Post = ({ post, creator, role, removePost, created }) => {
     onSubmit: (values) => {
       const value = reactionIdByUser(user, post.reacts);
       if (value !== -1) {
-        console.log("AAAAAADSADSDAD", post.id);
         dispatch(removeReaction(value, post.id));
       } else {
         dispatch(addReaction(values));
