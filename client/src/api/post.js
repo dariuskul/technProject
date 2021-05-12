@@ -57,3 +57,32 @@ export const removePostRequest = async (id) => {
 
   return response.json();
 };
+
+export const addPostReactionRequest = async (data) => {
+  const response = await fetch(`${URL}/postReact`, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+  return response.json();
+};
+
+export const removePostReactionRequest = async (id) => {
+  const response = await fetch(`${URL}/postReact/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+  return response.json();
+};

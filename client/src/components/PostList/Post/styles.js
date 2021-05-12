@@ -17,4 +17,11 @@ export default makeStyles((theme) => ({
     width: "100%",
     objectFit: "fit",
   },
+  button: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  count: {
+    marginLeft: "0.5em",
+  },
 }));

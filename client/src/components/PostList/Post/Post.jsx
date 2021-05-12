@@ -17,32 +17,42 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Comments from "../../CommentList/CommentList";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import { useFormik } from "formik";
-import { FacebookCounter, FacebookSelector } from "react-reactions";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
+import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
+import MoodBadIcon from "@material-ui/icons/MoodBad";
+import { addReaction, removeReaction } from "../../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { reactionCount } from "../../../utils/calculateReactions";
+import { reactionIdByUser } from "../../../utils/getReactionIdByUser";
 const Post = ({ post, creator, role, removePost, created }) => {
   const [readMore, setReadMore] = useState(false);
   const classes = useStyles();
+  const user = useSelector((state) => state.user.user.id);
   const [openModal, setOpenModal] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  const emojiTypes = {
-    Like: "Like",
-    Heart: "Heart",
-    Laugh: "Laugh",
-    Surprised: "Surprised",
-  };
+  const dispatch = useDispatch();
   const form = useFormik({
     initialValues: {
-      emoji: "",
+      reaction: "",
+      postId: post.id,
     },
     onSubmit: (values) => {
-      alert(values);
+      const value = reactionIdByUser(user, post.reacts);
+      if (value !== -1) {
+        console.log("AAAAAADSADSDAD", post.id);
+        dispatch(removeReaction(value, post.id));
+      } else {
+        dispatch(addReaction(values));
+      }
     },
   });
-  const counters = [
-    {
-      emoji: "like", // String name of reaction
-      by: "Case Sandberg", // String of persons name
-    },
-  ];
+  const handleEmojiAddition = (emoji) => {
+    form.values.reaction = emoji;
+    form.submitForm();
+  };
+  // let a = reactionCount(post, "Heart");
+  // console.log("COUNT", a);
   return (
     <Card>
       <CardHeader
@@ -76,9 +86,6 @@ const Post = ({ post, creator, role, removePost, created }) => {
         )}
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton>
-          <FavoriteIcon />
-        </IconButton>
         {post.userId === creator && (
           <IconButton onClick={() => setOpenModal(true)}>
             <EditIcon />
@@ -92,11 +99,39 @@ const Post = ({ post, creator, role, removePost, created }) => {
         <IconButton onClick={() => setShowComments(true)}>
           <ChatBubbleOutlineIcon />
         </IconButton>
-        <div style={{ width: "100%" }}>
-          <FacebookCounter counters={counters} />
-        </div>
+        <IconButton onClick={() => handleEmojiAddition("Heart")}>
+          <div className={classes.button}>
+            <FavoriteIcon />
+            <div className={classes.count}>{reactionCount(post, "Heart")}</div>
+          </div>
+        </IconButton>
+        <IconButton onClick={() => handleEmojiAddition("Like")}>
+          <div className={classes.button}>
+            <ThumbUpIcon />
+            <div className={classes.count}>{reactionCount(post, "Like")}</div>
+          </div>
+        </IconButton>
+        <IconButton onClick={() => handleEmojiAddition("Laugh")}>
+          <div className={classes.button}>
+            <EmojiEmotionsIcon />
+            <div className={classes.count}>{reactionCount(post, "Laugh")}</div>
+          </div>
+        </IconButton>
+        <IconButton onClick={() => handleEmojiAddition("Smile")}>
+          <div className={classes.button}>
+            <SentimentSatisfiedIcon />
+            <div className={classes.count}>{reactionCount(post, "Smile")}</div>
+          </div>
+        </IconButton>
+        <IconButton onClick={() => handleEmojiAddition("Surprised")}>
+          <div className={classes.button}>
+            <MoodBadIcon />
+            <div className={classes.count}>
+              {reactionCount(post, "Surprised")}
+            </div>
+          </div>
+        </IconButton>
       </CardActions>
-
       <ModalForm
         userId={creator}
         updateValues={post}

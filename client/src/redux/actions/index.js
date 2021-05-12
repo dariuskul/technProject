@@ -3,6 +3,8 @@ import {
   newPost,
   updatePostRequest,
   removePostRequest,
+  addPostReactionRequest,
+  removePostReactionRequest,
 } from "../../api/post";
 import { login, register } from "../../api/user";
 import { newComment } from "../../api/comment";
@@ -35,6 +37,7 @@ export const logOut = () => (dispatch) => {
 export const fetchPosts = () => async (dispatch) => {
   try {
     const posts = await fetchAll();
+    console.log("POSTS", posts);
     dispatch({ type: "FETCH_ALL", payload: posts });
   } catch (error) {
     alert(error);
@@ -74,4 +77,23 @@ export const addComent = (content, id) => async (dispatch) => {
     const post = await newComment(content, id);
     dispatch({ type: "UPDATE", payload: post });
   } catch (error) {}
+};
+
+export const addReaction = (data) => async (dispatch) => {
+  try {
+    const react = await addPostReactionRequest(data);
+    dispatch({ type: "ADD_REACTION", payload: react });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const removeReaction = (id, postId) => async (dispatch) => {
+  try {
+    await removePostReactionRequest(id);
+
+    dispatch({ type: "REMOVE_REACTION", payload: { id, postId } });
+  } catch (error) {
+    alert(error);
+  }
 };
