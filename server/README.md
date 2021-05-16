@@ -1617,3 +1617,168 @@ This request requires a jwt.
 ```
 
 ---
+
+## Outer Services Controller
+
+Outer service controller api url: `http://localhost:2000/outer_service`.
+
+---
+
+### GET Get tweets
+
+**Description**
+
+Fetches a specific number of tweets by the search query and tweet date.
+
+**Example request**
+
+`http://localhost:2000/outer_service/tweets?search={query}&date={2021-04-16}&count={1}`
+
+**Query parameters**
+
+-   Parameter `seach` is **required**
+-   Parameter `date` is **optional**, the default value is the previous month's date e.g. if today is 2020-02-11 then the default date is 2020-01-11
+-   Parameter `count` is **optional**, the default value is 10
+
+**Example response**
+
+```
+{
+    "statuses": [
+        {
+            "created_at": "Sun May 16 19:26:14 +0000 2021",
+            "id": 1394011328222843000,
+            "id_str": "1394011328222842884",
+            "text": "These #Banana #Pancakes Are Just 40 Calories Each\n\nhttps://t.co/xm9BJhmHXf",
+            "truncated": false,
+            "entities": {
+                "hashtags": [
+                    {
+                        "text": "Banana",
+                        "indices": [
+                            6,
+                            13
+                        ]
+                    },
+                    {
+                        "text": "Pancakes",
+                        "indices": [
+                            14,
+                            23
+                        ]
+                    }
+                ],
+                "symbols": [],
+                "user_mentions": [],
+                "urls": [
+                    {
+                        "url": "https://t.co/xm9BJhmHXf",
+                        "expanded_url": "https://www.livestrong.com/article/13713480-these-banana-pancakes-are-just-40-calories-each/",
+                        "display_url": "livestrong.com/article/137134…",
+                        "indices": [
+                            51,
+                            74
+                        ]
+                    }
+                ]
+            },
+            "metadata": {
+                "iso_language_code": "en",
+                "result_type": "recent"
+            },
+            "source": "<a href=\"https://www.socialjukebox.com\" rel=\"nofollow\">The Social Jukebox</a>",
+            "in_reply_to_status_id": null,
+            "in_reply_to_status_id_str": null,
+            "in_reply_to_user_id": null,
+            "in_reply_to_user_id_str": null,
+            "in_reply_to_screen_name": null,
+            "user": {
+                "id": 711041288867594200,
+                "id_str": "711041288867594240",
+                "name": "Health & Fitness💪😎",
+                "screen_name": "YouTubeFitness3",
+                "location": "Please SUBSCRIBE to my channel",
+                "description": "Do it➡\nFilm it➡\nShare it➡\nTweets from individuals who are sincerely passionate about HEALTH🍎 & FITNESS🏋\n(@PersonalFitnes3) (@TankyTalks) (@videos2watchNOW)",
+                "url": "https://t.co/xNduRJxtxx",
+                "entities": {
+                    "url": {
+                        "urls": [
+                            {
+                                "url": "https://t.co/xNduRJxtxx",
+                                "expanded_url": "https://linktr.ee/PersonalFitness3",
+                                "display_url": "linktr.ee/PersonalFitnes…",
+                                "indices": [
+                                    0,
+                                    23
+                                ]
+                            }
+                        ]
+                    },
+                    "description": {
+                        "urls": []
+                    }
+                },
+                "protected": false,
+                "followers_count": 792,
+                "friends_count": 989,
+                "listed_count": 41,
+                "created_at": "Sat Mar 19 04:07:08 +0000 2016",
+                "favourites_count": 9181,
+                "utc_offset": null,
+                "time_zone": null,
+                "geo_enabled": false,
+                "verified": false,
+                "statuses_count": 26910,
+                "lang": null,
+                "contributors_enabled": false,
+                "is_translator": false,
+                "is_translation_enabled": false,
+                "profile_background_color": "F5F8FA",
+                "profile_background_image_url": null,
+                "profile_background_image_url_https": null,
+                "profile_background_tile": false,
+                "profile_image_url": "http://pbs.twimg.com/profile_images/831474595882479616/rEXce246_normal.jpg",
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/831474595882479616/rEXce246_normal.jpg",
+                "profile_banner_url": "https://pbs.twimg.com/profile_banners/711041288867594240/1487074853",
+                "profile_link_color": "1DA1F2",
+                "profile_sidebar_border_color": "C0DEED",
+                "profile_sidebar_fill_color": "DDEEF6",
+                "profile_text_color": "333333",
+                "profile_use_background_image": true,
+                "has_extended_profile": false,
+                "default_profile": true,
+                "default_profile_image": false,
+                "following": null,
+                "follow_request_sent": null,
+                "notifications": null,
+                "translator_type": "none",
+                "withheld_in_countries": []
+            },
+            "geo": null,
+            "coordinates": null,
+            "place": null,
+            "contributors": null,
+            "is_quote_status": false,
+            "retweet_count": 0,
+            "favorite_count": 0,
+            "favorited": false,
+            "retweeted": false,
+            "possibly_sensitive": false,
+            "lang": "en"
+        }
+    ],
+    "search_metadata": {
+        "completed_in": 0.058,
+        "max_id": 1394011328222843000,
+        "max_id_str": "1394011328222842884",
+        "next_results": "?max_id=1394011328222842883&q=%23banana%20since%3A2021-04-16T19%3A32%3A13.959Z&count=1&include_entities=1",
+        "query": "%23banana+since%3A2021-04-16T19%3A32%3A13.959Z",
+        "refresh_url": "?since_id=1394011328222842884&q=%23banana%20since%3A2021-04-16T19%3A32%3A13.959Z&include_entities=1",
+        "count": 1,
+        "since_id": 0,
+        "since_id_str": "0"
+    }
+}
+```
+
+---
