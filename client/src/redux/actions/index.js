@@ -8,7 +8,12 @@ import {
 } from "../../api/post";
 import { login, register } from "../../api/user";
 import { newComment } from "../../api/comment";
-import { suspendPostRequest } from "../../api/admin";
+import {
+  suspendPostRequest,
+  fetchAllUsers,
+  suspendUserRequest,
+  removeUserRequest,
+} from "../../api/admin";
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
     const user = await login(payload);
@@ -103,6 +108,33 @@ export const suspendPost = (data) => async (dispatch) => {
   try {
     await suspendPostRequest(data);
     dispatch({ type: "SUSPEND_POST", payload: data.postId });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const fetchUsers = () => async (dispatch) => {
+  try {
+    const users = await fetchAllUsers();
+    dispatch({ type: "FETCH_USERS", payload: users });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const suspendUser = (data) => async (dispatch) => {
+  try {
+    await suspendUserRequest(data);
+    dispatch({ type: "SUSPEND_USER", payload: data.userId });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const removeUser = (id) => async (dispatch) => {
+  try {
+    await removeUserRequest(id);
+    dispatch({ type: "SUSPEND_USER", payload: id });
   } catch (error) {
     alert(error);
   }

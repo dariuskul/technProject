@@ -41,14 +41,20 @@ const PostListAdmin = () => {
         dispatch(suspendPost(values));
         closeModal();
       }
-      if (action === "remove") {
-        dispatch(removePost(values.postId));
-        closeModal();
-      }
     },
   });
   const closeModal = () => {
     setOpen(false);
+  };
+
+  const handleRemove = (id) => {
+    if (
+      window.confirm(
+        "Do you really want to remove this post? This action cannot be undone"
+      )
+    ) {
+      dispatch(removePost(id));
+    }
   };
   const toggleModal = (id, action = "") => {
     form.values.postId = id;
@@ -103,7 +109,7 @@ const PostListAdmin = () => {
               </TableCell>
               <TableCell align="center">
                 <Button
-                  onClick={() => toggleModal(row.id, "remove")}
+                  onClick={() => handleRemove(row.id)}
                   style={{ color: "red" }}
                 >
                   Remove

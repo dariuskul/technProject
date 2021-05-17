@@ -9,9 +9,12 @@ export const makeRows = (props) => {
   if (!props.length) {
     return rows;
   }
+  console.log("aa", props);
   for (let i = 0; i < props.length; i++) {
-    let text = smallerContent(props[i].content);
-    props[i].content = text;
+    if (props[i]?.content) {
+      let text = smallerContent(props[i].content);
+      props[i].content = text;
+    }
     rows.push(props[i]);
   }
 
