@@ -44,13 +44,15 @@ async function unsuspendPostById(id) {
 }
 
 async function suspendUserById(params) {
+    console.log(params)
     const user = await db.user.findOne({
         where: { id: params.userId },
         include: [{
             model: db.post,
-            required: true
+            required: false
         }]
     })
+    
     if (!user) throw new RequestError("User not found", 404)
     if (user.role == roles.Admin) throw new RequestError("Cannot suspend admins", 400)
 

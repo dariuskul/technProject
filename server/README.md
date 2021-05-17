@@ -1484,7 +1484,7 @@ Communication controller api url `http://localhost:2000/communication`
 
 **Description**
 
-Follows another user.
+Follows or unfollows another user.
 
 **Example request**
 
@@ -1522,23 +1522,9 @@ This request requires a jwt.
     "updatedAt": "2021-05-10T18:51:07.000Z",
     "followingSince": "2021-05-11T14:41:25.402Z"
 }
+
+or null
 ```
-
----
-
-### DELETE Unfollow user
-
-**Description**
-
-Unfollows another user.
-
-**Example request**
-
-`http://localhost:2000/communication/unfollow/{follow_id}`
-
-**Authentication**
-
-This request requires a jwt.
 
 ---
 
@@ -1779,6 +1765,46 @@ Fetches a specific number of tweets by the search query and tweet date.
         "since_id_str": "0"
     }
 }
+```
+
+---
+
+### GET Get job list
+
+**Description**
+
+Fetches all jobs according to the provided description and location.
+
+**Example request**
+
+`http://localhost:2000/outer_service/jobs?description={javascript}&location={Berlin}&full_time=${true}&page={1}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `full_time` by default is true - only full time positions are included
+
+**Example response**
+
+```
+{
+    "0": {
+        "id": "d05e4007-8114-4804-9694-ddfd26aa111e",
+        "type": "Full Time",
+        "url": "https://jobs.github.com/positions/d05e4007-8114-4804-9694-ddfd26aa111e",
+        "created_at": "Mon May 03 15:17:32 UTC 2021",
+        "company": "Civey GmbH",
+        "company_url": "https://civey.com/",
+        "location": "Berlin",
+        "title": "Senior JavaScript Engineer (m/f/x) in full- or part-time",
+        "description": "<p><strong>Your new Job</strong></p>\n<p><strong>You continuously improve the frontend of Civey together with our team</strong></p>\n<ul>\n<li>You develop, test, document and maintain our JS driven web applications. We strive to ensure code quality with reviews, pair-programming and alignment with strong engineering principles and standards.</li>\n<li>As part of the Dev Team, you get to work closely with our Devops Engineers, Data Engineers, Product Owners and Designers.</li>\n<li>Our source code is hosted on GitHub and our libraries are hosted as private npm modules. We do code reviews with pull requests, we do automated testing and our release process is fully automated by our CI/CD system.</li>\n<li>Your work will be seen by millions of visitors through our partners’ websites, including top German media outlets like Spiegel Online, Tagesspiegel, <a href=\"http://change.org/\">Change.org</a>, Die Welt and a lot more.</li>\n<li>You will work with an excellent team you can learn a lot from and that will always appreciate your ideas.</li>\n<li>You start in full-time or part-time (30h+ per week).</li>\n</ul>\n<p><strong>Civey is the leading company for digital opinion data in Germany</strong></p>\n<p>Civey represents a new generation of public opinion research. Instead of outdated methods we rely on digital technologies to pioneer high quality representative surveys in real time. Our vision is to enable everyone to access the results of our work.</p>\n<p><strong>Our clients and public benefit from our technology</strong></p>\n<p>We are the only provider to offer over one million active users per month immediate access to representative live data. Customers from different backgrounds such as politics, business and media benefit from an innovative synthesis of survey statistics and machine learning. We enable them to measure markets, consumption and attitudes around the clock in order to collect valid data for the smallest target groups. In doing so, we set new standards for precision and speed.</p>\n<p><strong>Now we are looking for you!</strong></p>\n<p>This is just the beginning. Founded in 2015 by Janina Mütze and Gerrit Richter more than 60 consultants, developers and statisticians from 12 Countries are currently working for Civey in Berlin. If you want to help transform the path of traditional opinion research and you live for new technologies, then we are looking for you. You should be able to work independently in a structured manner and have the ambition to achieve more than others. Does that sound good? Get in touch with us!</p>\n<p>Learn more about Civey and its team at <a href=\"http://t3u1.mjt.lu/lnk/AMwAAKCTIpAAAAAAAAAAAG3sWXAAAAAA-nQAAAAAAAZPNgBgj73iGHcqtsfGQeuTzv6vQfq6YAAGCXo/2/cSxFs1KzOefTLOB5urXe9A/aHR0cDovL3d3dy5jaXZleS5jb20vdWViZXItY2l2ZXkvam9icy11bmQtdGVhbQ\">www.civey.com/ueber-civey/jobs-und-team</a>.</p>\n<p><strong>Your Talents</strong></p>\n<p><strong>You are great at building data-rich web applications and are curious about the latest techniques in your field.</strong></p>\n<ul>\n<li>You have at least 5 years of experience in  building highly functional and fast, data-rich SPAs with dynamic interfaces.</li>\n<li>You have strong Typescript and React skills and are comfortable using the best coding, testing, debugging, and automation techniques.</li>\n<li>You have experience working as a developer and can provide good insights on the trade-offs between frontend JS frameworks like React, Vue, Svelte etc.</li>\n<li>You have an eye for UI/UX and accessibility and you're familiar with the challenges of modern web development.</li>\n<li>You have worked with node.js before to build the backend for a web application and know how to talk to a database or are interested in learning about this aspect of web development.</li>\n</ul>\n<p><strong>Your Package</strong></p>\n<p><strong>We are offering more than just benefits</strong></p>\n<ul>\n<li>\n<strong>Our values:</strong> We’re combining a conclusive business model with our vision to give all people access to high-quality opinion research.</li>\n<li>\n<strong>International:</strong> Our team is from China, Brasil, Germany, Vietnam and many other countries. Those who want can join our weekly German course.</li>\n<li>\n<strong>Visa support:</strong> We support our candidates throughout the whole visa process.</li>\n<li>\n<strong>Personal development:</strong> We promise a steep learning curve and an opportunity to boost your career.</li>\n<li>\n<strong>Equality:</strong> We are an equal opportunity employer and encourage everyone, regardless of gender, nationality, sexual orientation, age, ethnicity or belief to apply at Civey.</li>\n<li>\n<strong>Fair deal:</strong> We’ve devoted ourselves to fairness and transparency - this is why we foster a culture of constructive criticism. In return, we ask for your full commitment.</li>\n<li>\n<strong>Great location:</strong> Our office is located between Mitte and Kreuzberg, close to Moritzplatz.</li>\n<li>\n<strong>Training:</strong> We cover 90% of the costs of books, conferences and workshops.</li>\n<li>\n<strong>Sports and transportation:</strong> We cover your gym contract, your public transport ticket or a company bike.</li>\n<li>\n<strong>Mental health:</strong> You get professional support through an independent expert for personal or professional challenges.</li>\n<li>\n<strong>Pension plan:</strong> You can invest in your future with our company pension plan and capital-forming benefits.</li>\n<li>\n<strong>Good start into the day:</strong> We offer you breakfast, healthy fruits, free drinks and fresh coffee.</li>\n<li>\n<strong>Team Events:</strong> Celebrate with your colleagues on a regular basis.</li>\n<li>\n<strong>Technical equipment:</strong> We’ll provide you with the equipment you need to be able to work efficiently.</li>\n<li>\n<strong>Ask-me-Anything:</strong> Every employee can anonymously ask questions that our founders answer publicly.</li>\n<li>\n<strong>Clear structure:</strong> We have a proven feedback system consisting of stand-ups, review meetings and retrospectives.</li>\n<li>\n<strong>Recreation:</strong> We offer 30 days vacation, flexible working hours, overtime compensation and home office if needed.</li>\n<li>\n<strong>Salary:</strong> We will pay you a fair and competitive compensation.</li>\n</ul>\n<p><strong>Get in touch</strong></p>\n<p>For any questions about this position please get in touch with our Talent Manager Freyja Werner at <a href=\"mailto:jobs@civey.com\">jobs@civey.com</a>. Or learn more about Civey and its team at <a href=\"http://t3u1.mjt.lu/lnk/AMwAAKCTIpAAAAAAAAAAAG3sWXAAAAAA-nQAAAAAAAZPNgBgj73iGHcqtsfGQeuTzv6vQfq6YAAGCXo/3/D4xbqEL2uzpX3WRXlHQNiQ/aHR0cDovL3d3dy5jaXZleS5jb20vdWViZXItY2l2ZXkvam9icy11bmQtdGVhbQ\">www.civey.com/ueber-civey/jobs-und-team</a>.</p>\n<p><img src=\"https://camo.githubusercontent.com/214ca06c67c59aca8fa1c7a8f579a5d674816e60/68747470733a2f2f742e676f686972696e672e636f6d2f682f37333037313636393535356637643033643535386634646562353161646333623630666464396637656530393236343865396561646134393938303866383466\"></p>\n",
+        "how_to_apply": "<p><a href=\"https://t.gohiring.com/h/73d6a003b49d5745e59850ec423cb707f3c3978d72a12ed4fcd874c6e27692e9\">application form</a></p>\n",
+        "company_logo": "https://jobs.github.com/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBb09pIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--d5cb13026fa0a09eb93feb4916cd9524c83f4177/Civey%20GmbH.png"
+    },
+    "1": {
+        ...
+    }
 ```
 
 ---

@@ -1,9 +1,12 @@
 require('dotenv').config()
 const Twit = require('twit')
 const { RequestError } = require('../_helpers/request-error')
+const https = require('https')
+const fetch = require('node-fetch')
 
 module.exports = {
-    getTweetsByTitle
+    getTweetsByTitle,
+    getJobsByTitle
 }
 
 const config = {
@@ -23,4 +26,14 @@ async function getTweetsByTitle({ search, date, count = 10 }) {
 
     const searchParams = { q: `#${search} since:${date? date: altDate.toISOString()}`, count }
     return twitterAPI.get('search/tweets', searchParams)
+}
+
+async function getJobsByTitle({ description = "", full_time = true, location = "", page = "0"}) {
+    const url = `https://jobs.github.com/positions.json?` +
+                `description=${description}&full_time=${full_time}&location=${location}&page=${page}`
+
+    const response = await fetch(url)
+    if (!response.ok) throw new RequestError(response.statusText, response.status)
+    const data = await response.json()
+    return data
 }

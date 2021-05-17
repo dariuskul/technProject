@@ -25,6 +25,9 @@ async function initialize(){
     db.postSuspension = require('../models/post_suspension.model')(sequelize)
     db.commentSuspension = require('../models/comment_suspension.model')(sequelize)
     db.followedUser = sequelize.define('followed_user', {})
+    db.chat = sequelize.define('chat', {})
+    db.message = require('../models/message.model')(sequelize)
+    db.mutedUser = sequelize.define('muted_user', {})
 
     //Table relationships
     db.user.hasMany(db.post)
@@ -37,6 +40,11 @@ async function initialize(){
     db.user.hasMany(db.commentSuspension)
     db.user.hasMany(db.followedUser)
     db.user.hasMany(db.followedUser)
+    db.user.hasMany(db.chat, { as: 'user1', foreignKey: 'user1Id' })
+    db.user.hasMany(db.chat, { as: 'user2', foreignKey: 'user2Id' })
+    db.user.hasMany(db.mutedUser)
+    db.user.hasMany(db.mutedUser)
+    db.user.hasMany(db.message, { as: 'sender', foreignKey: 'senderId' })
     db.post.belongsTo(db.user)
     db.post.hasMany(db.comment)
     db.post.hasMany(db.postReact)
@@ -56,6 +64,10 @@ async function initialize(){
     db.commentSuspension.belongsTo(db.user)
     db.commentSuspension.belongsTo(db.comment)
     db.followedUser.belongsTo(db.user, { as: 'followee', foreignKey: 'followeeId' })
+    db.chat.hasMany(db.message)
+    db.message.belongsTo(db.chat)
+    db.message.belongsTo(db.user, { as: 'sender', foreignKey: 'senderId' })
+    db.mutedUser.belongsTo(db.user, { as: 'muted', foreignKey: 'mutedId'})
 
     await sequelize.sync();
 }
