@@ -2,12 +2,24 @@ import { makeStyles } from "@material-ui/core/styles";
 import { deepPurple } from "@material-ui/core/colors";
 
 export default makeStyles((theme) => ({
-  container: {
-    marginTop: "4em",
-  },
-  navigation: {
+  filter: {
     display: "flex",
     justifyContent: "center",
+    backgroundColor: "#d3d3d3",
+    padding: "12px",
+    borderRadius: "10px",
+    alignItems: "center",
+  },
+  filterTab: {
+    fontSize: "larger",
+    fontWeight: "700",
+    cursor: "pointer",
+    marginLeft: "12px",
+    padding: "12px",
+    borderRadius: "10px",
+    "&:hover": {
+      background: "grey",
+    },
   },
   button: {
     paddingRight: "2em",

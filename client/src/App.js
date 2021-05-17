@@ -17,6 +17,8 @@ import Alert from "@material-ui/lab/Alert";
 import PrivateRoute from "./components/Routes/PrivateRoute/PrivateRoute";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import { Role } from "./utils/Role";
+import UsersList from "./components/Admin/UsersList/UsersList";
+import PostListAdmin from "./components/Admin/PostListAdmin/PostList";
 //localStorage.removeItem('currentUser')
 function App() {
   const notifs = useSelector((state) => state?.notif?.notifications);
@@ -55,6 +57,16 @@ function App() {
               path="/auth/register"
               restricted={true}
               component={Register}
+            />
+            <PrivateRoute
+              path="/admin/users"
+              roles={Role.Admin}
+              component={UsersList}
+            />
+            <PrivateRoute
+              path="/admin/posts"
+              roles={Role.Admin}
+              component={PostListAdmin}
             />
           </Switch>
         </Container>

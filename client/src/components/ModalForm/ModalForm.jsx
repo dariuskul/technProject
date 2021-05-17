@@ -53,7 +53,7 @@ const ModalForm = ({ open, setOpen, userId, setCreated, updateValues }) => {
             <TextField
               autoFocus
               margin="dense"
-              id="content"
+              id="title"
               label="Post title"
               type="text"
               fullWidth
