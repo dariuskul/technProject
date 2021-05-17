@@ -32,6 +32,8 @@ export default function postReducer(posts = [], action) {
             }
           : post
       );
+    case "SUSPEND_POST":
+      return posts.filter((post) => post.id !== action.payload);
     default:
       // If this reducer doesn't recognize the action type, or doesn't
       // care about this specific action, return the existing state unchanged

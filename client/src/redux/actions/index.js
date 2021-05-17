@@ -8,6 +8,7 @@ import {
 } from "../../api/post";
 import { login, register } from "../../api/user";
 import { newComment } from "../../api/comment";
+import { suspendPostRequest } from "../../api/admin";
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
     const user = await login(payload);
@@ -93,6 +94,15 @@ export const removeReaction = (id, postId) => async (dispatch) => {
     await removePostReactionRequest(id);
 
     dispatch({ type: "REMOVE_REACTION", payload: { id, postId } });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const suspendPost = (data) => async (dispatch) => {
+  try {
+    await suspendPostRequest(data);
+    dispatch({ type: "SUSPEND_POST", payload: data.postId });
   } catch (error) {
     alert(error);
   }
