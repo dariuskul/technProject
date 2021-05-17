@@ -13,6 +13,8 @@ import {
   fetchAllUsers,
   suspendUserRequest,
   removeUserRequest,
+  fetchSuspendedPostsRequest,
+  unsuspendPostRequest,
 } from "../../api/admin";
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
@@ -138,4 +140,20 @@ export const removeUser = (id) => async (dispatch) => {
   } catch (error) {
     alert(error);
   }
+};
+
+export const fetchSuspendedPosts = () => async (dispatch) => {
+  try {
+    const posts = await fetchSuspendedPostsRequest();
+    dispatch({ type: "FETCH_ALL_SUSPENDED_POSTS", payload: posts });
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const unsuspendPost = (id) => async (dispatch) => {
+  try {
+    await unsuspendPostRequest(id);
+    dispatch({ type: "UNSUSPEND_POST", payload: id });
+  } catch (error) {}
 };

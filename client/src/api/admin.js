@@ -59,3 +59,31 @@ export const removeUserRequest = async (id) => {
 
   return response.json();
 };
+
+export const fetchSuspendedPostsRequest = async () => {
+  const response = await fetch(`${url}/suspensions/post`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+  return response.json();
+};
+
+export const unsuspendPostRequest = async (id) => {
+  const response = await fetch(`${url}/unsuspend/post/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+  return response.json();
+};

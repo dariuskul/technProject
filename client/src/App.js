@@ -1,29 +1,24 @@
 import { Container, CssBaseline } from "@material-ui/core";
 import NavBar from "./components/NavBar/NavBar";
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 import Login from "./components/Auth/Login/Login";
 import Register from "./components/Auth/Register/Register";
 import PostList from "./components/PostList/PostList";
 import JobsList from "./components/JobsList/JobsList";
 import PublicRoute from "./components/Routes/PublicRoute/PublicRoute";
 import { useSelector } from "react-redux";
-import Alert from "@material-ui/lab/Alert";
 import PrivateRoute from "./components/Routes/PrivateRoute/PrivateRoute";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import { Role } from "./utils/Role";
 import UsersList from "./components/Admin/UsersList/UsersList";
 import PostListAdmin from "./components/Admin/PostListAdmin/PostList";
 //localStorage.removeItem('currentUser')
+import "./App.css";
+import SuspendedPosts from "./components/Admin/SuspendedPosts/SuspendedPosts";
 function App() {
   const notifs = useSelector((state) => state?.notif?.notifications);
   return (
-    <div>
+    <div className="app">
       <BrowserRouter>
         <CssBaseline />
         <NavBar />
@@ -67,6 +62,12 @@ function App() {
               path="/admin/posts"
               roles={Role.Admin}
               component={PostListAdmin}
+            />
+            <PrivateRoute
+              exact
+              path="/admin/suspensions/post"
+              roles={Role.Admin}
+              component={SuspendedPosts}
             />
           </Switch>
         </Container>

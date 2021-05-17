@@ -53,7 +53,7 @@ const Post = ({ post, creator, role, removePost, created }) => {
   // let a = reactionCount(post, "Heart");
   // console.log("COUNT", a);
   return (
-    <Card>
+    <Card className={classes.main}>
       <CardHeader
         className={classes.cardHeader}
         title={post.title}
@@ -62,7 +62,7 @@ const Post = ({ post, creator, role, removePost, created }) => {
 
       <img src={post.photoUrl} className={classes.media} alt="" />
       <CardContent>
-        <Typography variant="body1" color="textSecondary" component="p">
+        <Typography className={classes.title} variant="body1" component="h1">
           {post.description}
         </Typography>
       </CardContent>
