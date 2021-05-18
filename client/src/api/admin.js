@@ -129,3 +129,21 @@ export const suspendCommentRequest = async (data) => {
   });
   return response.json();
 };
+
+export const fetchSuspendedCommentsRequest = async () => {
+  const response = await fetch(`${url}/suspensions/comment`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+
+  return response.json();
+};
+
+export const unsuspendCommentRequest = async () => {};
+
+export const removeCommentRequest = async () => {};

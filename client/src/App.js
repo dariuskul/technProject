@@ -16,6 +16,7 @@ import PostListAdmin from "./components/Admin/PostListAdmin/PostList";
 import "./App.css";
 import SuspendedPosts from "./components/Admin/SuspendedPosts/SuspendedPosts";
 import SuspendedUsers from "./components/Admin/SuspendedUsers/SuspendedUsers";
+import SuspendedComments from "./components/Admin/SuspendedComments/SuspendedComments";
 function App() {
   const notifs = useSelector((state) => state?.notif?.notifications);
   return (
@@ -75,6 +76,12 @@ function App() {
               path="/admin/suspensions/user"
               roles={Role.Admin}
               component={SuspendedUsers}
+            />
+            <PrivateRoute
+              exact
+              path="/admin/suspensions/comments"
+              roles={Role.Admin}
+              component={SuspendedComments}
             />
           </Switch>
         </Container>

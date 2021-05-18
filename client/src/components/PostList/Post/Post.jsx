@@ -57,7 +57,9 @@ const Post = ({ post, creator, role, removePost, created }) => {
       <CardHeader
         className={classes.cardHeader}
         title={post.title}
-        subheader={post.user.username}
+        subheader={
+          <Button className={classes.title}>{post.user.username}</Button>
+        }
       />
 
       <img src={post.photoUrl} className={classes.media} alt="" />

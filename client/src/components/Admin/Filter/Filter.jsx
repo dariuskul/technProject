@@ -37,7 +37,7 @@ const Filter = () => {
       <FilterTab
         title="Comments suspensions"
         count={0}
-        path={"/admin/posts/suspensions"}
+        path={"/admin/suspensions/comments"}
       />
     </div>
   );

@@ -18,6 +18,7 @@ import {
   fetchSuspendedUsersRequest,
   unsuspendUserRequest,
   suspendCommentRequest,
+  fetchSuspendedCommentsRequest,
 } from "../../api/admin";
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
@@ -179,4 +180,13 @@ export const suspendComment = (data, id) => async (dispatch) => {
     await suspendCommentRequest(data);
     dispatch({ type: "SUSPEND_COMMENT", payload: { data, id } });
   } catch (error) {}
+};
+
+export const fetchSuspendedComments = () => async (dispatch) => {
+  try {
+    const comments = await fetchSuspendedCommentsRequest();
+    dispatch({ type: "FETCH_ALL_SUSPENDED_COMMENTS", payload: comments });
+  } catch (error) {
+    alert(error);
+  }
 };
