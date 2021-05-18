@@ -40,7 +40,7 @@ const Post = ({ post, creator, role, removePost, created }) => {
     onSubmit: (values) => {
       const value = reactionIdByUser(user, post.reacts);
       if (value !== -1) {
-        dispatch(removeReaction(value, post.id));
+        dispatch(removeReaction(value, post.id, user));
       } else {
         dispatch(addReaction(values));
       }
@@ -81,6 +81,7 @@ const Post = ({ post, creator, role, removePost, created }) => {
             open={showComments}
             setOpen={setShowComments}
             created={created}
+            user={user}
           />
         )}
       </CardContent>

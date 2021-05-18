@@ -15,6 +15,9 @@ import {
   removeUserRequest,
   fetchSuspendedPostsRequest,
   unsuspendPostRequest,
+  fetchSuspendedUsersRequest,
+  unsuspendUserRequest,
+  suspendCommentRequest,
 } from "../../api/admin";
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
@@ -96,11 +99,10 @@ export const addReaction = (data) => async (dispatch) => {
   }
 };
 
-export const removeReaction = (id, postId) => async (dispatch) => {
+export const removeReaction = (id, postId, userId) => async (dispatch) => {
   try {
     await removePostReactionRequest(id);
-
-    dispatch({ type: "REMOVE_REACTION", payload: { id, postId } });
+    dispatch({ type: "REMOVE_REACTION", payload: { id, postId, userId } });
   } catch (error) {
     alert(error);
   }
@@ -151,9 +153,30 @@ export const fetchSuspendedPosts = () => async (dispatch) => {
   }
 };
 
+export const fetchSuspendedUsers = () => async (dispatch) => {
+  try {
+    const users = await fetchSuspendedUsersRequest();
+    dispatch({ type: "FETCH_SUSPENDED_USERS", payload: users });
+  } catch (error) {}
+};
+
 export const unsuspendPost = (id) => async (dispatch) => {
   try {
     await unsuspendPostRequest(id);
     dispatch({ type: "UNSUSPEND_POST", payload: id });
+  } catch (error) {}
+};
+
+export const unsuspendUser = (id) => async (dispatch) => {
+  try {
+    await unsuspendUserRequest(id);
+    dispatch({ type: "UNSUSPEND_USER", payload: id });
+  } catch (error) {}
+};
+
+export const suspendComment = (data, id) => async (dispatch) => {
+  try {
+    await suspendCommentRequest(data);
+    dispatch({ type: "SUSPEND_COMMENT", payload: { data, id } });
   } catch (error) {}
 };

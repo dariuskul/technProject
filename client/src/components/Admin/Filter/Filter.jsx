@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPosts,
   fetchSuspendedPosts,
+  fetchSuspendedUsers,
   fetchUsers,
 } from "../../../redux/actions";
 import FilterTab from "./FilterTab";
@@ -31,7 +32,7 @@ const Filter = () => {
       <FilterTab
         title="User suspensions"
         count={0}
-        path={"/admin/posts/suspensions"}
+        path={"/admin/suspensions/user"}
       />
       <FilterTab
         title="Comments suspensions"

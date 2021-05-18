@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { addComent } from "../../redux/actions";
 import Comment from "./Comment/Comment";
 
-const Comments = ({ comments, post, open, setOpen, created }) => {
+const Comments = ({ comments, post, open, setOpen, created, user }) => {
   const toggleModal = (open) => setOpen(!open);
   const dispatch = useDispatch();
   const form = useFormik({
@@ -36,7 +36,9 @@ const Comments = ({ comments, post, open, setOpen, created }) => {
       <DialogContent>
         <DialogContentText>
           {comments.length > 0
-            ? comments.map((comment) => <Comment comment={comment} />)
+            ? comments.map((comment) => (
+                <Comment comment={comment} postId={post.id} update={created} />
+              ))
             : "No comments :("}
         </DialogContentText>
         <form action="">

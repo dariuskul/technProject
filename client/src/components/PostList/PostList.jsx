@@ -1,16 +1,4 @@
-import {
-  Container,
-  Grid,
-  Input,
-  Button,
-  Modal,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  TextField,
-  DialogActions,
-} from "@material-ui/core";
+import { Container, Grid, Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts, removePost } from "../../redux/actions";

@@ -74,9 +74,51 @@ export const fetchSuspendedPostsRequest = async () => {
   return response.json();
 };
 
+export const fetchSuspendedUsersRequest = async () => {
+  const response = await fetch(`${url}/suspensions/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+  return response.json();
+};
+export const unsuspendUserRequest = async (id) => {
+  const response = await fetch(`${url}/unsuspend/user/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+  return response.json();
+};
+
 export const unsuspendPostRequest = async (id) => {
   const response = await fetch(`${url}/unsuspend/post/${id}`, {
     method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    },
+  });
+  return response.json();
+};
+
+export const suspendCommentRequest = async (data) => {
+  const response = await fetch(`${url}/suspend/comment`, {
+    method: "POST",
+    body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
       // 'Content-Type': 'application/x-www-form-urlencoded',
