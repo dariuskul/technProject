@@ -17,73 +17,17 @@ import "./App.css";
 import SuspendedPosts from "./components/Admin/SuspendedPosts/SuspendedPosts";
 import SuspendedUsers from "./components/Admin/SuspendedUsers/SuspendedUsers";
 import SuspendedComments from "./components/Admin/SuspendedComments/SuspendedComments";
+import Notifier from "./components/Notifier/Notifier";
+import { Routes } from "./helpers/Routes";
 function App() {
-  const notifs = useSelector((state) => state?.notif?.notifications);
   return (
     <div className="app">
+      <Notifier/>
       <BrowserRouter>
         <CssBaseline />
         <NavBar />
-        {notifs && <h1>{notifs}</h1>}
         <Container maxWidth="lg">
-          <Switch>
-            <PrivateRoute
-              path="/admin"
-              roles={Role.Admin}
-              component={AdminDashboard}
-              exact
-            />
-            <PublicRoute
-              restricted={false}
-              exact
-              path="/"
-              component={PostList}
-            />
-            <PublicRoute
-              restricted={false}
-              exact
-              path="/carrers"
-              component={JobsList}
-            />
-            <PublicRoute
-              restricted={true}
-              path="/auth/login"
-              component={Login}
-            />
-            <PublicRoute
-              path="/auth/register"
-              restricted={true}
-              component={Register}
-            />
-            <PrivateRoute
-              path="/admin/users"
-              roles={Role.Admin}
-              component={UsersList}
-            />
-            <PrivateRoute
-              path="/admin/posts"
-              roles={Role.Admin}
-              component={PostListAdmin}
-            />
-            <PrivateRoute
-              exact
-              path="/admin/suspensions/post"
-              roles={Role.Admin}
-              component={SuspendedPosts}
-            />
-            <PrivateRoute
-              exact
-              path="/admin/suspensions/user"
-              roles={Role.Admin}
-              component={SuspendedUsers}
-            />
-            <PrivateRoute
-              exact
-              path="/admin/suspensions/comments"
-              roles={Role.Admin}
-              component={SuspendedComments}
-            />
-          </Switch>
+            <Routes/>
         </Container>
       </BrowserRouter>
     </div>
