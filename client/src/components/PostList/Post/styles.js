@@ -35,4 +35,10 @@ export default makeStyles((theme) => ({
   count: {
     marginLeft: "0.5em",
   },
+  creator: {
+    padding: '0',
+    color: "black",
+    fontSize: "20px",
+    fontWeight: "bolder",
+  }
 }));

@@ -25,13 +25,15 @@ import { addReaction, removeReaction } from "../../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { reactionCount } from "../../../utils/calculateReactions";
 import { reactionIdByUser } from "../../../utils/getReactionIdByUser";
-const Post = ({ post, creator, role, removePost, created }) => {
+import { useHistory } from "react-router";
+const Post = ({ post, creator, role, removePost, created, userInfo }) => {
   const [readMore, setReadMore] = useState(false);
   const classes = useStyles();
   const user = useSelector((state) => state?.user?.user?.id);
   const [openModal, setOpenModal] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
   const form = useFormik({
     initialValues: {
       reaction: "",
@@ -50,15 +52,24 @@ const Post = ({ post, creator, role, removePost, created }) => {
     form.values.reaction = emoji;
     form.submitForm();
   };
-  // let a = reactionCount(post, "Heart");
-  // console.log("COUNT", a);
+
+  const handleViewUserProfile = () => {
+    if(user)
+    history.push(`/user/${post.userId}`)
+  }
+  let subHeader;
+  if(userInfo){
+    subHeader = userInfo.firstName + ' ' + userInfo.lastName;
+  }else{
+    subHeader= post.user.firstName + ' ' + post.user.lastName;
+  }
   return (
     <Card className={classes.main}>
       <CardHeader
         className={classes.cardHeader}
         title={post.title}
         subheader={
-          <Button className={classes.title}>{post.user.username}</Button>
+          <Button disabled={!user ? true : false} onClick={handleViewUserProfile} className={classes.creator}>{subHeader}</Button>
         }
       />
 
@@ -75,7 +86,6 @@ const Post = ({ post, creator, role, removePost, created }) => {
             {readMore ? "Read less" : "Read more"}
           </Button>
         )}
-
         {showComments && (
           <Comments
             comments={post?.comments}
@@ -87,6 +97,8 @@ const Post = ({ post, creator, role, removePost, created }) => {
           />
         )}
       </CardContent>
+      {user && 
+      <>
       <CardActions disableSpacing>
         {post.userId === creator && (
           <IconButton onClick={() => setOpenModal(true)}>
@@ -139,7 +151,10 @@ const Post = ({ post, creator, role, removePost, created }) => {
         updateValues={post}
         open={openModal}
         setOpen={setOpenModal}
-      />
+      /> 
+      </>
+      }
+      
     </Card>
   );
 };

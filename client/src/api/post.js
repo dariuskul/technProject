@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const URL = "http://localhost:2000/post";
 
 export const fetchAll = async () => {
@@ -11,6 +13,7 @@ export const fetchAll = async () => {
   const { posts } = await response.json();
   return posts;
 };
+export const getPostsById = async (id) => axios.get(`${URL}/getByUser/${id}`)
 
 export const newPost = async (data) => {
   const response = await fetch(`${URL}/create`, {

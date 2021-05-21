@@ -5,8 +5,9 @@ import {
   removePostRequest,
   addPostReactionRequest,
   removePostReactionRequest,
+  getPostsById,
 } from "../../api/post";
-import { login, register } from "../../api/user";
+import { fetchFollowedUsers, getUser, login, register,followUser } from "../../api/user";
 import { newComment } from "../../api/comment";
 import {
   suspendPostRequest,
@@ -230,3 +231,33 @@ export const removeSnackbar = key => ({
     type: REMOVE_SNACKBAR,
     key,
 });
+
+
+export const getUserProfile = (id) => async(dispatch) => {
+  try {
+    console.log("AADASDASDSD",id)
+    const {data} =  await getUser(id);
+    const {data: {posts}} = await getPostsById(id);
+    const userId = JSON.parse(localStorage.getItem('currentUser')).id
+    const follows = await fetchFollowedUsers(userId);
+    let fullProfile = {
+      user: data,
+      followers: follows.data
+    }
+    dispatch({type : "GET_PROFILE", payload: fullProfile});
+    dispatch({type: "FETCH_ALL", payload: posts})
+  } catch (error) {
+    
+  }
+}
+
+export const follow = (form,id) => async(dispatch) => {
+  try {
+    const {data} = await followUser(form);
+    console.log(id)
+    dispatch({type: 'FOLLOW_USER', payload: {data,id}})
+
+  } catch (error) {
+    
+  }
+}
