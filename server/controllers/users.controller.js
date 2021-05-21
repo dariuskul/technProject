@@ -79,9 +79,6 @@ function getAll(req, res, next) {
 }
 
 function getById(req, res, next) {
-    if (Number(req.params.id) != req.user.id && req.user.role != roles.Admin)
-        return res.status(403).json({ message: "Forbidden, must be a user with same id or admin"})
-
     userService.getUserById(req.params.id)
         .then(user => res.json({ ...user }))
         .catch(error => handleError(error, res))
