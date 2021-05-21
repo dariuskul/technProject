@@ -1,6 +1,7 @@
 const config = require('../config.json');
 const mysql = require('mysql');
 const { Sequelize } = require('sequelize');
+const { initiateUnsuspendJobs } = require('./scheduler-jobs')
 
 module.exports = db = {};
 
@@ -69,5 +70,6 @@ async function initialize(){
     db.message.belongsTo(db.user, { as: 'sender', foreignKey: 'senderId' })
     db.mutedUser.belongsTo(db.user, { as: 'muted', foreignKey: 'mutedId'})
 
-    await sequelize.sync();
+    await sequelize.sync()
+        .then(() => initiateUnsuspendJobs(db));
 }
