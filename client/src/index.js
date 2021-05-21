@@ -3,11 +3,17 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import { Modal } from "@material-ui/core";
-
+import "./App.css";
+import { SnackbarProvider } from 'notistack'
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <SnackbarProvider maxSnack={1}
+    anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+  }}>
+      <App />
+    </SnackbarProvider>
   </Provider>,
   document.getElementById("root")
 );

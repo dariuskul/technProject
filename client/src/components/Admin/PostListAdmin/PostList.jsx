@@ -67,94 +67,96 @@ const PostListAdmin = () => {
       component={Paper}
       size="large"
     >
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">Post id &nbsp;</TableCell>
-            <TableCell align="center">Title</TableCell>
-            <TableCell align="center">Content</TableCell>
-            <TableCell align="center">Image</TableCell>
-            <TableCell align="center">Creator</TableCell>
-            <TableCell align="center">Post created at</TableCell>
-            <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell component="th" scope="row" align="left">
-                {row.id}
-              </TableCell>
-              <TableCell align="left">{row.title}</TableCell>
-              <TableCell align="left">{row.content}</TableCell>
-              <TableCell align="left">
-                <img
-                  style={{ maxWidth: "200px" }}
-                  src={row.photoUrl}
-                  alt="post "
-                />
-              </TableCell>
-              <TableCell align="left">
-                {row.user.firstName + " " + row.user.lastName}
-              </TableCell>
-              <TableCell align="left">{row.createdAt}</TableCell>
-              <TableCell align="center">
-                <Button
-                  onClick={() => toggleModal(row.id, "suspend")}
-                  style={{ color: "red" }}
-                >
-                  Suspend
-                </Button>
-              </TableCell>
-              <TableCell align="center">
-                <Button
-                  onClick={() => handleRemove(row.id)}
-                  style={{ color: "red" }}
-                >
-                  Remove
-                </Button>
-              </TableCell>
+      <div className={classes.content}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Post id &nbsp;</TableCell>
+              <TableCell align="center">Title</TableCell>
+              <TableCell align="center">Content</TableCell>
+              <TableCell align="center">Image</TableCell>
+              <TableCell align="center">Creator</TableCell>
+              <TableCell align="center">Post created at</TableCell>
+              <TableCell align="center"></TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Dialog
-        onClose={closeModal}
-        aria-labelledby="post-create-modal"
-        open={open}
-      >
-        <DialogTitle>Please select reason</DialogTitle>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row" align="left">
+                  {row.id}
+                </TableCell>
+                <TableCell align="left">{row.title}</TableCell>
+                <TableCell align="left">{row.content}</TableCell>
+                <TableCell align="left">
+                  <img
+                    style={{ maxWidth: "200px" }}
+                    src={row.photoUrl}
+                    alt="post "
+                  />
+                </TableCell>
+                <TableCell align="left">
+                  {row.user.firstName + " " + row.user.lastName}
+                </TableCell>
+                <TableCell align="left">{row.createdAt}</TableCell>
+                <TableCell align="center">
+                  <Button
+                    onClick={() => toggleModal(row.id, "suspend")}
+                    style={{ color: "red" }}
+                  >
+                    Suspend
+                  </Button>
+                </TableCell>
+                <TableCell align="center">
+                  <Button
+                    onClick={() => handleRemove(row.id)}
+                    style={{ color: "red" }}
+                  >
+                    Remove
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <Dialog
+          onClose={closeModal}
+          aria-labelledby="post-create-modal"
+          open={open}
+        >
+          <DialogTitle>Please select reason</DialogTitle>
 
-        <DialogContent>
-          <form>
-            <Select
-              native
-              id="reason"
-              value={form.values.reason}
-              onChange={form.handleChange}
-              input={<Input id="demo-dialog-native" />}
-            >
-              <option aria-label="None" value="">
-                Select reason
-              </option>
-              <option value={"Fraud"}>Fraud</option>
-              <option value={"Inappropriate"}>Inappropriate</option>
-              <option value={"Violence"}>Violence</option>
-              <option value={"Spam"}>Spam</option>
-              <option value={"Hate speech"}>Hate speech</option>
-            </Select>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={toggleModal} color="primary">
-            Cancel
-          </Button>
-          <Button color="primary" onClick={form.submitForm}>
-            {action}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <DialogContent>
+            <form>
+              <Select
+                native
+                id="reason"
+                value={form.values.reason}
+                onChange={form.handleChange}
+                input={<Input id="demo-dialog-native" />}
+              >
+                <option aria-label="None" value="">
+                  Select reason
+                </option>
+                <option value={"Fraud"}>Fraud</option>
+                <option value={"Inappropriate"}>Inappropriate</option>
+                <option value={"Violence"}>Violence</option>
+                <option value={"Spam"}>Spam</option>
+                <option value={"Hate speech"}>Hate speech</option>
+              </Select>
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={toggleModal} color="primary">
+              Cancel
+            </Button>
+            <Button color="primary" onClick={form.submitForm}>
+              {action}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </TableContainer>
   );
 };

@@ -6,6 +6,10 @@ export default function adminReducer(users = [], action) {
       return users.filter((user) => user.id !== action.payload);
     case "REMOVE_USER":
       return users.filter((user) => user.id !== action.payload);
+    case "FETCH_SUSPENDED_USERS":
+      return action.payload;
+    case "UNSUSPEND_USER":
+      return users.filter((user) => user?.id !== action.payload);
     default:
       // If this reducer doesn't recognize the action type, or doesn't
       // care about this specific action, return the existing state unchanged

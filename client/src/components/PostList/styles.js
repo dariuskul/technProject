@@ -4,6 +4,7 @@ import { deepPurple } from "@material-ui/core/colors";
 export default makeStyles((theme) => ({
   container: {
     marginTop: "4em",
+    color: "black",
   },
   inputContainer: {
     marginBottom: "2em",

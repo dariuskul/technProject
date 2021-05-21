@@ -7,13 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/actions";
 const NavBar = () => {
   const classes = useStyles();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state?.user);
   const dispatch = useDispatch();
   const history = useHistory();
   const handleClick = () => {
     dispatch(logOut(history));
   };
-  console.log(JSON.parse(localStorage.getItem("currentUser")));
   return (
     <AppBar position="static" color="inherit" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>

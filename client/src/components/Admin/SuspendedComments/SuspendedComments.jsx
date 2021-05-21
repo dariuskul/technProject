@@ -10,47 +10,38 @@ import {
 } from "@material-ui/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchSuspendedUsers,
-  removeUser,
-  unsuspendUser,
-} from "../../../redux/actions";
+import { fetchSuspendedComments } from "../../../redux/actions";
 import { makeRows } from "../../../utils/createTableRows";
 
-const SuspendedUsers = () => {
+const SuspendedComments = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchSuspendedUsers());
+    dispatch(fetchSuspendedComments());
   }, [dispatch]);
-  const suspendedUsers = useSelector((state) => state?.users);
-  const handleUnsuspend = (id) => {
-    if (window.confirm("Do you really want to unsuspend this user?")) {
-      dispatch(unsuspendUser(id));
-    }
-  };
-  const handleRemove = (id) => {
-    if (
-      window.confirm(
-        "Do you really want to remove this user? This action cannot be undone"
-      )
-    ) {
-      dispatch(removeUser(id));
-    }
-  };
-  const rows = makeRows(suspendedUsers);
+  const suspendedComments = useSelector((state) => state.suspendedComments);
+
+  const rows = makeRows(suspendedComments);
+  const handleRemove = (id) => {};
+
+  const handleUnsuspend = (id) => {};
   return (
     <TableContainer component={Paper} size="large">
       <div>
         <Table aria-label="simple table">
           <TableHead>
-            <TableRow>
-              <TableCell align="center">User id</TableCell>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Last name</TableCell>
-              <TableCell align="center">Username</TableCell>
-              <TableCell align="center">Account creation date</TableCell>
+            <TableRow
+              style={{
+                color: "black",
+                fontSize: "20px",
+                fontWeight: "bolder",
+              }}
+            >
+              <TableCell align="center">Comment id</TableCell>
+              <TableCell align="center">Creator of the comment</TableCell>
+              <TableCell align="center">Comment creation date</TableCell>
               <TableCell align="center">Reason for suspension</TableCell>
               <TableCell align="center">Suspended by</TableCell>
+              <TableCell align="center">Comment</TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
@@ -60,14 +51,15 @@ const SuspendedUsers = () => {
                 <TableCell component="th" scope="row" align="left">
                   {row.id}
                 </TableCell>
-                <TableCell align="center">{row?.firstName}</TableCell>
-                <TableCell align="center">{row?.lastName}</TableCell>
-                <TableCell align="center">{row?.username}</TableCell>
+                <TableCell align="center">
+                  {row?.creator.firstName + " " + row?.creator.lastName}
+                </TableCell>
                 <TableCell align="center">{row?.createdAt}</TableCell>
                 <TableCell align="center">{row?.reason}</TableCell>
                 <TableCell align="center">
                   {row.admin?.firstName + " " + row.admin?.lastName}
                 </TableCell>
+                <TableCell align="center">{row?.content}</TableCell>
                 <TableCell align="center">
                   <Button onClick={() => handleUnsuspend(row.id)}>
                     Unsuspend
@@ -87,4 +79,4 @@ const SuspendedUsers = () => {
   );
 };
 
-export default SuspendedUsers;
+export default SuspendedComments;

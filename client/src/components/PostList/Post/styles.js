@@ -4,12 +4,23 @@ import { deepPurple } from "@material-ui/core/colors";
 export default makeStyles((theme) => ({
   cardHeader: {
     "& .MuiCardHeader-title": {
-      fontWeight: "1000",
+      fontWeight: "bolder",
       fontSize: "35px",
     },
     "& .MuiCardHeader-subheader": {
-      fontSize: "25px",
+      fontSize: "30px",
+      color: "black",
     },
+  },
+  main: {
+    color: "black",
+    fontSize: "15px",
+    fontWeight: "bolder",
+  },
+  title: {
+    color: "black",
+    fontSize: "30px",
+    fontWeight: "bolder",
   },
   media: {
     marginTop: "1em",

@@ -66,7 +66,7 @@ const UsersList = () => {
       component={Paper}
       size="large"
     >
-      <Table aria-label="simple table">
+      <Table className={classes} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="center">User id</TableCell>

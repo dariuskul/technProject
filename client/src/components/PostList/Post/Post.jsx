@@ -40,7 +40,7 @@ const Post = ({ post, creator, role, removePost, created }) => {
     onSubmit: (values) => {
       const value = reactionIdByUser(user, post.reacts);
       if (value !== -1) {
-        dispatch(removeReaction(value, post.id));
+        dispatch(removeReaction(value, post.id, user));
       } else {
         dispatch(addReaction(values));
       }
@@ -53,16 +53,18 @@ const Post = ({ post, creator, role, removePost, created }) => {
   // let a = reactionCount(post, "Heart");
   // console.log("COUNT", a);
   return (
-    <Card>
+    <Card className={classes.main}>
       <CardHeader
         className={classes.cardHeader}
         title={post.title}
-        subheader={post.user.username}
+        subheader={
+          <Button className={classes.title}>{post.user.username}</Button>
+        }
       />
 
       <img src={post.photoUrl} className={classes.media} alt="" />
       <CardContent>
-        <Typography variant="body1" color="textSecondary" component="p">
+        <Typography className={classes.title} variant="body1" component="h1">
           {post.description}
         </Typography>
       </CardContent>
@@ -81,6 +83,7 @@ const Post = ({ post, creator, role, removePost, created }) => {
             open={showComments}
             setOpen={setShowComments}
             created={created}
+            user={user}
           />
         )}
       </CardContent>
