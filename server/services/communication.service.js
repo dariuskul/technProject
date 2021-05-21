@@ -1,6 +1,7 @@
 const db = require('../_helpers/db')
 const { RequestError } = require('../_helpers/request-error')
 const { getUserById } = require('../services/user.service')
+const { Op } = require('sequelize')
 
 module.exports = {
     followUser,
@@ -46,25 +47,29 @@ async function getAllFollowedUsers(userId) {
      return follows
 }
 
-async function getChatHistory({ user1Id, user2Id, page = 0, per_page = 100 }) {
-    const chat = await db.chat.findOne({ user1Id, user2Id })
+async function getChatHistory({ user1Id, user2Id, page = 0, per_page = 20 }) {
+    const chatParams = user1Id > user2Id? { user1Id: user2Id, user2Id: user1Id } :
+                        { user1Id, user2Id }
+    const chat = await db.chat.findOne({ where: chatParams })
     if (!chat) return []
 
     const messages = await db.message.findAll({
         where: { 
             chatId: chat.id,
-            id: { $gt: per_page * page, $lt: per_page * (page + 1) }
+            id: { [Op.gte]: per_page * page, [Op.lt]: per_page * (page + 1) }
          },
-        order: 'createdAt desc'
+        order: [['createdAt', 'DESC']]
     })
     return messages
 }
 
 async function addMessage({ user1Id, user2Id, content }) {
-    var chat = await db.chat.findOne({ where: { user1Id, user2Id } })
+    const chatParams = user1Id > user2Id? { user1Id: user2Id, user2Id: user1Id } :
+                            { user1Id, user2Id }
+    var chat = await db.chat.findOne({ where: chatParams })
 
     if (!chat) {
-        chat = new db.chat({ user1Id, user2Id })
+        chat = new db.chat(chatParams)
         await chat.save()
     }
 

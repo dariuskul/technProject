@@ -1,6 +1,7 @@
 const db = require("../_helpers/db.js");
 const { RequestError } = require('../_helpers/request-error')
 const roles = require('../_helpers/roles')
+const schedule = require('node-schedule')
 
 module.exports = {
     suspendCommentById,
@@ -44,7 +45,6 @@ async function unsuspendPostById(id) {
 }
 
 async function suspendUserById(params) {
-    console.log(params)
     const user = await db.user.findOne({
         where: { id: params.userId },
         include: [{
@@ -52,7 +52,7 @@ async function suspendUserById(params) {
             required: false
         }]
     })
-    
+
     if (!user) throw new RequestError("User not found", 404)
     if (user.role == roles.Admin) throw new RequestError("Cannot suspend admins", 400)
 
@@ -124,6 +124,13 @@ async function suspendUser(params, user) {
     user.isSuspended = true
     user.updatedAt = Date.now()
     await user.save()
+
+    if (suspension.validUntil) {
+        const unsuspendDate = new Date(suspension.validUntil)
+        schedule.scheduleJob(`unsuspend ${user.id}`, unsuspendDate, function() {
+            unsuspendUser(user)
+        })
+    }
 
     const { reason, adminId } = params
     user.posts.forEach(async post => {
@@ -202,7 +209,6 @@ async function getAllPostSuspensions() {
             }
         ]
     })
-    console.log(suspensions)
     suspensions = suspensions.map(suspension => {
         var { user: creator, post_suspensions, ...rest } = suspension.get({ plain: true })
         var { user, ...rest } = { ...rest, ...post_suspensions[0] }

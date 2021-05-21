@@ -47,13 +47,12 @@ function userSuspensionSchema(req, res, next) {
     const schema = Joi.object({
         reason: Joi.string().required().valid('Fraud', 'Inappropriate', 'Violence', 'Spam', 'Hate speech'),
         userId: Joi.number().required(),
-        validUntil: Joi.date()
+        validUntil: Joi.date().min(Date.now())
     })
 
     validateRequest(req, res, next, schema)
 }
 
-//TODO Add admin only and filtering
 function suspendUser(req, res, next) {
     adminService.suspendUserById({ ...req.body, adminId: req.user.id })
         .then(() => res.json({ message: 'User suspended' }))

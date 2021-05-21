@@ -54,14 +54,18 @@ function getChatHistory(req, res, next) {
 function addMessageSchema(req, res, next) {
     const schema = Joi.object({
         content: Joi.string().required().min(1).max(512),
-        user2Id: Joi.number().required()
+        userId: Joi.number().required()
     })
 
     validateRequest(req, res, next, schema)
 }
 
 function addMessage(req, res, next) {
-    communicationService.addMessage({ user1Id: req.user.id, ...req.body })
+    communicationService.addMessage({
+        user1Id: req.user.id, 
+        user2Id: req.body.userId,
+        content: req.body.content
+    })
         .then(message => res.json(message))
         .catch(error => handleError(error, res))
 }

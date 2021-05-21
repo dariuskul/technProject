@@ -1480,7 +1480,7 @@ Communication controller api url `http://localhost:2000/communication`
 
 ---
 
-### POST Follow user
+### POST Follow/Unfollow user
 
 **Description**
 
@@ -1528,52 +1528,6 @@ or null
 
 ---
 
-### POST Follow user
-
-**Description**
-
-Follows another user.
-
-**Example request**
-
-`http://localhost:2000/communication/follow`
-
-**Authentication**
-
-This request requires a jwt.
-
-**Example request body**
-
-```
-{
-    "followeeId": 2
-}
-```
-
-**Validations**
-
--   Field `followeeId` is **required**.
-
-**Example response**
-
-```
-{
-    "id": 1,
-    "userId": 2,
-    "username": "username2",
-    "firstName": "firstName",
-    "lastName": "lastName",
-    "dateOfBirth": "1999-01-01T00:00:00.000Z",
-    "role": "User",
-    "isSuspended": false,
-    "createdAt": "2021-05-09T19:12:15.000Z",
-    "updatedAt": "2021-05-10T18:51:07.000Z",
-    "followingSince": "2021-05-11T14:41:25.402Z"
-}
-```
-
----
-
 ### GET Get user's followed users list
 
 **Description**
@@ -1601,6 +1555,112 @@ This request requires a jwt.
     }
 ]
 ```
+
+---
+
+### GET Get chat history
+
+**Description**
+
+Fetches all of specific chat's messages.
+
+**Example request**
+
+`http://localhost:2000/communication/chat/{user_id}?page={0}&per_page={10}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `per_page` by default is 20
+
+**Authentication**
+
+This request requires a jwt.
+
+**Example response**
+
+```
+{
+    "messages": [
+        {
+            "id": 6,
+            "content": "Message two",
+            "createdAt": "2021-05-21T17:10:59.000Z",
+            "updatedAt": "2021-05-21T17:10:59.000Z",
+            "senderId": 2,
+            "chatId": 1
+        },
+        {
+            "id": 2,
+            "content": "This is a message",
+            "createdAt": "2021-05-21T15:38:45.000Z",
+            "updatedAt": "2021-05-21T15:38:45.000Z",
+            "senderId": 1,
+            "chatId": 1
+        }
+    ]
+}
+```
+
+---
+
+### POST Add a message
+
+**Description**
+
+Adds a message to the database.
+
+**Example request**
+
+`http://localhost:2000/communication/message`
+
+**Authentication**
+
+This request requires a jwt.
+
+**Example request body**
+
+```
+{
+    "content": "This is a message",
+    "userId": 2
+}
+```
+
+**Validations**
+
+-   All fields are **required**
+-   Field `content` must be between 1 and 512 characters long.
+
+**Example response**
+
+```
+{
+    "id": 2,
+    "content": "This is a message",
+    "senderId": 1,
+    "chatId": 1,
+    "updatedAt": "2021-05-21T15:38:45.398Z",
+    "createdAt": "2021-05-21T15:38:45.398Z"
+}
+```
+
+---
+
+### POST Mute/Unmute a user
+
+**Description**
+
+Mutes or unmutes the specified user.
+
+**Example request**
+
+`http://localhost:2000/communication/mute/{user_id}`
+
+**Authentication**
+
+This request requires a jwt.
 
 ---
 
