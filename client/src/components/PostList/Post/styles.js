@@ -40,5 +40,12 @@ export default makeStyles((theme) => ({
     color: "black",
     fontSize: "20px",
     fontWeight: "bolder",
+  },
+  hidePost: {
+    padding: '0',
+    color: "black",
+    fontSize: "20px",
+    fontWeight: "bolder",
+    marginLeft: '0.5em'
   }
 }));

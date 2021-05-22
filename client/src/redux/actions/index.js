@@ -6,7 +6,8 @@ import {
   addPostReactionRequest,
   removePostReactionRequest,
   getPostsById,
-  searchPost
+  searchPost,
+  hidePost
 } from "../../api/post";
 import { fetchFollowedUsers, getUser, login, register,followUser } from "../../api/user";
 import { newComment } from "../../api/comment";
@@ -275,5 +276,14 @@ export const searchBytitle = (query) => async(dispatch) => {
     
   } catch (error) {
     
+  }
+}
+
+export const hideUserPost = (id) => async(dispatch) => {
+  try {
+    const {data} = await hidePost(id);
+    dispatch({type: 'UPDATE', payload: data});
+  } catch (error) {
+    alert(error);
   }
 }

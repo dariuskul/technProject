@@ -91,3 +91,12 @@ export const removePostReactionRequest = async (id) => {
 };
 
 export const searchPost = async(searchQuery) => axios.get(`${URL}/getBySearch?value=${searchQuery}`)
+
+export const hidePost = async(id) => axios.put(`${URL}/hide/${id}`,{},{
+  headers: {
+    'Authorization': `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    }
+})
+ 

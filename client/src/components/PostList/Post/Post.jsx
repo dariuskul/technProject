@@ -21,7 +21,7 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
-import { addReaction, removeReaction } from "../../../redux/actions";
+import { addReaction, hideUserPost, removeReaction } from "../../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { reactionCount } from "../../../utils/calculateReactions";
 import { reactionIdByUser } from "../../../utils/getReactionIdByUser";
@@ -57,6 +57,10 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
     if(user)
     history.push(`/user/${post.userId}`)
   }
+
+  const handleHidePost = () => {
+    dispatch(hideUserPost(post?.id))
+  }
   let subHeader;
   if(userInfo){
     subHeader = userInfo.firstName + ' ' + userInfo.lastName;
@@ -70,7 +74,7 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
         title={
           <div>
             {post.title}
-            { post.userId === creator && <Button>Hide post</Button>}
+            { post.userId === creator && <Button onClick={handleHidePost} className={classes.hidePost}>{post.isHidden? 'UNHIDE' : 'HIDE'}</Button>}
           </div>
         }
         subheader={
