@@ -25,15 +25,15 @@ export default makeStyles((theme) => ({
   media: {
     marginTop: "1em",
     backgroundBlendMode: "darken",
-    width: "100%",
     objectFit: "fit",
+    width: '100%',
   },
   button: {
     display: "flex",
     justifyContent: "space-between",
   },
   count: {
-    marginLeft: "0.5em",
+    marginLeft: "0.2em",
   },
   creator: {
     padding: '0',

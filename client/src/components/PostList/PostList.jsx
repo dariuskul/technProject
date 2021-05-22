@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts, removePost } from "../../redux/actions";
 import { isLoggedIn } from "../../utils/isLoggedIn";
 import ModalForm from "../ModalForm/ModalForm";
+import Search from "../Search/Search";
 import Post from "./Post/Post";
 import useStyles from "./styles";
 const PostList = ({viewProfile}) => {
@@ -45,9 +46,10 @@ const PostList = ({viewProfile}) => {
           </Button>
         )}
       </Container>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
+       {!viewProfile  && <Search/> }
         <Grid container spacing={3}>
-          {posts?.map((post) => (
+          {posts.length ? posts?.map((post) => (
             <Grid key={post.id} item xs={12} sm={6}>
               <Post
                 post={post}
@@ -58,7 +60,7 @@ const PostList = ({viewProfile}) => {
                 userInfo={viewUser}
               />
             </Grid>
-          ))}
+          )) : 'Loading...'}
         </Grid>
         <ModalForm
           open={openModal}

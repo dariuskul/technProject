@@ -67,7 +67,12 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
     <Card className={classes.main}>
       <CardHeader
         className={classes.cardHeader}
-        title={post.title}
+        title={
+          <div>
+            {post.title}
+            { post.userId === creator && <Button>Hide post</Button>}
+          </div>
+        }
         subheader={
           <Button disabled={!user ? true : false} onClick={handleViewUserProfile} className={classes.creator}>{subHeader}</Button>
         }
@@ -145,6 +150,7 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
             </div>
           </div>
         </IconButton>
+
       </CardActions>
       <ModalForm
         userId={creator}

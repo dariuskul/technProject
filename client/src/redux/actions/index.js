@@ -6,6 +6,7 @@ import {
   addPostReactionRequest,
   removePostReactionRequest,
   getPostsById,
+  searchPost
 } from "../../api/post";
 import { fetchFollowedUsers, getUser, login, register,followUser } from "../../api/user";
 import { newComment } from "../../api/comment";
@@ -247,7 +248,7 @@ export const getUserProfile = (id) => async(dispatch) => {
     dispatch({type : "GET_PROFILE", payload: fullProfile});
     dispatch({type: "FETCH_ALL", payload: posts})
   } catch (error) {
-    
+    alert(error)
   }
 }
 
@@ -257,6 +258,21 @@ export const follow = (form,id) => async(dispatch) => {
     console.log(id)
     dispatch({type: 'FOLLOW_USER', payload: {data,id}})
 
+  } catch (error) {
+    
+  }
+}
+
+export const searchBytitle = (query) => async(dispatch) => {
+  try {
+    const {data: {posts}} = await searchPost(query);
+    console.log(posts)
+    if(posts.length > 0){
+      dispatch({type: 'FETCH_ALL', payload: posts})
+    }else{
+      notification('We could not find anything :(', 'info',dispatch,enqueueSnackbar,closeSnackbar)
+    }
+    
   } catch (error) {
     
   }

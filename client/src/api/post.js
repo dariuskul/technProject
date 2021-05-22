@@ -89,3 +89,5 @@ export const removePostReactionRequest = async (id) => {
   });
   return response.json();
 };
+
+export const searchPost = async(searchQuery) => axios.get(`${URL}/getBySearch?value=${searchQuery}`)
