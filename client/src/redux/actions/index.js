@@ -5,8 +5,11 @@ import {
   removePostRequest,
   addPostReactionRequest,
   removePostReactionRequest,
+  getPostsById,
+  searchPost,
+  hidePost
 } from "../../api/post";
-import { login, register } from "../../api/user";
+import { fetchFollowedUsers, getUser, login, register,followUser } from "../../api/user";
 import { newComment } from "../../api/comment";
 import {
   suspendPostRequest,
@@ -230,3 +233,57 @@ export const removeSnackbar = key => ({
     type: REMOVE_SNACKBAR,
     key,
 });
+
+
+export const getUserProfile = (id) => async(dispatch) => {
+  try {
+    console.log("AADASDASDSD",id)
+    const {data} =  await getUser(id);
+    const {data: {posts}} = await getPostsById(id);
+    const userId = JSON.parse(localStorage.getItem('currentUser')).id
+    const follows = await fetchFollowedUsers(userId);
+    let fullProfile = {
+      user: data,
+      followers: follows.data
+    }
+    dispatch({type : "GET_PROFILE", payload: fullProfile});
+    dispatch({type: "FETCH_ALL", payload: posts})
+  } catch (error) {
+    alert(error)
+  }
+}
+
+export const follow = (form,id) => async(dispatch) => {
+  try {
+    const {data} = await followUser(form);
+    console.log(id)
+    dispatch({type: 'FOLLOW_USER', payload: {data,id}})
+
+  } catch (error) {
+    
+  }
+}
+
+export const searchBytitle = (query) => async(dispatch) => {
+  try {
+    const {data: {posts}} = await searchPost(query);
+    console.log(posts)
+    if(posts.length > 0){
+      dispatch({type: 'FETCH_ALL', payload: posts})
+    }else{
+      notification('We could not find anything :(', 'info',dispatch,enqueueSnackbar,closeSnackbar)
+    }
+    
+  } catch (error) {
+    
+  }
+}
+
+export const hideUserPost = (id) => async(dispatch) => {
+  try {
+    const {data} = await hidePost(id);
+    dispatch({type: 'UPDATE', payload: data});
+  } catch (error) {
+    alert(error);
+  }
+}

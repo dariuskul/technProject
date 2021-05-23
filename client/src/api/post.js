@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const URL = "http://localhost:2000/post";
 
 export const fetchAll = async () => {
@@ -11,6 +13,7 @@ export const fetchAll = async () => {
   const { posts } = await response.json();
   return posts;
 };
+export const getPostsById = async (id) => axios.get(`${URL}/getByUser/${id}`)
 
 export const newPost = async (data) => {
   const response = await fetch(`${URL}/create`, {
@@ -86,3 +89,14 @@ export const removePostReactionRequest = async (id) => {
   });
   return response.json();
 };
+
+export const searchPost = async(searchQuery) => axios.get(`${URL}/getBySearch?value=${searchQuery}`)
+
+export const hidePost = async(id) => axios.put(`${URL}/hide/${id}`,{},{
+  headers: {
+    'Authorization': `Bearer ${
+        JSON.parse(localStorage.getItem("currentUser")).token
+      }`,
+    }
+})
+ 

@@ -33,11 +33,11 @@ const NavBar = () => {
             )}
             <Button
               component={Link}
-              to="/posts"
+              to="/myposts"
               variant="contained"
               className={classes.button}
             >
-              Posts
+              My posts
             </Button>
             <Button
               component={Link}

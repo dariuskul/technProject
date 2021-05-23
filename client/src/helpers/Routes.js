@@ -11,6 +11,8 @@ import JobsList from "../components/JobsList/JobsList"
 import PostList from "../components/PostList/PostList"
 import PrivateRoute from "../components/Routes/PrivateRoute/PrivateRoute"
 import PublicRoute from "../components/Routes/PublicRoute/PublicRoute"
+import UserPosts from "../components/UserPosts/UserPosts"
+import ViewProfile from "../components/ViewProfile/ViewProfile"
 import { Role } from "../utils/Role"
 
 export const Routes = () => {
@@ -72,6 +74,8 @@ export const Routes = () => {
               roles={Role.Admin}
               component={SuspendedComments}
             />
+            <PublicRoute path="/user/:id" component={ViewProfile}/>
+            <PrivateRoute path="/myposts" roles={[Role.Admin,Role.User]} component={UserPosts}/>
         </Switch>
     )
 }

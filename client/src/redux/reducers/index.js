@@ -5,6 +5,7 @@ import notificationsReducer from "./notifications";
 import adminReducer from "./admin";
 import suspendedPost from "./suspendedPost";
 import suspendedComments from "./suspendedComments";
+import communication from "./communication"
 export default combineReducers({
   user: userReducer,
   posts: postReducer,
@@ -12,4 +13,5 @@ export default combineReducers({
   users: adminReducer,
   suspendedPosts: suspendedPost,
   suspendedComments: suspendedComments,
+  communication: communication
 });
