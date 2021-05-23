@@ -25,6 +25,7 @@ import {
 } from "../../api/admin";
 import { Button } from "@material-ui/core";
 import { notification } from "../../utils/notification";
+import { getTweets } from "../../api/twitter";
 export const ENQUEUE_SNACKBAR = 'ENQUEUE_SNACKBAR';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const REMOVE_SNACKBAR = 'REMOVE_SNACKBAR';
@@ -285,5 +286,14 @@ export const hideUserPost = (id) => async(dispatch) => {
     dispatch({type: 'UPDATE', payload: data});
   } catch (error) {
     alert(error);
+  }
+}
+
+export const fetchTweets = (query) => async(dispatch) => {
+  try {
+      const {data} = await getTweets(query);
+      dispatch({type: 'GET_TWEETS', payload: data})
+  } catch (error) {
+    
   }
 }

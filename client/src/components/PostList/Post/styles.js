@@ -16,6 +16,7 @@ export default makeStyles((theme) => ({
     color: "black",
     fontSize: "15px",
     fontWeight: "bolder",
+    height: '100%'
   },
   title: {
     color: "black",
@@ -25,8 +26,8 @@ export default makeStyles((theme) => ({
   media: {
     marginTop: "1em",
     backgroundBlendMode: "darken",
-    objectFit: "fit",
-    width: '100%',
+    objectFit: "cover",
+    width: '100%'
   },
   button: {
     display: "flex",
@@ -47,5 +48,5 @@ export default makeStyles((theme) => ({
     fontSize: "20px",
     fontWeight: "bolder",
     marginLeft: '0.5em'
-  }
+  },
 }));

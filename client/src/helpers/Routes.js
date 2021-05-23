@@ -11,6 +11,7 @@ import JobsList from "../components/JobsList/JobsList"
 import PostList from "../components/PostList/PostList"
 import PrivateRoute from "../components/Routes/PrivateRoute/PrivateRoute"
 import PublicRoute from "../components/Routes/PublicRoute/PublicRoute"
+import Tweets from "../components/Tweets/Tweets"
 import UserPosts from "../components/UserPosts/UserPosts"
 import ViewProfile from "../components/ViewProfile/ViewProfile"
 import { Role } from "../utils/Role"
@@ -76,6 +77,7 @@ export const Routes = () => {
             />
             <PublicRoute path="/user/:id" component={ViewProfile}/>
             <PrivateRoute path="/myposts" roles={[Role.Admin,Role.User]} component={UserPosts}/>
+            <PublicRoute path='/tweets' component={Tweets}/>
         </Switch>
     )
 }

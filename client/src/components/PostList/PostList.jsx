@@ -1,7 +1,7 @@
 import { Container, Grid, Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts, removePost } from "../../redux/actions";
+import { fetchPosts, removePost, searchBytitle } from "../../redux/actions";
 import { isLoggedIn } from "../../utils/isLoggedIn";
 import ModalForm from "../ModalForm/ModalForm";
 import Search from "../Search/Search";
@@ -15,7 +15,7 @@ const PostList = ({viewProfile}) => {
   const posts = useSelector((state) => state?.posts);
   const dispatch = useDispatch();
   const [created, setCreated] = useState("");
-
+  const [search,setSearch] = useState('');
 
 
   useEffect(() => {
@@ -32,6 +32,19 @@ const PostList = ({viewProfile}) => {
   const deletePost = (id) => {
     dispatch(removePost(id));
   };
+
+  const handleChange = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(search){
+      dispatch(searchBytitle(search))
+    }else{
+      dispatch(searchBytitle(search))
+    }
+  }
   return (
     <div className={classes.container}>
       <Container className={classes.inputContainer} maxWidth="xl">
@@ -47,7 +60,7 @@ const PostList = ({viewProfile}) => {
         )}
       </Container>
       <Container maxWidth="xl">
-       {!viewProfile  && <Search/> }
+       {!viewProfile  && <Search handleChange={handleChange} handleSubmit={handleSubmit} search={search} setSearch={setSearch}/> }
         <Grid container spacing={3}>
           {posts.length ? posts?.map((post) => (
             <Grid key={post.id} item xs={12} sm={6}>
@@ -60,7 +73,7 @@ const PostList = ({viewProfile}) => {
                 userInfo={viewUser}
               />
             </Grid>
-          )) : 'Loading...'}
+          )) : <h3>No posts...</h3>}
         </Grid>
         <ModalForm
           open={openModal}

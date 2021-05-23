@@ -6,6 +6,7 @@ import adminReducer from "./admin";
 import suspendedPost from "./suspendedPost";
 import suspendedComments from "./suspendedComments";
 import communication from "./communication"
+import tweets from "./tweet"
 export default combineReducers({
   user: userReducer,
   posts: postReducer,
@@ -13,5 +14,6 @@ export default combineReducers({
   users: adminReducer,
   suspendedPosts: suspendedPost,
   suspendedComments: suspendedComments,
-  communication: communication
+  communication: communication,
+  tweets: tweets
 });

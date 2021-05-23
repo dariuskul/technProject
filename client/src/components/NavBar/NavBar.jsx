@@ -47,6 +47,14 @@ const NavBar = () => {
             >
               Carrers
             </Button>
+            <Button
+              component={Link}
+              to="/tweets"
+              variant="contained"
+              className={classes.button}
+            >
+              Tweets
+            </Button>
 
             <Button
               variant="contained"
@@ -81,6 +89,14 @@ const NavBar = () => {
               className={classes.button}
             >
               Carrers
+            </Button>
+            <Button
+              component={Link}
+              to="/tweets"
+              variant="contained"
+              className={classes.button}
+            >
+              Tweets
             </Button>
           </div>
         )}

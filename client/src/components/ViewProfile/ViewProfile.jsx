@@ -1,7 +1,7 @@
 import { Container, Paper } from "@material-ui/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useLocation,useParams } from "react-router"
+import { Redirect,useParams } from "react-router"
 import { getUserProfile } from "../../redux/actions";
 import { isLoggedIn } from "../../utils/isLoggedIn";
 import PostList from "../PostList/PostList";
