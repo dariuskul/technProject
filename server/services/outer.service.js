@@ -5,7 +5,7 @@ const https = require('https')
 const fetch = require('node-fetch')
 
 module.exports = {
-    getTweetsByTitle,
+    getTweetsByHashtag,
     getJobsByTitle
 }
 
@@ -16,7 +16,7 @@ const config = {
 }
 const twitterAPI = new Twit(config)
 
-async function getTweetsByTitle({ search, date, count = 10 }) {
+async function getTweetsByHashtag({ search, date, count = 10 }) {
     if (!search) throw new RequestError("Search query missing", 400)
 
     var altDate = new Date()
@@ -24,8 +24,14 @@ async function getTweetsByTitle({ search, date, count = 10 }) {
     altDate.setDate(0)
     altDate.setDate(currentDate.getDate())
 
-    const searchParams = { q: `#${search} since:${date? date: altDate.toISOString()}`, count }
-    return twitterAPI.get('search/tweets', searchParams)
+    const searchParams = { 
+        q: `#${search} since:${date? date: altDate.toISOString()} -filter:retweets AND -filter:replies AND filter:verified`, 
+        count 
+    }
+    return twitterAPI.get('search/tweets', searchParams).then(response => {
+        if (!response.resp.statusCode) throw new RequestError(response.stack, 400)
+        return response.data
+    })
 }
 
 async function getJobsByTitle({ description = "", full_time = true, location = "", page = "0"}) {

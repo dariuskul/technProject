@@ -9,8 +9,8 @@ router.get('/jobs', getJobs)
 module.exports = router
 
 function getTweets(req, res, next) {
-    outerService.getTweetsByTitle(req.query)
-        .then(response => res.json({ ...response.data }))
+    outerService.getTweetsByHashtag(req.query)
+        .then(tweets => res.json({ ...tweets }))
         .catch(error => handleError(error, res))
 }
 
