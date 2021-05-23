@@ -592,7 +592,7 @@ Fetches a spefici user's posts by the users id.
 
 **Example request**
 
-`http://localhost:2000/post/getByUser/{userId}`
+`http://localhost:2000/post/getByUser/{userId}?logged_in_id={1}`
 
 **Authentication**
 

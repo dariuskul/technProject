@@ -81,11 +81,12 @@ function _delete(req, res, next) {
 }
 
 function getByUser(req, res, next) {
-    postService.getPostsByUser(req.params.id)
+    postService.getPostsByUser(req.params.id, req.query.logged_in_id)
         .then(posts => res.json({ posts }))
         .catch(error => handleError(error, res))
 }
 
+//TODO Get data from token
 function changeVisibility(req, res, next) {
     postService.changePostVisibility(req.params.id, req.user.id)
         .then(post => res.json({ ...post }))

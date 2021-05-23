@@ -32,9 +32,9 @@ async function login({ username, password }) {
   }
 
   if (user.isSuspended) throw new RequestError("User account is suspended", 403)
-
-  const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: "1d" });
-  return { ...omitHash(user.get()), token };
+  const userWithoutHash = omitHash(user.get())
+  const token = jwt.sign({ sub:userWithoutHash.id, ...userWithoutHash }, config.secret, { expiresIn: "1d" });
+  return { ...userWithoutHash ,token };
 }
 
 async function update(id, params) {

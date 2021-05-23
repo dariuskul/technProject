@@ -64,6 +64,9 @@ async function getChatHistory({ user1Id, user2Id, page = 0, per_page = 20 }) {
 }
 
 async function addMessage({ user1Id, user2Id, content }) {
+    const mutedUser = await findMutedUser(user1Id, user2Id)
+    if (mutedUser) throw new RequestError("The user has muted you.", 400)
+
     const chatParams = user1Id > user2Id? { user1Id: user2Id, user2Id: user1Id } :
                             { user1Id, user2Id }
     var chat = await db.chat.findOne({ where: chatParams })
