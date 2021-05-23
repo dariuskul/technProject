@@ -91,12 +91,14 @@ async function updatePost(id, params, userId) {
     return { ...post.get(), reacts, comments }
 }
 
-async function getPostsByUser(id) {
+async function getPostsByUser(id, userId = null) {
     var posts = await db.post.findAll({ 
         where: { 
             userId: id,
             isSuspended: false,
-            isHidden: false
+            isHidden: userId && db.sequelize.where(db.sequelize.col("post.userId"), "==", userId)? 
+                        { [Op.or]: [false, true] } 
+                        : false
          },
         include: [{
             model: db.user,
