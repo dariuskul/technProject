@@ -12,6 +12,7 @@ router.put('/update/:id', authorize(), updateSchema, update)
 router.delete('/delete/:id', authorize(roles.Admin), _delete)
 router.get('/getAll', authorize(roles.Admin), getAll)
 router.get('/getById/:id', getById)
+router.get('/getByToken', authorize(), getByToken)
 module.exports = router
 
 //TODO Add more validation parameters with custom messages, add email
@@ -41,7 +42,13 @@ function loginSchema(req, res, next) {
 
 function login(req, res, next) {
     userService.login(req.body)
-        .then(user => res.json(user))
+        .then(token => {
+            res.cookie('token', token, {
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+                httpOnly: true
+            });
+            res.json({ message: "User authenticated"})
+        })
         .catch(error => handleError(error, res))
 }
 
@@ -80,6 +87,12 @@ function getAll(req, res, next) {
 
 function getById(req, res, next) {
     userService.getUserById(req.params.id)
+        .then(user => res.json({ ...user }))
+        .catch(error => handleError(error, res))
+}
+
+function getByToken(req, res, next) {
+    userService.getUserById(req.user.id)
         .then(user => res.json({ ...user }))
         .catch(error => handleError(error, res))
 }

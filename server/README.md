@@ -88,16 +88,7 @@ This request requires no authentication.
 
 ```
 {
-    "id": 2,
-    "username": "username",
-    "firstName": "firstName",
-    "lastName": "lastName",
-    "dateOfBirth": "1999-01-01T00:00:00.000Z",
-    "role": "User",
-    "isSuspended": false,
-    "createdAt": "2021-05-05T18:07:31.000Z",
-    "updatedAt": "2021-05-05T18:07:31.000Z",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImlhdCI6MTYyMDIzODE4NiwiZXhwIjoxNjIwMzI0NTg2fQ.d7zUT5K7WPLItX9H8GN55FNu08Oo7aDOkhjSgiF1bZQ"
+    "message": "User authenticated"
 }
 ```
 

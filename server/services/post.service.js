@@ -55,8 +55,7 @@ async function getPostById(id) {
     const post = await db.post.findOne({
          where: { 
              id,
-             isSuspended: false,
-             isHidden: false
+             isSuspended: false
           },
          include: [{
             model: db.user,
@@ -91,12 +90,13 @@ async function updatePost(id, params, userId) {
     return { ...post.get(), reacts, comments }
 }
 
+//TODO Massive refactor needed
 async function getPostsByUser(id, userId = null) {
     var posts = await db.post.findAll({ 
         where: { 
             userId: id,
             isSuspended: false,
-            isHidden: userId && db.sequelize.where(db.sequelize.col("post.userId"), "==", userId)? 
+            isHidden: userId && db.sequelize.where(db.sequelize.fn("IF", db.sequelize.col('post.userId'), userId))? 
                         { [Op.or]: [false, true] } 
                         : false
          },
