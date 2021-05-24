@@ -23,7 +23,7 @@ import MoodBadIcon from "@material-ui/icons/MoodBad";
 import { addReaction, hideUserPost, removeReaction } from "../../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { reactionCount } from "../../../utils/calculateReactions";
-import { reactionIdByUser } from "../../../utils/getReactionIdByUser";
+import { reactionIdByUser,ADD,ADD_REMOVE,REMOVE } from "../../../utils/getReactionIdByUser";
 import { useHistory } from "react-router";
 const Post = ({ post, creator, role, removePost, created, userInfo }) => {
   const [readMore, setReadMore] = useState(false);
@@ -40,8 +40,20 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
     },
     onSubmit: (values) => {
       const value = reactionIdByUser(user, post.reacts,values);
-      dispatch(removeReaction(value))
+      if(value[1]===ADD){
+        dispatch(removeReaction(value[0]))
+      }
+      if(value[1]===ADD_REMOVE){
+      console.log(value)
+      dispatch(removeReaction(value[0]))
       dispatch(addReaction(values))
+      }
+
+      if(value===REMOVE){
+        dispatch(addReaction(values))
+      }
+
+
     },
   });
   const handleEmojiAddition = (emoji) => {
