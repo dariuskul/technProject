@@ -12,7 +12,7 @@ router.post('/postReact', authorize(), postReactSchema, createPostReact)
 router.post('/commentReact', authorize(), commentReactSchema, createCommentReact)
 router.get('/getAll', getAll)
 router.get('/getById/:id', getById)
-router.get('/getByUser/:id', getByUser)
+router.get('/getByUser/:id', authorize([], false), getByUser)
 router.get('/getBySearch', getBySearch)
 router.get('/comments/:id', getComments)
 router.get('/getHidden/:id', authorize(), getHidden)
@@ -81,7 +81,7 @@ function _delete(req, res, next) {
 }
 
 function getByUser(req, res, next) {
-    postService.getPostsByUser(req.params.id, req.query.logged_in_id)
+    postService.getPostsByUser(req.params.id, req.user.id)
         .then(posts => res.json({ posts }))
         .catch(error => handleError(error, res))
 }

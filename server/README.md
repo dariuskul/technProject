@@ -178,6 +178,40 @@ This request does not have validations.
 
 ---
 
+### DELETE Logout
+
+**Description**
+
+Clears user cookies.
+
+**Example request**
+
+`http://localhost:2000/user/logout`
+
+**Authentication**
+
+This request requires a jwt within a cookie.
+
+**Example request body**
+
+```
+This request does not require a body.
+```
+
+**Validations**
+
+This request does not have validations.
+
+**Example response**
+
+```
+{
+    "message": "Logout successful"
+}
+```
+
+---
+
 ### GET Get all users
 
 **Description**
@@ -266,6 +300,48 @@ This request does not have validations.
 
 ---
 
+### GET Get user by token
+
+**Description**
+
+Fetches a specific user's data by the token.
+
+**Example request**
+
+`http://localhost:2000/user/getByToken`
+
+**Authentication**
+
+This request requires a jwt.
+
+**Example request body**
+
+```
+This request does not require a body.
+```
+
+**Validations**
+
+This request does not have validations.
+
+**Example response**
+
+```
+{
+    "id": 2,
+    "username": "username",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "dateOfBirth": "1999-01-01T00:00:00.000Z",
+    "role": "Admin",
+    "isSuspended": false,
+    "createdAt": "2021-05-05T18:07:31.000Z",
+    "updatedAt": "2021-05-05T18:17:24.000Z"
+}
+```
+
+---
+
 ## Post Controller
 
 Post controller api url: `http://localhost:2000/post`.
@@ -282,7 +358,7 @@ Creates a new post.
 
 **Authentication**
 
-This request requires a jwt token to authenticate the user.
+This request requires a jwt to authenticate the user.
 
 **Example request body**
 
@@ -583,7 +659,7 @@ Fetches a spefici user's posts by the users id.
 
 **Example request**
 
-`http://localhost:2000/post/getByUser/{userId}?logged_in_id={1}`
+`http://localhost:2000/post/getByUser/{userId}`
 
 **Authentication**
 
