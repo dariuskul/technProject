@@ -91,7 +91,7 @@ async function updatePost(id, params, userId) {
     return { ...post.get(), reacts, comments }
 }
 
-async function getPostsByUser(id, loggedInId = null) {
+async function getPostsByUser(id, loggedInId) {
     var posts = await db.post.findAll({ 
         where: { 
             userId: id,
