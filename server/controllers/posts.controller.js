@@ -81,7 +81,8 @@ function _delete(req, res, next) {
 }
 
 function getByUser(req, res, next) {
-    postService.getPostsByUser(req.params.id, req.user.id)
+    const loggedInId = req.user? req.user.id : null
+    postService.getPostsByUser(req.params.id, loggedInId)
         .then(posts => res.json({ posts }))
         .catch(error => handleError(error, res))
 }

@@ -1,7 +1,6 @@
 require('dotenv').config()
 const Twit = require('twit')
 const { RequestError } = require('../_helpers/request-error')
-const https = require('https')
 const fetch = require('node-fetch')
 
 module.exports = {
