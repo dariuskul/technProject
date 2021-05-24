@@ -5,7 +5,7 @@ const Joi = require('joi');
 const validateRequest = require('../middleware/validate-request')
 const authorize = require('../middleware/authorize')
 const roles = require('../_helpers/roles')
-const { handleError } = require('../_helpers/request-error')
+const { handleError, RequestError } = require('../_helpers/request-error')
 router.post('/register', registerSchema,register)
 router.post('/login', loginSchema, login)
 router.put('/update/:id', authorize(), updateSchema, update)
@@ -13,6 +13,7 @@ router.delete('/delete/:id', authorize(roles.Admin), _delete)
 router.get('/getAll', authorize(roles.Admin), getAll)
 router.get('/getById/:id', getById)
 router.get('/getByToken', authorize(), getByToken)
+router.delete('/logout', authorize(), logout)
 module.exports = router
 
 //TODO Add more validation parameters with custom messages, add email
@@ -95,4 +96,14 @@ function getByToken(req, res, next) {
     userService.getUserById(req.user.id)
         .then(user => res.json({ ...user }))
         .catch(error => handleError(error, res))
+}
+
+function logout(req, res, next) {
+    try {
+        if (!req.cookies.token) throw new RequestError("Cookie not found.", 400)
+        res.clearCookie('token')
+        res.json({ message: "Logout successful" })
+    } catch (error) {
+        handleError(error, res)
+    }
 }

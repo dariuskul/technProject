@@ -2,7 +2,7 @@ const jwt = require('express-jwt');
 const { secret } = require('../config.json');
 const db = require('../_helpers/db');
 module.exports = authorize
-function authorize(roles = []) {
+function authorize(roles = [], credentialsRequired = true) {
     if (typeof roles == 'string')
         roles = [roles]
 
@@ -10,6 +10,7 @@ function authorize(roles = []) {
         jwt({
             secret,
             algorithms: ['HS256'],
+            credentialsRequired,
             getToken: function getTokenFromCookie(req) {
                 const token = req.cookies.token
                 if (!token) return null

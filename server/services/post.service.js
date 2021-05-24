@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const db = require('../_helpers/db.js')
 const roles = require('../_helpers/roles')
 const { getUserById } = require('./user.service')
+const { QueryTypes } = require('sequelize');
 const { RequestError } = require('../_helpers/request-error')
 
 module.exports = {
@@ -90,15 +91,11 @@ async function updatePost(id, params, userId) {
     return { ...post.get(), reacts, comments }
 }
 
-//TODO Massive refactor needed
-async function getPostsByUser(id, userId = null) {
+async function getPostsByUser(id, loggedInId = null) {
     var posts = await db.post.findAll({ 
         where: { 
             userId: id,
             isSuspended: false,
-            isHidden: userId && db.sequelize.where(db.sequelize.fn("IF", db.sequelize.col('post.userId'), userId))? 
-                        { [Op.or]: [false, true] } 
-                        : false
          },
         include: [{
             model: db.user,
@@ -107,6 +104,7 @@ async function getPostsByUser(id, userId = null) {
             attributes: ['username']
         }]
     })
+    posts = posts.filter(post => post.userId != loggedInId && post.isHidden? false : true)
     posts = posts.map(post => post.get({ plain: true }))
 
     return Promise.all(
