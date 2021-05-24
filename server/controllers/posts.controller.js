@@ -140,7 +140,7 @@ function postReactSchema(req, res, next) {
 }
 
 function createPostReact(req, res, next) {
-    postService.createPostReact(req.body, req.user.id)
+    postService.reactToPost(req.body, req.user.id)
         .then(react => res.json({ ...react }))
         .catch(error => handleError(error, res))
 }
@@ -161,7 +161,7 @@ function commentReactSchema(req, res, next) {
 }
 
 function createCommentReact(req, res, next) {
-    postService.createCommentReact(req.body, req.user.id)
+    postService.reactToComment(req.body, req.user.id)
         .then(react => res.json({ ...react }))
         .catch(error => handleError(error, res))
 }

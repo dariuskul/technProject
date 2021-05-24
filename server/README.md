@@ -15,7 +15,7 @@ User controller api url: `http://localhost:2000/user`.
 
 ---
 
-### POST Register:
+### POST Register
 
 **Description**
 
@@ -943,11 +943,11 @@ This request requires a jwt to authenticate the user.
 
 ---
 
-### POST Add a reaction to post
+### POST Add/Remove reaction from post
 
 **Description**
 
-Adds a reaction to the post.
+Adds or removes a reaction from the post.
 
 **Example request**
 
@@ -987,15 +987,21 @@ This request requires a jwt to authenticate the user.
         "lastName": "lastName"
     }
 }
+
+or
+
+{
+
+}
 ```
 
 ---
 
-### POST Add a reaction to comment
+### POST Add/Remove a reaction from comment
 
 **Description**
 
-Adds a reaction to the comment.
+Adds or removes a reaction from the comment.
 
 **Example request**
 
@@ -1034,6 +1040,12 @@ This request requires a jwt to authenticate the user.
         "firstName": "firstName",
         "lastName": "lastName"
     }
+}
+
+or
+
+{
+
 }
 ```
 
@@ -1095,38 +1107,6 @@ Fetches the post's comments with it's reactions by the post's id.
     ]
 }
 ```
-
----
-
-### DELETE Remove a post react
-
-**Description**
-
-Removes a reaction from the post by the reaction's id.
-
-**Example request**
-
-`http://localhost:2000/post/postReact/{react_id}`
-
-**Authentication**
-
-This request requires a jwt that contains the same `userId` as the react.
-
----
-
-### DELETE Remove a comment react
-
-**Description**
-
-Removes a reaction from the comment by the reaction's id.
-
-**Example request**
-
-`http://localhost:2000/post/commentReact/{react_id}`
-
-**Authentication**
-
-This request requires a jwt that contains the same `userId` as the react.
 
 ---
 
@@ -1745,13 +1725,14 @@ Fetches a specific number of tweets by the search query and tweet date.
 
 **Example request**
 
-`http://localhost:2000/outer_service/tweets?search={query}&date={2021-04-16}&count={1}`
+`http://localhost:2000/outer_service/tweets?search={query}&date={2021-04-16}&count={1}&next_id={1396842434034765826}`
 
 **Query parameters**
 
 -   Parameter `seach` is **required**
 -   Parameter `date` is **optional**, the default value is the previous month's date e.g. if today is 2020-02-11 then the default date is 2020-01-11
 -   Parameter `count` is **optional**, the default value is 10
+-   Parameter `next_id` is used to get the next page of tweets, it is **optional**,
 
 **Example response**
 
@@ -1759,25 +1740,32 @@ Fetches a specific number of tweets by the search query and tweet date.
 {
     "statuses": [
         {
-            "created_at": "Sun May 16 19:26:14 +0000 2021",
-            "id": 1394011328222843000,
-            "id_str": "1394011328222842884",
-            "text": "These #Banana #Pancakes Are Just 40 Calories Each\n\nhttps://t.co/xm9BJhmHXf",
-            "truncated": false,
+            "created_at": "Mon May 24 14:56:03 +0000 2021",
+            "id": 1396842434034765800,
+            "id_str": "1396842434034765827",
+            "text": "Got dark brown, soft #bananas in kitchen? Transform them into #healthy &amp; yummy delight like these decadent #Banana… https://t.co/WE9HO7V69Q",
+            "truncated": true,
             "entities": {
                 "hashtags": [
                     {
-                        "text": "Banana",
+                        "text": "bananas",
                         "indices": [
-                            6,
-                            13
+                            21,
+                            29
                         ]
                     },
                     {
-                        "text": "Pancakes",
+                        "text": "healthy",
                         "indices": [
-                            14,
-                            23
+                            62,
+                            70
+                        ]
+                    },
+                    {
+                        "text": "Banana",
+                        "indices": [
+                            111,
+                            118
                         ]
                     }
                 ],
@@ -1785,12 +1773,12 @@ Fetches a specific number of tweets by the search query and tweet date.
                 "user_mentions": [],
                 "urls": [
                     {
-                        "url": "https://t.co/xm9BJhmHXf",
-                        "expanded_url": "https://www.livestrong.com/article/13713480-these-banana-pancakes-are-just-40-calories-each/",
-                        "display_url": "livestrong.com/article/137134…",
+                        "url": "https://t.co/WE9HO7V69Q",
+                        "expanded_url": "https://twitter.com/i/web/status/1396842434034765827",
+                        "display_url": "twitter.com/i/web/status/1…",
                         "indices": [
-                            51,
-                            74
+                            120,
+                            143
                         ]
                     }
                 ]
@@ -1799,27 +1787,27 @@ Fetches a specific number of tweets by the search query and tweet date.
                 "iso_language_code": "en",
                 "result_type": "recent"
             },
-            "source": "<a href=\"https://www.socialjukebox.com\" rel=\"nofollow\">The Social Jukebox</a>",
+            "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
             "in_reply_to_status_id": null,
             "in_reply_to_status_id_str": null,
             "in_reply_to_user_id": null,
             "in_reply_to_user_id_str": null,
             "in_reply_to_screen_name": null,
             "user": {
-                "id": 711041288867594200,
-                "id_str": "711041288867594240",
-                "name": "Health & Fitness💪😎",
-                "screen_name": "YouTubeFitness3",
-                "location": "Please SUBSCRIBE to my channel",
-                "description": "Do it➡\nFilm it➡\nShare it➡\nTweets from individuals who are sincerely passionate about HEALTH🍎 & FITNESS🏋\n(@PersonalFitnes3) (@TankyTalks) (@videos2watchNOW)",
-                "url": "https://t.co/xNduRJxtxx",
+                "id": 2776396662,
+                "id_str": "2776396662",
+                "name": "HT Life&Style",
+                "screen_name": "htlifeandstyle",
+                "location": "New Delhi",
+                "description": "Your daily dose of travel, style, art, culture, food and healthy living. We tell you how to look better, love better and live better!",
+                "url": "https://t.co/YbiTaIwHpB",
                 "entities": {
                     "url": {
                         "urls": [
                             {
-                                "url": "https://t.co/xNduRJxtxx",
-                                "expanded_url": "https://linktr.ee/PersonalFitness3",
-                                "display_url": "linktr.ee/PersonalFitnes…",
+                                "url": "https://t.co/YbiTaIwHpB",
+                                "expanded_url": "http://www.hindustantimes.com/lifestyle",
+                                "display_url": "hindustantimes.com/lifestyle",
                                 "indices": [
                                     0,
                                     23
@@ -1832,34 +1820,34 @@ Fetches a specific number of tweets by the search query and tweet date.
                     }
                 },
                 "protected": false,
-                "followers_count": 792,
-                "friends_count": 989,
-                "listed_count": 41,
-                "created_at": "Sat Mar 19 04:07:08 +0000 2016",
-                "favourites_count": 9181,
+                "followers_count": 29811,
+                "friends_count": 56,
+                "listed_count": 184,
+                "created_at": "Thu Aug 28 13:19:11 +0000 2014",
+                "favourites_count": 733,
                 "utc_offset": null,
                 "time_zone": null,
                 "geo_enabled": false,
-                "verified": false,
-                "statuses_count": 26910,
+                "verified": true,
+                "statuses_count": 30784,
                 "lang": null,
                 "contributors_enabled": false,
                 "is_translator": false,
                 "is_translation_enabled": false,
-                "profile_background_color": "F5F8FA",
-                "profile_background_image_url": null,
-                "profile_background_image_url_https": null,
-                "profile_background_tile": false,
-                "profile_image_url": "http://pbs.twimg.com/profile_images/831474595882479616/rEXce246_normal.jpg",
-                "profile_image_url_https": "https://pbs.twimg.com/profile_images/831474595882479616/rEXce246_normal.jpg",
-                "profile_banner_url": "https://pbs.twimg.com/profile_banners/711041288867594240/1487074853",
-                "profile_link_color": "1DA1F2",
-                "profile_sidebar_border_color": "C0DEED",
-                "profile_sidebar_fill_color": "DDEEF6",
-                "profile_text_color": "333333",
+                "profile_background_color": "000000",
+                "profile_background_image_url": "http://abs.twimg.com/images/themes/theme14/bg.gif",
+                "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme14/bg.gif",
+                "profile_background_tile": true,
+                "profile_image_url": "http://pbs.twimg.com/profile_images/1300145188908662784/SJL7Z1nY_normal.jpg",
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/1300145188908662784/SJL7Z1nY_normal.jpg",
+                "profile_banner_url": "https://pbs.twimg.com/profile_banners/2776396662/1543826115",
+                "profile_link_color": "E81C4F",
+                "profile_sidebar_border_color": "000000",
+                "profile_sidebar_fill_color": "000000",
+                "profile_text_color": "000000",
                 "profile_use_background_image": true,
                 "has_extended_profile": false,
-                "default_profile": true,
+                "default_profile": false,
                 "default_profile_image": false,
                 "following": null,
                 "follow_request_sent": null,
@@ -1881,15 +1869,15 @@ Fetches a specific number of tweets by the search query and tweet date.
         }
     ],
     "search_metadata": {
-        "completed_in": 0.058,
-        "max_id": 1394011328222843000,
-        "max_id_str": "1394011328222842884",
-        "next_results": "?max_id=1394011328222842883&q=%23banana%20since%3A2021-04-16T19%3A32%3A13.959Z&count=1&include_entities=1",
-        "query": "%23banana+since%3A2021-04-16T19%3A32%3A13.959Z",
-        "refresh_url": "?since_id=1394011328222842884&q=%23banana%20since%3A2021-04-16T19%3A32%3A13.959Z&include_entities=1",
+        "completed_in": 0.025,
+        "max_id": 0,
+        "max_id_str": "0",
+        "next_results": "?max_id=1396842434034765826&q=%23banana%20since%3A2021-04-24T15%3A37%3A47.570Z%20-filter%3Aretweets%20AND%20-filter%3Areplies%20AND%20filter%3Averified&count=1&include_entities=1",
+        "query": "%23banana+since%3A2021-04-24T15%3A37%3A47.570Z+-filter%3Aretweets+AND+-filter%3Areplies+AND+filter%3Averified",
         "count": 1,
         "since_id": 0,
-        "since_id_str": "0"
+        "since_id_str": "0",
+        "next_id": "1396842434034765826"
     }
 }
 ```

@@ -15,12 +15,10 @@ module.exports = {
     changePostVisibility,
     getPostsBySearch,
     createComment,
-    createPostReact,
-    createCommentReact,
     getAllComments,
-    deleteCommentReactById,
-    deletePostReactById,
-    getHiddenPosts
+    getHiddenPosts,
+    reactToPost,
+    reactToComment
 }
 
 async function createPost(params) {
@@ -165,10 +163,38 @@ async function createPostReact(params, userId) {
     return { ...react.get(), user: { username, firstName, lastName } }
 }
 
+async function reactToPost(params, userId) {
+    var react = await db.postReact.findOne({ where: { postId: params.postId, userId } })
+    
+    if (!react) return await createPostReact(params, userId)
+    else if (react.reaction != params.reaction) {
+        await react.destroy()
+        return await createPostReact(params, userId)
+    }
+    else {
+        await react.destroy()
+        return null
+    }
+}
+
 async function createCommentReact(params, userId) {
     const react = await db.commentReact.create({ ...params, userId })
     const { username, firstName, lastName } = await getUserById(userId)
     return { ...react.get(), user: { username, firstName, lastName } }
+}
+
+async function reactToComment(params, userId) {
+    var react = await db.commentReact.findOne({ where: { commentId: params.commentId, userId } })
+    
+    if (!react) return await createCommentReact(params, userId)
+    else if (react.reaction != params.reaction) {
+        await react.destroy()
+        return await createCommentReact(params, userId)
+    }
+    else {
+        await react.destroy()
+        return null
+    }
 }
 
 async function getAllComments(postId) {
@@ -220,24 +246,6 @@ async function getAllCommentReacts(commentId) {
     })
 
     return reacts
-}
-
-async function deleteCommentReactById(reactId, userId) {
-    const react = await db.commentReact.findByPk(reactId)
-    if (!react) 
-        throw new RequestError('React not found', 404)
-    if (react.userId != userId)
-        throw 'User id must match react\'s owner id'
-    await react.destroy()
-}
-
-async function deletePostReactById(reactId, userId) {
-    const react = await db.postReact.findByPk(reactId)
-    if (!react) 
-        throw new RequestError('React not found', 404)
-    if (react.userId != userId)
-        throw new RequestError('Forbidden, user id must match react\'s owner id', 403)
-    await react.destroy()
 }
 
 async function getHiddenPosts(userId) {

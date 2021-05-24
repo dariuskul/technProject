@@ -15,8 +15,8 @@ const config = {
 }
 const twitterAPI = new Twit(config)
 
-async function getTweetsByHashtag({ search, date, count = 10, next_query = null }) {
-    if (!search && !next_query) throw new RequestError("Search query missing", 400)
+async function getTweetsByHashtag({ search, date, count = 10, next_id = null }) {
+    if (!search) throw new RequestError("Search query missing", 400)
 
     var altDate = new Date()
     var currentDate = new Date()
@@ -24,14 +24,25 @@ async function getTweetsByHashtag({ search, date, count = 10, next_query = null 
     altDate.setDate(currentDate.getDate())
 
     const searchParams = { 
-        q: next_query? next_query :
-            `#${search} since:${date? date: altDate.toISOString()} -filter:retweets AND -filter:replies AND filter:verified`, 
+        q: `#${search} since:${date? date: altDate.toISOString()} -filter:retweets AND -filter:replies AND filter:verified`, 
         count,
-        next_token: true
+        max_id: next_id
     }
     return twitterAPI.get('search/tweets', searchParams).then(response => {
         if (!response.resp.statusCode) throw new RequestError(response.stack, 400)
-        return response.data
+
+        const nextString = response.data.search_metadata.next_results
+        let from = nextString.indexOf("=") + 1
+        let to = nextString.indexOf("&")
+        const nextId = response.data.search_metadata.next_results.substring(from, to)
+
+        return { 
+            ...response.data,
+            search_metadata: {
+                ...response.data.search_metadata,
+                next_id: nextId
+            },
+        }
     })
 }
 
