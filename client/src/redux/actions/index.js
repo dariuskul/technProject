@@ -127,6 +127,7 @@ export const addComent = (content, id) => async (dispatch) => {
 
 export const addReaction = (react) => async (dispatch) => {
   try {
+    console.log(react)
     const {data} = await addPostReactionRequest(react);
     dispatch({ type: "ADD_REACTION", payload: data });
   } catch (error) {
