@@ -134,9 +134,16 @@ export const addReaction = (react) => async (dispatch) => {
   }
 };
 
-export const removeReaction = (id, postId, userId) => async (dispatch) => {
+// createdAt: "2021-05-24T18:35:33.000Z"
+// id: 246
+// postId: 5
+// reaction: "Surprised"
+// updatedAt: "2021-05-24T18:35:33.000Z"
+// user: {username: "test1", firstName: "Darius", lastName: "Kulevičius"}
+// userId: 3
+// id, postId, userId
+export const removeReaction = ({id,postId,userId}) => async (dispatch) => {
   try {
-    await removePostReactionRequest(id);
     dispatch({ type: "REMOVE_REACTION", payload: { id, postId, userId } });
   } catch (error) {
     alert(error);

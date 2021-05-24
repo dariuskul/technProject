@@ -39,12 +39,9 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
       postId: post.id,
     },
     onSubmit: (values) => {
-      const value = reactionIdByUser(user, post.reacts);
-      if (value !== -1) {
-        dispatch(removeReaction(value, post.id, user));
-      } else {
-        dispatch(addReaction(values));
-      }
+      const value = reactionIdByUser(user, post.reacts,values);
+      dispatch(removeReaction(value))
+      dispatch(addReaction(values))
     },
   });
   const handleEmojiAddition = (emoji) => {

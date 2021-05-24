@@ -1,11 +1,9 @@
-export const reactionIdByUser = (userId, reactions) => {
-  let id = -1;
-
-  for (let i = 0; i < reactions.length; i++) {
-    if (reactions[i].userId === userId) {
-      id = reactions[i].id;
+export const reactionIdByUser = (userId, reactions,selectValues) => {
+  const postReactions = reactions;
+  for (let i = 0; i < postReactions.length; i++) {
+    if(postReactions[i].reaction !==selectValues.reaction && postReactions[i].userId === userId && selectValues.postId === postReactions[i].postId){
+        return postReactions[i];
     }
   }
 
-  return id;
 };

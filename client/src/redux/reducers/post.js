@@ -21,6 +21,10 @@ export default function postReducer(posts = [], action) {
           : post
       );
     case "REMOVE_REACTION":
+      let react = {};
+      if(action.payload.data){
+        react = action.payload.data;
+      }
       return posts.map((post) =>
         post.id === action.payload.postId
           ? {
@@ -30,6 +34,9 @@ export default function postReducer(posts = [], action) {
                   react.id !== action.payload.id &&
                   react.userId !== action.payload.userId
               ),
+              
+
+
             }
           : post
       );
