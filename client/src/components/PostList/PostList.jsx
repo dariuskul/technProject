@@ -10,7 +10,7 @@ import useStyles from "./styles";
 const PostList = ({viewProfile}) => {
   const classes = useStyles();
   const [openModal, setOpenModal] = useState(false);
-  const user = useSelector((state) => state?.user?.user);
+  const user = useSelector((state) => state.user?.user);
   const viewUser = useSelector((state)=> state?.communication?.user)
   const posts = useSelector((state) => state?.posts);
   const dispatch = useDispatch();
@@ -30,7 +30,9 @@ const PostList = ({viewProfile}) => {
   }, [dispatch, created,viewProfile]);
 
   const deletePost = (id) => {
+    if(window.confirm('Do you really want to remove this post?')){
     dispatch(removePost(id));
+    }
   };
 
   const handleChange = (e) => {
@@ -42,13 +44,14 @@ const PostList = ({viewProfile}) => {
     if(search){
       dispatch(searchBytitle(search))
     }else{
-      dispatch(searchBytitle(search))
+      dispatch(searchBytitle('javascript'))
     }
   }
+  console.log(user)
   return (
     <div className={classes.container}>
       <Container className={classes.inputContainer} maxWidth="xl">
-        {(!viewProfile && isLoggedIn()) && (
+        {(!viewProfile && isLoggedIn(user)) && (
           <Button
             onClick={() => setOpenModal(true)}
             color="primary"

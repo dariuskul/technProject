@@ -5,15 +5,15 @@ import { Button, Toolbar, Typography } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserAction, logOut } from "../../redux/actions";
+import Cookies from 'js-cookie';
 const NavBar = () => {
   const classes = useStyles();
   const user = useSelector((state) => state?.user);
   const dispatch = useDispatch();
   const history = useHistory();
-
   useEffect(()=> {
     if(!user?.length > 0){
-      dispatch(getUserAction())
+      dispatch(getUserAction(history))
       console.log("YE..")
     }
   },[dispatch])

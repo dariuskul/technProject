@@ -9,7 +9,7 @@ import {
   searchPost,
   hidePost
 } from "../../api/post";
-import { fetchFollowedUsers, getUser, login, register,followUser, getUserData } from "../../api/user";
+import { fetchFollowedUsers, getUser, login, register,followUser, getUserData, logout } from "../../api/user";
 import { newComment } from "../../api/comment";
 import {
   suspendPostRequest,
@@ -49,37 +49,35 @@ export const loginAction = (payload, history) => async (dispatch) => {
   }
 };
 
-export const getUserAction = () => async (dispatch) => {
+export const getUserAction = (history) => async (dispatch) => {
   try {
     const {data} = await getUserData();
     dispatch({ type: "LOGIN", payload: data });
 
   } catch (err) {
-    // if(err.response.status===403){
-    //   notification('Your account is suspended', 'error',dispatch,enqueueSnackbar,closeSnackbar)
-    // }else{
-    //   notification(err.response.data.message, 'error',dispatch,enqueueSnackbar,closeSnackbar)
-    // }
-    alert(err)
+    if(err.response.status===401){
+        history.push('/auth/login')
+    }
   }
 };
 
 export const registerAction = (payload) => async (dispatch) => {
   try {
-    console.log(payload);
-    const user = await register(payload);
-    console.log("REGISTER",user);
-    dispatch({ type: "REGISTER", payload: user });
+    await register(payload);
     notification('Your account was created succesfully, You can now login', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {
     notification(error, 'error',dispatch,enqueueSnackbar,closeSnackbar)
   }
 };
 
-export const logOut = () => (dispatch) => {
-  localStorage.removeItem("currentUser");
-  dispatch({ type: "LOGOUT" });
-  window.location.reload();
+export const logOut = (history) => async(dispatch) => {
+  try {
+    await logout();
+    dispatch({type: "LOGOUT"})
+    history.push('/')
+  } catch (error) {
+    
+  }
 };
 
 export const fetchPosts = () => async (dispatch) => {
@@ -93,7 +91,7 @@ export const fetchPosts = () => async (dispatch) => {
 
 export const createPost = (data) => async (dispatch) => {
   try {
-    const post = await newPost(data);
+    const {data:{post}} = await newPost(data);
     dispatch({ type: "NEW_POST", payload: post });
     notification('Post created succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {
@@ -101,10 +99,10 @@ export const createPost = (data) => async (dispatch) => {
   }
 };
 
-export const updatePost = (data, id) => async (dispatch) => {
+export const updatePost = (post, id) => async (dispatch) => {
   try {
-    const post = await updatePostRequest(data, id);
-    dispatch({ type: "UPDATE", payload: post });
+    const {data} = await updatePostRequest(post, id);
+    dispatch({ type: "UPDATE", payload: data });
     notification('Post updated succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {
     alert(error);
@@ -112,9 +110,9 @@ export const updatePost = (data, id) => async (dispatch) => {
 };
 export const removePost = (id) => async (dispatch) => {
   try {
-    await removePostRequest(id);
+    const {data} = await removePostRequest(id);
     dispatch({ type: "REMOVE_POST", payload: id });
-    dispatch({ type: "REMOVED", payload: "Post removed succesfully" });
+    notification(data.message,'info',dispatch,enqueueSnackbar,closeSnackbar);
   } catch (error) {
     alert(error);
   }
@@ -122,15 +120,15 @@ export const removePost = (id) => async (dispatch) => {
 
 export const addComent = (content, id) => async (dispatch) => {
   try {
-    const post = await newComment(content, id);
-    dispatch({ type: "UPDATE", payload: post });
+    const {data} = await newComment(content, id);
+    dispatch({ type: "UPDATE", payload: data });
   } catch (error) {}
 };
 
-export const addReaction = (data) => async (dispatch) => {
+export const addReaction = (react) => async (dispatch) => {
   try {
-    const react = await addPostReactionRequest(data);
-    dispatch({ type: "ADD_REACTION", payload: react });
+    const {data} = await addPostReactionRequest(react);
+    dispatch({ type: "ADD_REACTION", payload: data });
   } catch (error) {
     alert(error);
   }
@@ -215,6 +213,7 @@ export const suspendComment = (data, id) => async (dispatch) => {
   try {
     await suspendCommentRequest(data);
     dispatch({ type: "SUSPEND_COMMENT", payload: { data, id } });
+    notification('Comment suspended','success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {}
 };
 
@@ -255,7 +254,7 @@ export const removeSnackbar = key => ({
 
 export const getUserProfile = (id,userId) => async(dispatch) => {
   try {
-    console.log("AADASDASDSD",id)
+    console.log("AADASDASDSD",userId)
     const {data} =  await getUser(id);
     const {data: {posts}} = await getPostsById(id);
     const follows = await fetchFollowedUsers(userId);
@@ -270,6 +269,14 @@ export const getUserProfile = (id,userId) => async(dispatch) => {
     alert(error)
   }
 }
+
+// export const getLoggedInUserPosts = () => async(dispatch) => {
+//   try {
+
+//   } catch (error) {
+    
+//   }
+// }
 
 export const follow = (form,id) => async(dispatch) => {
   try {

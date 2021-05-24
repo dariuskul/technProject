@@ -27,6 +27,7 @@ const UsersList = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
   const users = useSelector((state) => state?.users);
+  const user = useSelector((state)=> state.user?.user);
   const [open, setOpen] = useState(false);
   const closeModal = () => {
     setOpen(false);
@@ -88,12 +89,12 @@ const UsersList = () => {
               <TableCell align="center">{row.username}</TableCell>
               <TableCell align="center">{row.createdAt}</TableCell>
               <TableCell align="center">
-                <Button onClick={() => toggleModal(row.id)}>
+              {user?.id !== row.id &&                <Button onClick={() => toggleModal(row.id)}>
                   {row.isSuspended ? "Unsuspend" : "Suspend"}
-                </Button>
+                </Button>}
               </TableCell>
               <TableCell align="center">
-                <Button onClick={() => handleRemove(row.id)}>Remove</Button>
+                {user?.id !== row.id &&<Button onClick={() => handleRemove(row.id)}>Remove</Button>}
               </TableCell>
             </TableRow>
           ))}

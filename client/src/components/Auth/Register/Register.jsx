@@ -3,7 +3,6 @@ import {
   Button,
   Container,
   Grid,
-  Paper,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -21,13 +20,12 @@ const Register = () => {
       firstName: "",
       lastName: "",
       dateOfBirth: "",
-      // email: "",
       role: "User",
       isSuspended: false,
     },
-    onSubmit: (values) => {
-      alert(values);
+    onSubmit: (values, {resetForm}) => {
       dispatch(registerAction(values));
+      resetForm();
     },
   });
   return (

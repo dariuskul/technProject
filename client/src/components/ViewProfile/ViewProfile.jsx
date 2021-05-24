@@ -13,9 +13,10 @@ const ViewProfile = () => {
     const user = useSelector((state)=> state?.communication?.user );
     const loggedInUser = useSelector((state)=> state?.user?.user);
     const classes = useStyles();
+    console.log("AADASDA",id)
     useEffect(()=> {
-        dispatch(getUserProfile(id,loggedInUser.id))
-    },[dispatch,id])
+        dispatch(getUserProfile(id,loggedInUser?.id))
+    },[dispatch,id,loggedInUser?.id])
 
     if(!isLoggedIn(loggedInUser)){
         return <Redirect to='/'/>

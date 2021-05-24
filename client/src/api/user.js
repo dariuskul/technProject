@@ -12,5 +12,6 @@ export const getUser = async (id) => axios.get(`${URL}/getById/${id}`)
 export const getUserData = async() => transport.get(`${URL}/getByToken`)
 export const followUser = async(followData) => transport.post(`${URLCOMMUNICATION}/follow`,followData)
 export const fetchFollowedUsers = async(id) => transport.get(`${URLCOMMUNICATION}/follows/${id}`)
+export const logout = async() => transport.delete(`${URL}/logout`);
 
 

@@ -7,7 +7,7 @@ const transport = axios.create({
 
 
 export const fetchAll = async() => axios.get(`${URL}/getAll`)
-export const getPostsById = async (id) => axios.get(`${URL}/getByUser/${id}`)
+export const getPostsById = async (id) => transport.get(`${URL}/getByUser/${id}`)
 
 // export const newPost = async (data) => {
 //   const response = await fetch(`${URL}/create`, {

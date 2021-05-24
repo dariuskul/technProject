@@ -21,7 +21,6 @@ export default function postReducer(posts = [], action) {
           : post
       );
     case "REMOVE_REACTION":
-      //alert(action.payload.userId);
       return posts.map((post) =>
         post.id === action.payload.postId
           ? {
@@ -38,15 +37,13 @@ export default function postReducer(posts = [], action) {
       return posts.filter((post) => post.id !== action.payload);
 
     case "SUSPEND_COMMENT":
-      return posts.map((post) =>
-        post.id === action.payload.postId
-          ? {
+      console.log(action.payload.postId)
+      return posts.map((post) => ({
               ...post,
               comments: post.comments.filter(
-                (comment) => comment.id !== action.payload.commentId
+                (comment) => comment.id !== action.payload.data.commentId
               ),
-            }
-          : post
+            })
       );
     default:
       // If this reducer doesn't recognize the action type, or doesn't

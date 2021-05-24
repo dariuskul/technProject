@@ -4,13 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../redux/actions";
 import PostList from "../PostList/PostList";
 import useStyles from './styles'
-const userId = JSON.parse(localStorage.getItem('currentUser'))?.id;
 const UserPosts = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const userId = useSelector((state)=> state.user?.user?.id)
     useEffect(()=> {
-        if(userId)
-        dispatch(getUserProfile(userId))
+        dispatch(getUserProfile(userId,userId))
     },[dispatch])
     const posts = useSelector((state)=> state?.posts);
     return(
