@@ -7,7 +7,15 @@ function authorize(roles = []) {
         roles = [roles]
 
     return [
-        jwt({secret, algorithms: ['HS256']}),
+        jwt({
+            secret,
+            algorithms: ['HS256'],
+            getToken: function getTokenFromCookie(req) {
+                const token = req.cookies.token
+                if (!token) return null
+                return token
+            }
+            }),
 
         async (req,res,next) => {
             const user = await db.user.findByPk(req.user.sub);
