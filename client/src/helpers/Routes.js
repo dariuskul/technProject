@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Switch } from "react-router"
 import AdminDashboard from "../components/Admin/AdminDashboard"
 import PostListAdmin from "../components/Admin/PostListAdmin/PostList"
@@ -14,9 +16,11 @@ import PublicRoute from "../components/Routes/PublicRoute/PublicRoute"
 import Tweets from "../components/Tweets/Tweets"
 import UserPosts from "../components/UserPosts/UserPosts"
 import ViewProfile from "../components/ViewProfile/ViewProfile"
+import { getUserAction } from "../redux/actions"
 import { Role } from "../utils/Role"
 
-export const Routes = () => {
+export const Routes = (user) => {
+
     return (
         <Switch>
             <PrivateRoute
@@ -24,6 +28,7 @@ export const Routes = () => {
               roles={Role.Admin}
               component={AdminDashboard}
               exact
+              user={user}
             />
             <PublicRoute
               restricted={false}
@@ -51,32 +56,37 @@ export const Routes = () => {
               path="/admin/users"
               roles={Role.Admin}
               component={UsersList}
+              user={user}
             />
             <PrivateRoute
               path="/admin/posts"
               roles={Role.Admin}
               component={PostListAdmin}
+              user={user}
             />
             <PrivateRoute
               exact
               path="/admin/suspensions/post"
               roles={Role.Admin}
               component={SuspendedPosts}
+              user={user}
             />
             <PrivateRoute
               exact
               path="/admin/suspensions/user"
               roles={Role.Admin}
               component={SuspendedUsers}
+              user={user}
             />
             <PrivateRoute
               exact
               path="/admin/suspensions/comments"
               roles={Role.Admin}
               component={SuspendedComments}
+              user={user}
             />
             <PublicRoute path="/user/:id" component={ViewProfile}/>
-            <PrivateRoute path="/myposts" roles={[Role.Admin,Role.User]} component={UserPosts}/>
+            <PrivateRoute path="/myposts" roles={[Role.Admin,Role.User]} component={UserPosts} user={user}/>
             <PublicRoute path='/tweets' component={Tweets}/>
         </Switch>
     )

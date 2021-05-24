@@ -1,149 +1,21 @@
+import axios from "axios";
+
 const url = "http://localhost:2000/admin";
 const urlHelper = "http://localhost:2000/user/";
-export const suspendPostRequest = async (data) => {
-  const response = await fetch(`${url}/suspend/post`, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  return response.json();
-};
 
-export const fetchAllUsers = async () => {
-  const response = await fetch(`${urlHelper}/getAll`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  const { users } = await response.json();
-  return users;
-};
+const transport = axios.create({
+  withCredentials: true,
+})
 
-export const suspendUserRequest = async (data) => {
-  const response = await fetch(`${url}/suspend/user`, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  return response.json();
-};
-
-export const removeUserRequest = async (id) => {
-  const response = await fetch(`${urlHelper}/delete/${id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-
-  return response.json();
-};
-
-export const fetchSuspendedPostsRequest = async () => {
-  const response = await fetch(`${url}/suspensions/post`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  return response.json();
-};
-
-export const fetchSuspendedUsersRequest = async () => {
-  const response = await fetch(`${url}/suspensions/user`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  return response.json();
-};
-export const unsuspendUserRequest = async (id) => {
-  const response = await fetch(`${url}/unsuspend/user/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  return response.json();
-};
-
-export const unsuspendPostRequest = async (id) => {
-  const response = await fetch(`${url}/unsuspend/post/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  return response.json();
-};
-
-export const suspendCommentRequest = async (data) => {
-  const response = await fetch(`${url}/suspend/comment`, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  return response.json();
-};
-
-export const fetchSuspendedCommentsRequest = async () => {
-  const response = await fetch(`${url}/suspensions/comment`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-
-  return response.json();
-};
-
+export const suspendPostRequest = async (data) => transport.post(`${url}/suspend/post`,data)
+export const fetchAllUsers = async () => transport.get(`${urlHelper}/getAll`);
+export const suspendUserRequest = async (data) => transport.post(`${url}/suspend/user`,data);
+export const removeUserRequest = async (id) => transport.delete(`${urlHelper}/delete/${id}`);
+export const fetchSuspendedPostsRequest = async () => transport.get(`${url}/suspensions/post`);
+export const fetchSuspendedUsersRequest = async () => transport.get(`${url}/suspensions/user`);
+export const unsuspendUserRequest = async (id) => transport.put(`${url}/unsuspend/user/${id}`);
+export const unsuspendPostRequest = async (id) => transport.put(`${url}/unsuspend/post/${id}`);
+export const suspendCommentRequest = async (data) => transport.post(`${url}/suspend/comment/`,data);
+export const fetchSuspendedCommentsRequest = async () => transport.get(`${url}/suspensions/comment`);
 export const unsuspendCommentRequest = async () => {};
-
 export const removeCommentRequest = async () => {};

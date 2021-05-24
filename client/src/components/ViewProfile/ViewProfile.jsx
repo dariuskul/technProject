@@ -10,12 +10,14 @@ import useStyles from './styles'
 const ViewProfile = () => {
     const {id} = useParams();
     const dispatch = useDispatch();
+    const user = useSelector((state)=> state?.communication?.user );
+    const loggedInUser = useSelector((state)=> state?.user?.user);
     const classes = useStyles();
     useEffect(()=> {
-        dispatch(getUserProfile(id))
+        dispatch(getUserProfile(id,loggedInUser.id))
     },[dispatch,id])
-    const user = useSelector((state)=> state?.communication?.user );
-    if(!isLoggedIn()){
+
+    if(!isLoggedIn(loggedInUser)){
         return <Redirect to='/'/>
     }
     return(

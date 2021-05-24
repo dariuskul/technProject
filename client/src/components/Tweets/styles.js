@@ -1,8 +1,10 @@
-import { fade, makeStyles } from "@material-ui/core/styles";
-import { deepPurple } from "@material-ui/core/colors";
+import { fade, makeStyles } from "@material-ui/core/styles";;
 
 export default makeStyles((theme) => ({
     container: {
         margin: '10em'
+    },
+    button: {
+        fontSize: '30px'
     }
 }));

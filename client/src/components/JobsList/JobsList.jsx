@@ -1,16 +1,11 @@
 import {
   Button,
   CircularProgress,
-  Collapse,
   Container,
-  FormControlLabel,
   Grid,
   InputLabel,
-  MenuItem,
-  Select,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { Switch } from "react-router";
 import Sort from "../Sort/Sort";
 import Job from "./Job/Job";
 
@@ -19,7 +14,6 @@ const JobsList = () => {
   const classes = useStyles();
   const [data, setData] = useState(null);
   const [page, setpage] = useState(1);
-  const [fullTime,setFullTime] = useState(false);
   const [sort, setSort] = useState();
   const [check,setCheck] = useState(false);
   useEffect(() => {

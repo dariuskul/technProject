@@ -9,7 +9,7 @@ import {
   searchPost,
   hidePost
 } from "../../api/post";
-import { fetchFollowedUsers, getUser, login, register,followUser } from "../../api/user";
+import { fetchFollowedUsers, getUser, login, register,followUser, getUserData } from "../../api/user";
 import { newComment } from "../../api/comment";
 import {
   suspendPostRequest,
@@ -33,16 +33,34 @@ export const REMOVE_SNACKBAR = 'REMOVE_SNACKBAR';
 
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
-    const {data} = await login(payload);
-    localStorage.setItem("currentUser", JSON.stringify(data));
+    console.log("DASDASDASD",payload)
+    await login(payload);
+    const {data} = await getUserData();
     dispatch({ type: "LOGIN", payload: data });
     history.push("/");
+
   } catch (err) {
-    if(err.response.status===403){
-      notification('Your account is suspended', 'error',dispatch,enqueueSnackbar,closeSnackbar)
-    }else{
-      notification(err.response.data.message, 'error',dispatch,enqueueSnackbar,closeSnackbar)
-    }
+    // if(err.response.status===403){
+    //   notification('Your account is suspended', 'error',dispatch,enqueueSnackbar,closeSnackbar)
+    // }else{
+    //   notification(err.response.data.message, 'error',dispatch,enqueueSnackbar,closeSnackbar)
+    // }
+    alert(err)
+  }
+};
+
+export const getUserAction = () => async (dispatch) => {
+  try {
+    const {data} = await getUserData();
+    dispatch({ type: "LOGIN", payload: data });
+
+  } catch (err) {
+    // if(err.response.status===403){
+    //   notification('Your account is suspended', 'error',dispatch,enqueueSnackbar,closeSnackbar)
+    // }else{
+    //   notification(err.response.data.message, 'error',dispatch,enqueueSnackbar,closeSnackbar)
+    // }
+    alert(err)
   }
 };
 
@@ -66,8 +84,7 @@ export const logOut = () => (dispatch) => {
 
 export const fetchPosts = () => async (dispatch) => {
   try {
-    const posts = await fetchAll();
-    console.log("POSTS", posts);
+    const {data: {posts}} = await fetchAll();
     dispatch({ type: "FETCH_ALL", payload: posts });
   } catch (error) {
     alert(error);
@@ -139,7 +156,7 @@ export const suspendPost = (data) => async (dispatch) => {
 
 export const fetchUsers = () => async (dispatch) => {
   try {
-    const users = await fetchAllUsers();
+    const {data:{users}} = await fetchAllUsers();
     dispatch({ type: "FETCH_USERS", payload: users });
   } catch (error) {
     alert(error);
@@ -166,8 +183,8 @@ export const removeUser = (id) => async (dispatch) => {
 
 export const fetchSuspendedPosts = () => async (dispatch) => {
   try {
-    const posts = await fetchSuspendedPostsRequest();
-    dispatch({ type: "FETCH_ALL_SUSPENDED_POSTS", payload: posts });
+    const {data} = await fetchSuspendedPostsRequest();
+    dispatch({ type: "FETCH_ALL_SUSPENDED_POSTS", payload: data });
   } catch (error) {
     alert(error);
   }
@@ -175,8 +192,8 @@ export const fetchSuspendedPosts = () => async (dispatch) => {
 
 export const fetchSuspendedUsers = () => async (dispatch) => {
   try {
-    const users = await fetchSuspendedUsersRequest();
-    dispatch({ type: "FETCH_SUSPENDED_USERS", payload: users });
+    const {data} = await fetchSuspendedUsersRequest();
+    dispatch({ type: "FETCH_SUSPENDED_USERS", payload: data });
   } catch (error) {}
 };
 
@@ -203,8 +220,8 @@ export const suspendComment = (data, id) => async (dispatch) => {
 
 export const fetchSuspendedComments = () => async (dispatch) => {
   try {
-    const comments = await fetchSuspendedCommentsRequest();
-    dispatch({ type: "FETCH_ALL_SUSPENDED_COMMENTS", payload: comments });
+    const {data} = await fetchSuspendedCommentsRequest();
+    dispatch({ type: "FETCH_ALL_SUSPENDED_COMMENTS", payload: data });
   } catch (error) {
     alert(error);
   }
@@ -236,13 +253,13 @@ export const removeSnackbar = key => ({
 });
 
 
-export const getUserProfile = (id) => async(dispatch) => {
+export const getUserProfile = (id,userId) => async(dispatch) => {
   try {
     console.log("AADASDASDSD",id)
     const {data} =  await getUser(id);
     const {data: {posts}} = await getPostsById(id);
-    const userId = JSON.parse(localStorage.getItem('currentUser')).id
     const follows = await fetchFollowedUsers(userId);
+    console.log("FOLLOWS",follows)
     let fullProfile = {
       user: data,
       followers: follows.data
@@ -289,9 +306,10 @@ export const hideUserPost = (id) => async(dispatch) => {
   }
 }
 
-export const fetchTweets = (query) => async(dispatch) => {
+export const fetchTweets = (query,page) => async(dispatch) => {
   try {
-      const {data} = await getTweets(query);
+    console.log("heh",query,page)
+      const {data} = await getTweets(query,page);
       dispatch({type: 'GET_TWEETS', payload: data})
   } catch (error) {
     

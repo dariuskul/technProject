@@ -1,5 +1,7 @@
-export const isLoggedIn = () => {
-    if (localStorage.getItem('currentUser')) {
+import { useSelector } from "react-redux";
+
+export const isLoggedIn = (user) => {
+    if (user) {
         return true;
     }
 

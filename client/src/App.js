@@ -5,7 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import Notifier from "./components/Notifier/Notifier";
 import { Routes } from "./helpers/Routes";
+import { useSelector } from "react-redux";
 function App() {
+  const user = useSelector((state)=> state?.user?.user)
   return (
     <div className="app">
       <Notifier/>
@@ -13,7 +15,7 @@ function App() {
         <CssBaseline />
         <NavBar />
         <Container maxWidth="lg">
-            <Routes/>
+            <Routes user={user}/>
         </Container>
       </BrowserRouter>
     </div>
