@@ -19,8 +19,6 @@ router.get('/getHidden/:id', authorize(), getHidden)
 router.put('/update/:id', authorize(), updateSchema, update)
 router.put('/hide/:id', authorize(), changeVisibility)
 router.delete('/delete/:id', authorize(), _delete)
-router.delete('/commentReact/:id', authorize(), deleteCommentReact)
-router.delete('/postReact/:id', authorize(), deletePostReact)
 module.exports = router
 
 function createSchema(req, res, next) {
@@ -145,12 +143,6 @@ function createPostReact(req, res, next) {
         .catch(error => handleError(error, res))
 }
 
-function deletePostReact(req, res, next) {
-    postService.deletePostReactById(req.params.id, req.user.id)
-        .then(() => res.json({ message: 'React removed from post.' }))
-        .catch(error => handleError(error, res))
-}
-
 function commentReactSchema(req, res, next) {
     const schema = Joi.object({
         reaction: Joi.string().required().valid('Smile', 'Like', 'Heart', 'Laugh', 'Surprised'),
@@ -163,11 +155,5 @@ function commentReactSchema(req, res, next) {
 function createCommentReact(req, res, next) {
     postService.reactToComment(req.body, req.user.id)
         .then(react => res.json({ ...react }))
-        .catch(error => handleError(error, res))
-}
-
-function deleteCommentReact(req, res, next) {
-    postService.deleteCommentReactById(req.params.id, req.user.id)
-        .then(() => res.json({ message: 'React removed from comment.' }))
         .catch(error => handleError(error, res))
 }
