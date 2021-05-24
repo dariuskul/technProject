@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { newPost } from "../../api/post";
 import FileBase64 from "react-file-base64";
 import { createPost, updatePost } from "../../redux/actions";
@@ -21,7 +21,7 @@ const ModalForm = ({ open, setOpen, userId, setCreated, updateValues }) => {
       description: updateValues?.description || "",
       content: updateValues?.content || "",
       photoUrl: updateValues?.photoUrl || "",
-      userId: userId,
+      userId: '',
     },
     onSubmit: (values) => {
       if (updateValues) {
@@ -35,6 +35,7 @@ const ModalForm = ({ open, setOpen, userId, setCreated, updateValues }) => {
       }
     },
   });
+  form.initialValues.userId = userId;
   return (
     <>
       <Dialog

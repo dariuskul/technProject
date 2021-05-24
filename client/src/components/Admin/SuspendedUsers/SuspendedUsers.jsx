@@ -22,7 +22,7 @@ const SuspendedUsers = () => {
   useEffect(() => {
     dispatch(fetchSuspendedUsers());
   }, [dispatch]);
-  const suspendedUsers = useSelector((state) => state?.users);
+  const suspendedUsers = useSelector((state) => state?.suspendedUsers);
   const handleUnsuspend = (id) => {
     if (window.confirm("Do you really want to unsuspend this user?")) {
       dispatch(unsuspendUser(id));
@@ -38,6 +38,7 @@ const SuspendedUsers = () => {
     }
   };
   const rows = makeRows(suspendedUsers);
+  console.log(suspendedUsers)
   return (
     <TableContainer component={Paper} size="large">
       <div>

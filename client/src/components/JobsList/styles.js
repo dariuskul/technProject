@@ -22,7 +22,7 @@ export default makeStyles((theme) => ({
   sorting:{
     display: 'flex',
     width: '100%',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: '1em',
     '& .MuiInputLabel-root':{
@@ -34,8 +34,12 @@ export default makeStyles((theme) => ({
     '& .MuiSelect-root':{
       fontSize: '50px',
       color: 'black',
-      fontSize: 'bolder'
-    }
+    },
+  },
+  jobButton: {
+    color: 'black',
+    fontSize: '20px',
+    fontWeight: 'bolder'
   }
 
 }));

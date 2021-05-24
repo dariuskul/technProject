@@ -1,25 +1,13 @@
 import { Container, CssBaseline } from "@material-ui/core";
 import NavBar from "./components/NavBar/NavBar";
-import { BrowserRouter, Switch } from "react-router-dom";
-import Login from "./components/Auth/Login/Login";
-import Register from "./components/Auth/Register/Register";
-import PostList from "./components/PostList/PostList";
-import JobsList from "./components/JobsList/JobsList";
-import PublicRoute from "./components/Routes/PublicRoute/PublicRoute";
-import { useSelector } from "react-redux";
-import PrivateRoute from "./components/Routes/PrivateRoute/PrivateRoute";
-import AdminDashboard from "./components/Admin/AdminDashboard";
-import { Role } from "./utils/Role";
-import UsersList from "./components/Admin/UsersList/UsersList";
-import PostListAdmin from "./components/Admin/PostListAdmin/PostList";
+import { BrowserRouter } from "react-router-dom";
 //localStorage.removeItem('currentUser')
 import "./App.css";
-import SuspendedPosts from "./components/Admin/SuspendedPosts/SuspendedPosts";
-import SuspendedUsers from "./components/Admin/SuspendedUsers/SuspendedUsers";
-import SuspendedComments from "./components/Admin/SuspendedComments/SuspendedComments";
 import Notifier from "./components/Notifier/Notifier";
 import { Routes } from "./helpers/Routes";
+import { useSelector } from "react-redux";
 function App() {
+  const user = useSelector((state)=> state?.user?.user)
   return (
     <div className="app">
       <Notifier/>
@@ -27,7 +15,7 @@ function App() {
         <CssBaseline />
         <NavBar />
         <Container maxWidth="lg">
-            <Routes/>
+            <Routes user={user}/>
         </Container>
       </BrowserRouter>
     </div>

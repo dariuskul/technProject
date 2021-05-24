@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import useStyles from "./style";
 import { Button, Toolbar, Typography } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../../redux/actions";
+import { getUserAction, logOut } from "../../redux/actions";
+import Cookies from 'js-cookie';
 const NavBar = () => {
   const classes = useStyles();
   const user = useSelector((state) => state?.user);
   const dispatch = useDispatch();
   const history = useHistory();
+  useEffect(()=> {
+    if(!user?.length > 0){
+      dispatch(getUserAction(history))
+      console.log("YE..")
+    }
+  },[dispatch])
   const handleClick = () => {
     dispatch(logOut(history));
   };
@@ -47,6 +54,14 @@ const NavBar = () => {
             >
               Carrers
             </Button>
+            <Button
+              component={Link}
+              to="/tweets"
+              variant="contained"
+              className={classes.button}
+            >
+              Tweets
+            </Button>
 
             <Button
               variant="contained"
@@ -81,6 +96,14 @@ const NavBar = () => {
               className={classes.button}
             >
               Carrers
+            </Button>
+            <Button
+              component={Link}
+              to="/tweets"
+              variant="contained"
+              className={classes.button}
+            >
+              Tweets
             </Button>
           </div>
         )}

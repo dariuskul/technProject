@@ -1,15 +1,31 @@
-import { Card, CardContent, CardHeader, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, Typography } from '@material-ui/core';
 import React from 'react'
 import useStyles from './styles'
 
 const Job = (props) =>{
     const classes = useStyles();
+    const regex = /(<([^>]+)>)/ig;
+    const job_apply = props.apply.replace(regex,'');
+    console.log(props.type)
     return(
         <Card className={classes.card}>
             <CardHeader
-            title={props.title}
-            subheader={props.createdAt}
+            title={props.company}
+            subheader={props.title}
+            classes={{
+                root: classes.title,
+                subheader: classes.label,
+            }}
+
             />
+            <CardContent>
+                <Typography>
+                    {job_apply.startsWith('htt') ? <Button className={classes.button} href={job_apply}>Apply</Button> : <p>{job_apply}</p> }
+                </Typography>
+                <Typography variant='h5'>
+                {props.type}
+                </Typography>
+            </CardContent>
         </Card>
     )
 }

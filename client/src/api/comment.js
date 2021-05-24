@@ -1,16 +1,8 @@
-const URL = "http://localhost:2000/post";
+import axios from "axios";
 
-export const newComment = async (data) => {
-  const response = await fetch(`${URL}/comment`, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("currentUser")).token
-      }`,
-    },
-  });
-  const { post } = await response.json();
-  return post;
-};
+const URL = "http://localhost:2000/post";
+const transport = axios.create({
+  withCredentials: true
+})
+
+export const newComment = async (data) => transport.post(`${URL}/comment`,data);

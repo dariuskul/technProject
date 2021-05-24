@@ -1,21 +1,21 @@
 import React, { Component } from "react";
+import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import { isLoggedIn } from "../../../utils/isLoggedIn";
 
-const PrivateRoute = ({ component: Component, roles, ...rest }) => {
+const PrivateRoute = ({ component: Component, user, roles, ...rest }) => {
   return (
     <Route
       {...rest}
       render={(props) => {
-        const user = JSON.parse(localStorage.getItem("currentUser"));
-        if (!isLoggedIn()) {
+        if (!isLoggedIn(user)) {
           return (
             <Redirect
               to={{ pathname: "/auth/login", state: { from: props.location } }}
             />
           );
         }
-        if (roles && roles.indexOf(user.role) === -1) {
+        if (user && roles.indexOf(user?.user?.role) === -1) {
           return <Redirect to={{ pathname: "/" }} />;
         }
         console.log("AAAAAAA");
