@@ -2,7 +2,6 @@ import {
   Button,
   Container,
   Grid,
-  Paper,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -12,10 +11,17 @@ import useStyles from "./style";
 import { loginAction } from "../../../redux/actions";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import * as Yup from 'yup';
 const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const LoginSchema = Yup.object().shape({
+    username: Yup.string().required('Please provide username!'),
+    password: Yup.string().required('Please provide password!')
+  })
+
   const form = useFormik({
     initialValues: {
       username: "",
@@ -24,6 +30,7 @@ const Login = () => {
     onSubmit: (values) => {
       dispatch(loginAction(values, history));
     },
+    validationSchema: LoginSchema
   });
   return (
     <Container maxWidth="xs">
@@ -41,6 +48,9 @@ const Login = () => {
                 name="username"
                 value={form.values.username}
                 onChange={form.handleChange}
+                error={form.errors.username ? true : false}
+                helperText={form.errors.username ? form.errors.username : ''}
+                
               />
             </Grid>
             <Grid item xs={12} sm={12}>
@@ -53,6 +63,8 @@ const Login = () => {
                 name="password"
                 value={form.values.password}
                 onChange={form.handleChange}
+                error={form.errors.password? true : false}
+                helperText={form.errors.password ? form.errors.password : ''}
               />
             </Grid>
           </Grid>
