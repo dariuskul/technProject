@@ -1,4 +1,6 @@
 {
+    "serverPort": 2000,   
+    "clientUrl": "http://localhost:3000",
     "database": {
         "host": "localhost",
         "port": 3306,
@@ -6,14 +8,5 @@
         "password": "",
         "database": "CoderMedia"
     },
-    "secret": "BET KAS REALIAI",
-    "emailFrom": "sojusesu@gmail.com",
-    "smtpOptions": {
-        "host": "smtp.gmail.com",
-        "port": 587,
-        "auth": {
-            "user": "sojusesu@gmail.com",
-            "pass": "siandienyra22"
-        }
-    }
+    "secret": "BET KAS REALIAI"
 }
