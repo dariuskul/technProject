@@ -4,7 +4,6 @@ import {
   updatePostRequest,
   removePostRequest,
   addPostReactionRequest,
-  removePostReactionRequest,
   getPostsById,
   searchPost,
   hidePost
@@ -23,7 +22,6 @@ import {
   suspendCommentRequest,
   fetchSuspendedCommentsRequest,
 } from "../../api/admin";
-import { Button } from "@material-ui/core";
 import { notification } from "../../utils/notification";
 import { getTweets } from "../../api/twitter";
 export const ENQUEUE_SNACKBAR = 'ENQUEUE_SNACKBAR';
@@ -40,12 +38,12 @@ export const loginAction = (payload, history) => async (dispatch) => {
     history.push("/");
 
   } catch (err) {
-    // if(err.response.status===403){
-    //   notification('Your account is suspended', 'error',dispatch,enqueueSnackbar,closeSnackbar)
-    // }else{
-    //   notification(err.response.data.message, 'error',dispatch,enqueueSnackbar,closeSnackbar)
-    // }
-    alert(err)
+    if(err.response.status===403){
+      notification('Your account is suspended', 'error',dispatch,enqueueSnackbar,closeSnackbar)
+    }else{
+      notification(err.response.data.message, 'error',dispatch,enqueueSnackbar,closeSnackbar)
+    }
+    
   }
 };
 
@@ -122,6 +120,7 @@ export const addComent = (content, id) => async (dispatch) => {
   try {
     const {data} = await newComment(content, id);
     dispatch({ type: "UPDATE", payload: data });
+    notification('Comment added succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {}
 };
 
@@ -135,14 +134,6 @@ export const addReaction = (react) => async (dispatch) => {
   }
 };
 
-// createdAt: "2021-05-24T18:35:33.000Z"
-// id: 246
-// postId: 5
-// reaction: "Surprised"
-// updatedAt: "2021-05-24T18:35:33.000Z"
-// user: {username: "test1", firstName: "Darius", lastName: "Kulevičius"}
-// userId: 3
-// id, postId, userId
 export const removeReaction = ({id,postId,userId}) => async (dispatch) => {
   try {
     dispatch({ type: "REMOVE_REACTION", payload: { id, postId, userId } });
@@ -155,6 +146,7 @@ export const suspendPost = (data) => async (dispatch) => {
   try {
     await suspendPostRequest(data);
     dispatch({ type: "SUSPEND_POST", payload: data.postId });
+    notification('Post suspended succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {
     alert(error);
   }
@@ -173,6 +165,7 @@ export const suspendUser = (data) => async (dispatch) => {
   try {
     await suspendUserRequest(data);
     dispatch({ type: "SUSPEND_USER", payload: data.userId });
+    notification('User suspended succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {
     alert(error);
   }
@@ -182,6 +175,7 @@ export const removeUser = (id) => async (dispatch) => {
   try {
     await removeUserRequest(id);
     dispatch({ type: "SUSPEND_USER", payload: id });
+    notification('User removed succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {
     alert(error);
   }
@@ -207,6 +201,7 @@ export const unsuspendPost = (id) => async (dispatch) => {
   try {
     await unsuspendPostRequest(id);
     dispatch({ type: "UNSUSPEND_POST", payload: id });
+    notification('Post unsuspended succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {}
 };
 
@@ -214,6 +209,7 @@ export const unsuspendUser = (id) => async (dispatch) => {
   try {
     await unsuspendUserRequest(id);
     dispatch({ type: "UNSUSPEND_USER", payload: id });
+    notification('User unsuspended succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {}
 };
 
@@ -222,6 +218,7 @@ export const suspendComment = (data, id) => async (dispatch) => {
     await suspendCommentRequest(data);
     dispatch({ type: "SUSPEND_COMMENT", payload: { data, id } });
     notification('Comment suspended','success',dispatch,enqueueSnackbar,closeSnackbar)
+    notification('Comment suspended succesfully', 'success',dispatch,enqueueSnackbar,closeSnackbar)
   } catch (error) {}
 };
 
@@ -233,8 +230,6 @@ export const fetchSuspendedComments = () => async (dispatch) => {
     alert(error);
   }
 };
-
-
 
 export const enqueueSnackbar = (notification) => {
     const key = notification.options && notification.options.key;
@@ -277,14 +272,6 @@ export const getUserProfile = (id,userId) => async(dispatch) => {
     alert(error)
   }
 }
-
-// export const getLoggedInUserPosts = () => async(dispatch) => {
-//   try {
-
-//   } catch (error) {
-    
-//   }
-// }
 
 export const follow = (form,id) => async(dispatch) => {
   try {
