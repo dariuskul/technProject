@@ -81,7 +81,7 @@ function _delete(req, res, next) {
 }
 
 function getAll(req, res, next) {
-    userService.getAllUsers()
+    userService.getAllUsers(req.query)
         .then(users => res.json({ users }))
         .catch(error => handleError(error, res))
 }

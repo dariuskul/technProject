@@ -6,10 +6,11 @@ const { Op } = require('sequelize')
 module.exports = {
     followUser,
     getAllFollowedUsers,
-    getChatHistory,
+    getMessages,
     addMessage,
     muteUserById,
-    findMutedUser
+    findMutedUser,
+    getChatsByUser
 }
 
 async function followUser({ followeeId, userId }) {
@@ -27,8 +28,11 @@ async function followUser({ followeeId, userId }) {
     }
 }
 
-async function getAllFollowedUsers(userId) {
+async function getAllFollowedUsers(userId, { page = '0', count = '10' }) {
+    const perPage = parseInt(count)
     var follows = await db.followedUser.findAll({
+        limit: perPage,
+        offset: parseInt(page) * perPage,
         where: { userId },
         attributes: ['id', 'createdAt'],
         include: [{
@@ -47,16 +51,18 @@ async function getAllFollowedUsers(userId) {
      return follows
 }
 
-async function getChatHistory({ user1Id, user2Id, page = 0, per_page = 20 }) {
+async function getMessages({ user1Id, user2Id, page = '0', count = '20' }) {
     const chatParams = user1Id > user2Id? { user1Id: user2Id, user2Id: user1Id } :
                         { user1Id, user2Id }
     const chat = await db.chat.findOne({ where: chatParams })
     if (!chat) return []
 
+    const perPage = parseInt(count)
     const messages = await db.message.findAll({
+        limit: perPage,
+        offset: parseInt(page) & perPage,
         where: { 
-            chatId: chat.id,
-            id: { [Op.gte]: per_page * page, [Op.lt]: per_page * (page + 1) }
+            chatId: chat.id
          },
         order: [['createdAt', 'DESC']]
     })
@@ -102,4 +108,19 @@ async function muteUserById(mutedId, userId) {
 async function findMutedUser(mutedId, userId) {
     const mutedUser = await db.mutedUser.findOne({ where: { mutedId, userId } })
     return mutedUser
+}
+
+async function getChatsByUser(userId, { page = '0', count = '10' }) {
+    const perPage = parseInt(count)
+    const chats = await db.chat.findAll({ 
+        limit: perPage,
+        offset: parseInt(page) * perPage,
+        where: {
+            [Op.or]: [
+                { user1Id: userId },
+                { user2Id: userId }
+            ]
+        } })
+
+     return chats
 }

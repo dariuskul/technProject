@@ -67,8 +67,12 @@ async function deleteUser(id) {
   await user.destroy();
 }
 
-async function getAllUsers() {
-  const users = await db.user.findAll();
+async function getAllUsers({ page = '0', count = '10' }) {
+  const perPage = parseInt(count)
+  const users = await db.user.findAll({ 
+    limit: perPage,
+    offset: parseInt(page) * perPage
+   });
   return users;
 }
 

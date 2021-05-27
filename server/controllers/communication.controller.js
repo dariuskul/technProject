@@ -9,7 +9,8 @@ router.post('/follow', authorize(), followSchema, follow)
 router.post('/mute/:id', authorize(), muteUser)
 router.post('/message', authorize(), addMessageSchema, addMessage)
 router.get('/follows/:id', authorize(), getAllFollowed)
-router.get('/chat/:id', authorize(), getChatHistory)
+router.get('/messages/:id', authorize(), getMessages)
+router.get('/chats', authorize(), getChats)
 module.exports = router
 
 
@@ -31,7 +32,7 @@ function getAllFollowed(req, res, next) {
     if (Number(req.params.id) != req.user.id)
         return res.status(403).json({ message: "Forbidden, token and provided user ids do not match"})
     
-    communicationService.getAllFollowedUsers(req.params.id)
+    communicationService.getAllFollowedUsers(req.params.id, req.query)
         .then(follows => res.json(follows))
         .catch(error => handleError(error, res))
 }
@@ -42,8 +43,8 @@ function muteUser(req, res, next) {
         .catch(error => handleError(error, res))
 }
 
-function getChatHistory(req, res, next) {
-    communicationService.getChatHistory({
+function getMessages(req, res, next) {
+    communicationService.getMessages({
         user1Id: req.user.id,
         user2Id: req.params.id,
         ...req.query
@@ -67,5 +68,11 @@ function addMessage(req, res, next) {
         content: req.body.content
     })
         .then(message => res.json(message))
+        .catch(error => handleError(error, res))
+}
+
+function getChats(req, res, next) {
+    communicationService.getChatsByUser(req.user.id, req.query)
+        .then(chats => res.json(chats))
         .catch(error => handleError(error, res))
 }

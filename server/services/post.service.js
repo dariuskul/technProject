@@ -16,7 +16,6 @@ module.exports = {
     getPostsBySearch,
     createComment,
     getAllComments,
-    getHiddenPosts,
     reactToPost,
     reactToComment
 }
@@ -27,8 +26,11 @@ async function createPost(params) {
     return { ...post.get(), user: { username, firstName, lastName }, reacts: [], comments: [] }
 }
 
-async function getAllPosts() {
+async function getAllPosts({ page = '0', count = '10' }) {
+    const perPage = parseInt(count)
     let posts = await db.post.findAll({
+        limit: perPage,
+        offset: parseInt(page) * perPage,
         where : {
             isSuspended: false,
             isHidden: false
@@ -44,7 +46,7 @@ async function getAllPosts() {
     return Promise.all(
         posts.map(async post => {
             const reacts = await getAllPostReacts(post.id)
-            const comments = await getAllComments(post.id)
+            const comments = await getAllComments(post.id, {})
             return { ...post, comments, reacts }
         })
     )
@@ -66,7 +68,7 @@ async function getPostById(id) {
     if (!post) throw new RequestError('Post not found', 404)
 
     const reacts = await getAllPostReacts(id)
-    const comments = await getAllComments(id)
+    const comments = await getAllComments(id, {})
     return { post, reacts, comments }
 }
 
@@ -89,8 +91,11 @@ async function updatePost(id, params, userId) {
     return { ...post.get(), reacts, comments }
 }
 
-async function getPostsByUser(id, loggedInId) {
-    var posts = await db.post.findAll({ 
+async function getPostsByUser(id, loggedInId, { page = '0', count = '10' }) {
+    const perPage = parseInt(count)
+    var posts = await db.post.findAll({
+        limit: perPage,
+        offset: parseInt(page) * perPage, 
         where: { 
             userId: id,
             isSuspended: false,
@@ -108,7 +113,7 @@ async function getPostsByUser(id, loggedInId) {
     return Promise.all(
         posts.map(async post => {
             const reacts = await getAllPostReacts(post.id)
-            const comments = await getAllComments(post.id)
+            const comments = await getAllComments(post.id, {})
             return { ...post, comments, reacts }
         })
     )
@@ -123,8 +128,11 @@ async function changePostVisibility(id, userId) {
     return { ...post.get(), reacts, comments }
 }
 
-async function getPostsBySearch(value) {
+async function getPostsBySearch({ value = "", page = '0', count = '10' }) {
+    const perPage = parseInt(count)
     var posts = await db.post.findAll({ 
+        limit: perPage,
+        offset: parseInt(page) * perPage,
         where: { 
             [Op.or]: [
                 { title: { [Op.substring]: value } },
@@ -145,7 +153,7 @@ async function getPostsBySearch(value) {
     return Promise.all(
         posts.map(async post => {
             const reacts = await getAllPostReacts(post.id)
-            const comments = await getAllComments(post.id)
+            const comments = await getAllComments(post.id, {})
             return { ...post, comments, reacts }
         })
     )
@@ -197,8 +205,11 @@ async function reactToComment(params, userId) {
     }
 }
 
-async function getAllComments(postId) {
+async function getAllComments(postId, { page = '0', count = '20' }) {
+    const perPage = parseInt(count)
     let comments = await db.comment.findAll({ 
+        limit: perPage,
+        offset: parseInt(page) * perPage,
         where: { 
             postId,
             isSuspended: false 
@@ -246,29 +257,4 @@ async function getAllCommentReacts(commentId) {
     })
 
     return reacts
-}
-
-async function getHiddenPosts(userId) {
-    var posts = await db.post.findAll({ 
-        where: { 
-            userId, 
-            isHidden: true,
-            isSuspended: false 
-        },
-        include: [{
-            model: db.user,
-            as: "user",
-            required: true,
-            attributes: ['username']
-        }]
-    })
-    posts = posts.map(post => post.get({ plain: true }))
-
-    return Promise.all(
-        posts.map(async post => {
-            const reacts = await getAllPostReacts(post.id)
-            const comments = await getAllComments(post.id)
-            return { ...post, comments, reacts }
-        })
-    )
 }

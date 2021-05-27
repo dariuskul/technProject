@@ -15,7 +15,6 @@ router.get('/getById/:id', getById)
 router.get('/getByUser/:id', authorize([], false), getByUser)
 router.get('/getBySearch', getBySearch)
 router.get('/comments/:id', getComments)
-router.get('/getHidden/:id', authorize(), getHidden)
 router.put('/update/:id', authorize(), updateSchema, update)
 router.put('/hide/:id', authorize(), changeVisibility)
 router.delete('/delete/:id', authorize(), _delete)
@@ -41,7 +40,7 @@ function create(req, res, next) {
 }
 
 function getAll(req, res, next) {
-    postService.getAllPosts()
+    postService.getAllPosts(req.query)
         .then(posts => res.json({ posts }))
         .catch(error => handleError(error, res))
 }
@@ -80,7 +79,7 @@ function _delete(req, res, next) {
 
 function getByUser(req, res, next) {
     const loggedInId = req.user? req.user.id : null
-    postService.getPostsByUser(req.params.id, loggedInId)
+    postService.getPostsByUser(req.params.id, loggedInId, req.query)
         .then(posts => res.json({ posts }))
         .catch(error => handleError(error, res))
 }
@@ -92,17 +91,8 @@ function changeVisibility(req, res, next) {
         .catch(error => handleError(error, res))
 }
 
-function getHidden(req, res, next) {
-    if (Number(req.params.id) != req.user.id && req.user.role != roles.Admin)
-        return res.status(403).json({ message: "Forbidden, must be a user with same id or admin"})
-
-    postService.getHiddenPosts(req.params.id)
-        .then(posts => res.json({ posts }))
-        .catch(error => handleError(error, res))
-}
-
 function getBySearch(req, res, next) {
-    postService.getPostsBySearch(req.query.value)
+    postService.getPostsBySearch(req.query)
         .then(posts => res.json({ posts }))
         .catch(error => handleError(error, res))
 }
@@ -123,7 +113,7 @@ function createComment(req, res, next) {
 }
 
 function getComments(req, res, next) {
-    postService.getAllComments(req.params.id)
+    postService.getAllComments(req.params.id, req.query)
         .then(comments => res.json({ comments }))
         .catch(error => handleError(error, res))
 }

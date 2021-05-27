@@ -220,7 +220,13 @@ Fetches all user data.
 
 **Example request**
 
-`http://localhost:2000/user/getAll`
+`http://localhost:2000/user/getAll?page={0}&count={10}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `count` by default is 10
 
 **Authentication**
 
@@ -416,7 +422,13 @@ Fetches all post data.
 
 **Example request**
 
-`http://localhost:2000/post/getAll`
+`http://localhost:2000/post/getAll?page={0}&count={10}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `count` by default is 10
 
 **Authentication**
 
@@ -659,7 +671,13 @@ Fetches a spefici user's posts by the users id.
 
 **Example request**
 
-`http://localhost:2000/post/getByUser/{userId}`
+`http://localhost:2000/post/getByUser/{userId}?page={0}&count={10}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `count` by default is 10
 
 **Authentication**
 
@@ -777,7 +795,13 @@ Fetches all posts that have a similar title or post creator's username to the pr
 
 **Example request**
 
-`http://localhost:2000/post/getBySearch?value={post_title|username}`
+`http://localhost:2000/post/getBySearch?value={post_title|username}&page={0}&count={10}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `count` by default is 10
 
 **Authentication**
 
@@ -831,58 +855,6 @@ This request does not have validations.
                     "reacts": []
                 }
             ],
-            "reacts": []
-        }
-    ]
-}
-```
-
----
-
-### GET Get user's hidden posts
-
-**Description**
-
-Fetches all user's hidden posts by the user's id.
-
-**Example request**
-
-`http://localhost:2000/post/getHidden/{userId}`
-
-**Authentication**
-
-This request requires a jwt with the same `userId` or `role` of **admin**.
-
-**Example request body**
-
-```
-This request does not require a body.
-```
-
-**Validations**
-
-This request does not have validations.
-
-**Example response**
-
-```
-{
-    "posts": [
-        {
-            "id": 2,
-            "title": "Post title",
-            "description": "This is the description",
-            "photoUrl": "https://specials-images.forbesimg.com/imageserve/5f302109ffad89f9130e07db/960x0.jpg?cropX1=0&cropX2=4800&cropY1=243&cropY2=2943",
-            "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor i",
-            "isHidden": true,
-            "isSuspended": false,
-            "createdAt": "2021-05-09T15:33:21.000Z",
-            "updatedAt": "2021-05-09T15:38:43.000Z",
-            "userId": 1,
-            "user": {
-                "username": "username"
-            },
-            "comments": [],
             "reacts": []
         }
     ]
@@ -1059,7 +1031,13 @@ Fetches the post's comments with it's reactions by the post's id.
 
 **Example request**
 
-`http://localhost:2000/post/comments/{post_id}`
+`http://localhost:2000/post/comments/{post_id}?page={0}&count={20}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `count` by default is 20
 
 **Example response**
 
@@ -1583,7 +1561,13 @@ Fetches all user's followed users list
 
 **Example request**
 
-`http://localhost:2000/communication/follows/{user_id}`
+`http://localhost:2000/communication/follows/{user_id}?page={0}&count={10}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `count` by default is 10
 
 **Authentication**
 
@@ -1605,7 +1589,50 @@ This request requires a jwt.
 
 ---
 
-### GET Get chat history
+### GET Get user's chats
+
+**Description**
+
+Fetches all user's chats with other users.
+
+**Example request**
+
+`http://localhost:2000/communication/chats?page={0}&count={10}`
+
+**Query parameters**
+
+-   Every parameter is **optional**
+-   Parameter `page` by default is 0
+-   Parameter `count` by default is 10
+
+**Authentication**
+
+This request requires a jwt.
+
+**Example response**
+
+```
+[
+    {
+        "id": 1,
+        "createdAt": "2021-05-17T17:34:03.000Z",
+        "updatedAt": "2021-05-17T17:34:03.000Z",
+        "user1Id": 1,
+        "user2Id": 2
+    },
+    {
+        "id": 5,
+        "createdAt": "2021-05-24T09:31:19.000Z",
+        "updatedAt": "2021-05-24T09:31:19.000Z",
+        "user1Id": 3,
+        "user2Id": 1
+    }
+]
+```
+
+---
+
+### GET Get messages
 
 **Description**
 
@@ -1613,13 +1640,13 @@ Fetches all of specific chat's messages.
 
 **Example request**
 
-`http://localhost:2000/communication/chat/{user_id}?page={0}&per_page={10}`
+`http://localhost:2000/communication/messages/{user_id}?page={0}&count={10}`
 
 **Query parameters**
 
 -   Every parameter is **optional**
 -   Parameter `page` by default is 0
--   Parameter `per_page` by default is 20
+-   Parameter `count` by default is 20
 
 **Authentication**
 
