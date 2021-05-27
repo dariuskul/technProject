@@ -20,10 +20,19 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
-import { addReaction, hideUserPost, removeReaction } from "../../../redux/actions";
+import {
+  addReaction,
+  hideUserPost,
+  removeReaction,
+} from "../../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { reactionCount } from "../../../utils/calculateReactions";
-import { reactionIdByUser,ADD_ONLY,ADD_REMOVE,REMOVE_ONLY } from "../../../utils/getReactionIdByUser";
+import {
+  reactionIdByUser,
+  ADD_ONLY,
+  ADD_REMOVE,
+  REMOVE_ONLY,
+} from "../../../utils/getReactionIdByUser";
 import { useHistory } from "react-router";
 const Post = ({ post, creator, role, removePost, created, userInfo }) => {
   const [readMore, setReadMore] = useState(false);
@@ -39,24 +48,21 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
       postId: post.id,
     },
     onSubmit: (values) => {
-      const value = reactionIdByUser(user, post.reacts,values);
+      const value = reactionIdByUser(user, post.reacts, values);
       console.log(value);
-      if(value===ADD_ONLY){
-        dispatch(addReaction(values))
+      if (value === ADD_ONLY) {
+        dispatch(addReaction(values));
       }
-      if(value[1]===ADD_REMOVE){
-      console.log(value)
-      dispatch(removeReaction(value[0]))
-      dispatch(addReaction(values))
-      }
-
-      if(value[1]===REMOVE_ONLY){
-        dispatch(addReaction(values))
-        dispatch(removeReaction(value[0]))
-
+      if (value[1] === ADD_REMOVE) {
+        console.log(value);
+        dispatch(removeReaction(value[0]));
+        dispatch(addReaction(values));
       }
 
-
+      if (value[1] === REMOVE_ONLY) {
+        dispatch(addReaction(values));
+        dispatch(removeReaction(value[0]));
+      }
     },
   });
   const handleEmojiAddition = (emoji) => {
@@ -65,19 +71,21 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
   };
 
   const handleViewUserProfile = () => {
-    if(user)
-    history.push(`/user/${post.userId}`)
-  }
+    if (user) history.push(`/user/${post.userId}`);
+  };
 
   const handleHidePost = () => {
-    dispatch(hideUserPost(post?.id))
-  }
+    dispatch(hideUserPost(post?.id));
+  };
   let subHeader;
-  if(userInfo){
-    subHeader = userInfo.firstName + ' ' + userInfo.lastName;
-  }else{
-    subHeader= post.user.firstName + ' ' + post.user.lastName;
+  if (userInfo) {
+    subHeader = userInfo.firstName + " " + userInfo.lastName;
+  } else {
+    subHeader = post.user.firstName + " " + post.user.lastName;
   }
+
+  const content = readMore ? post.content.substring(0, 100) : post.content;
+
   return (
     <Card className={classes.main}>
       <CardHeader
@@ -85,11 +93,21 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
         title={
           <div>
             {post.title}
-            { post.userId === creator && <Button onClick={handleHidePost} className={classes.hidePost}>{post.isHidden? 'UNHIDE' : 'HIDE'}</Button>}
+            {post.userId === creator && (
+              <Button onClick={handleHidePost} className={classes.hidePost}>
+                {post.isHidden ? "UNHIDE" : "HIDE"}
+              </Button>
+            )}
           </div>
         }
         subheader={
-          <Button disabled={!user ? true : false} onClick={handleViewUserProfile} className={classes.creator}>{subHeader}</Button>
+          <Button
+            disabled={!user ? true : false}
+            onClick={handleViewUserProfile}
+            className={classes.creator}
+          >
+            {subHeader}
+          </Button>
         }
       />
 
@@ -100,10 +118,16 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
         </Typography>
       </CardContent>
       <CardContent>
-        {readMore ? post.content : post.content.substring(0, 100)}
+        <div
+          style={{
+            textAlign: "justify",
+          }}
+        >
+          <Typography variant="body1">{content}</Typography>
+        </div>
         {post.content.length > 100 && (
           <Button onClick={() => setReadMore(!readMore)}>
-            {readMore ? "Read less" : "Read more"}
+            {readMore ? "Read more" : "Read less"}
           </Button>
         )}
         {showComments && (
@@ -117,65 +141,73 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
           />
         )}
       </CardContent>
-      {user && 
-      <>
-      <CardActions disableSpacing>
-        {post.userId === creator && (
-          <IconButton onClick={() => setOpenModal(true)}>
-            <EditIcon />
-          </IconButton>
-        )}
-        {(post.userId === creator || role === "Admin") && (
-          <IconButton onClick={() => removePost(post.id)}>
-            <DeleteIcon />
-          </IconButton>
-        )}
-        <IconButton onClick={() => setShowComments(true)}>
-          <ChatBubbleOutlineIcon />
-        </IconButton>
-        <IconButton onClick={() => handleEmojiAddition("Heart")}>
-          <div className={classes.button}>
-            <FavoriteIcon />
-            <div className={classes.count}>{reactionCount(post, "Heart")}</div>
-          </div>
-        </IconButton>
-        <IconButton onClick={() => handleEmojiAddition("Like")}>
-          <div className={classes.button}>
-            <ThumbUpIcon />
-            <div className={classes.count}>{reactionCount(post, "Like")}</div>
-          </div>
-        </IconButton>
-        <IconButton onClick={() => handleEmojiAddition("Laugh")}>
-          <div className={classes.button}>
-            <EmojiEmotionsIcon />
-            <div className={classes.count}>{reactionCount(post, "Laugh")}</div>
-          </div>
-        </IconButton>
-        <IconButton onClick={() => handleEmojiAddition("Smile")}>
-          <div className={classes.button}>
-            <SentimentSatisfiedIcon />
-            <div className={classes.count}>{reactionCount(post, "Smile")}</div>
-          </div>
-        </IconButton>
-        <IconButton onClick={() => handleEmojiAddition("Surprised")}>
-          <div className={classes.button}>
-            <MoodBadIcon />
-            <div className={classes.count}>
-              {reactionCount(post, "Surprised")}
+      {user && (
+        <>
+          <CardActions disableSpacing>
+            <div className={classes.iconButtons}>
+              {post.userId === creator && (
+                <IconButton onClick={() => setOpenModal(true)}>
+                  <EditIcon />
+                </IconButton>
+              )}
+              {(post.userId === creator || role === "Admin") && (
+                <IconButton onClick={() => removePost(post.id)}>
+                  <DeleteIcon />
+                </IconButton>
+              )}
+              <IconButton onClick={() => setShowComments(true)}>
+                <ChatBubbleOutlineIcon />
+              </IconButton>
+              <IconButton onClick={() => handleEmojiAddition("Heart")}>
+                <div className={classes.button}>
+                  <FavoriteIcon />
+                  <div className={classes.count}>
+                    {reactionCount(post, "Heart")}
+                  </div>
+                </div>
+              </IconButton>
+              <IconButton onClick={() => handleEmojiAddition("Like")}>
+                <div className={classes.button}>
+                  <ThumbUpIcon />
+                  <div className={classes.count}>
+                    {reactionCount(post, "Like")}
+                  </div>
+                </div>
+              </IconButton>
+              <IconButton onClick={() => handleEmojiAddition("Laugh")}>
+                <div className={classes.button}>
+                  <EmojiEmotionsIcon />
+                  <div className={classes.count}>
+                    {reactionCount(post, "Laugh")}
+                  </div>
+                </div>
+              </IconButton>
+              <IconButton onClick={() => handleEmojiAddition("Smile")}>
+                <div className={classes.button}>
+                  <SentimentSatisfiedIcon />
+                  <div className={classes.count}>
+                    {reactionCount(post, "Smile")}
+                  </div>
+                </div>
+              </IconButton>
+              <IconButton onClick={() => handleEmojiAddition("Surprised")}>
+                <div className={classes.button}>
+                  <MoodBadIcon />
+                  <div className={classes.count}>
+                    {reactionCount(post, "Surprised")}
+                  </div>
+                </div>
+              </IconButton>
             </div>
-          </div>
-        </IconButton>
-
-      </CardActions>
-      <ModalForm
-        userId={creator}
-        updateValues={post}
-        open={openModal}
-        setOpen={setOpenModal}
-      /> 
-      </>
-      }
-      
+          </CardActions>
+          <ModalForm
+            userId={creator}
+            updateValues={post}
+            open={openModal}
+            setOpen={setOpenModal}
+          />
+        </>
+      )}
     </Card>
   );
 };

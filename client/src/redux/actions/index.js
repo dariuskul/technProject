@@ -308,10 +308,10 @@ export const hideUserPost = (id) => async(dispatch) => {
   }
 }
 
-export const fetchTweets = (query,page) => async(dispatch) => {
+export const fetchTweets = (query,page,next) => async(dispatch) => {
   try {
-    console.log("heh",query,page)
-      const {data} = await getTweets(query,page);
+      const {data} = await getTweets(query,page,next);
+    
       dispatch({type: 'GET_TWEETS', payload: data})
   } catch (error) {
     

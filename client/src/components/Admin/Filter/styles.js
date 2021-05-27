@@ -9,6 +9,10 @@ export default makeStyles((theme) => ({
     padding: "12px",
     borderRadius: "10px",
     alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      justifyContent: "flex-start",
+    },
   },
   filterTab: {
     fontSize: "larger",

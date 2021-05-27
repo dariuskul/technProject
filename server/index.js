@@ -17,11 +17,11 @@ app.use(cors({
 }));
 app.use(cookieParser())
 
-app.use("/user", require("./controllers/users.controller"))
-app.use("/post", require("./controllers/posts.controller"))
-app.use("/admin", require("./controllers/admin.controller"))
-app.use("/communication", require("./controllers/communication.controller"))
-app.use("/outer_service", require("./controllers/outer_services.controller"))
+app.use("/user", require("./controllers/users.controller"));
+app.use("/post", require("./controllers/posts.controller"));
+app.use("/admin", require("./controllers/admin.controller"));
+app.use("/communication", require("./controllers/communication.controller"));
+app.use("/outer_service", require("./controllers/outer_services.controller"));
 
 useSockets(io)
 
