@@ -98,6 +98,10 @@ export default makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
   },
+
+  paper: {
+    width: "200px",
+  },
   mobileButtons: {
     display: "flex",
     alignItems: "center",

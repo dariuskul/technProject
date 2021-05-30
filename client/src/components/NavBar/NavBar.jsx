@@ -34,8 +34,8 @@ const NavBar = () => {
           >
             Coder<span>Media</span>
           </Typography>
-          <Buttons role={user?.user?.role} handler={handleClick} />
-          <MobileNavBar role={user?.user?.role} />
+          {/* <Buttons role={user?.user?.role} handler={handleClick} /> */}
+          <MobileNavBar handler={handleClick} role={user?.user?.role} />
         </Toolbar>
       </AppBar>
     </div>

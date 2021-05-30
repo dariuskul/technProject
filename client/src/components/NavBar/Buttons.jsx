@@ -4,6 +4,7 @@ import { Links } from "./Links";
 import useStyles from "./style";
 const Buttons = ({ role, handler }) => {
   const classes = useStyles();
+  console.log("a", handler);
   return (
     <div className={classes.buttons}>
       {Links.map(
@@ -17,7 +18,7 @@ const Buttons = ({ role, handler }) => {
               component={Link}
               to={link.path}
               key={i}
-              onClick={link.label === "Logout" && handler}
+              onClick={link.label === "Logout" ? handler : ""}
             >
               {link.label}
             </Button>

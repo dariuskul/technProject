@@ -7,7 +7,7 @@ import Buttons from "./Buttons";
 import { Links } from "./Links";
 import { Link } from "react-router-dom";
 import Divider from "@material-ui/core/Divider";
-const MobileNavBar = ({ role }) => {
+const MobileNavBar = ({ role, handler }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   return (
@@ -15,7 +15,7 @@ const MobileNavBar = ({ role }) => {
       <Button onClick={() => setOpen(true)}>
         <MenuIcon className={classes.menuIcon} />
       </Button>
-      <Drawer open={open} className={classes.mobileButtons}>
+      <Drawer open={open} className={classes.paper}>
         <Button
           onClick={() => setOpen((prev) => !prev)}
           className={classes.close}
@@ -34,6 +34,7 @@ const MobileNavBar = ({ role }) => {
                   component={Link}
                   to={link.path}
                   key={i}
+                  onClick={link.label === "Logout" ? handler : ""}
                 >
                   {link.label}
                 </Button>
