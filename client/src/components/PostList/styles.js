@@ -5,6 +5,7 @@ export default makeStyles((theme) => ({
   container: {
     marginTop: "4em",
     color: "black",
+    overflow: "hidden",
   },
   inputContainer: {
     marginBottom: "2em",
