@@ -22,7 +22,6 @@ const SuspendedPosts = () => {
   useEffect(() => {
     dispatch(fetchSuspendedPosts());
   }, [dispatch]);
-  console.log("suspended");
   const suspendedPosts = useSelector((state) => state.suspendedPosts);
   const rows = makeRows(suspendedPosts);
 

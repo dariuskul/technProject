@@ -44,7 +44,6 @@ const PostList = ({ viewProfile }) => {
       dispatch(searchBytitle("javascript"));
     }
   };
-  console.log(user);
   return (
     <div className={classes.container}>
       <Container className={classes.inputContainer} maxWidth="xl">

@@ -1,9 +1,7 @@
-import { useSelector } from "react-redux";
-
 export const isLoggedIn = (user) => {
-    if (user) {
-        return true;
-    }
+  if (user) {
+    return true;
+  }
 
-    return false;
-}
+  return false;
+};

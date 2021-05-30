@@ -11,16 +11,16 @@ import useStyles from "./style";
 import { loginAction } from "../../../redux/actions";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
 
   const LoginSchema = Yup.object().shape({
-    username: Yup.string().required('Please provide username!'),
-    password: Yup.string().required('Please provide password!')
-  })
+    username: Yup.string().required("Please provide username!"),
+    password: Yup.string().required("Please provide password!"),
+  });
 
   const form = useFormik({
     initialValues: {
@@ -30,18 +30,18 @@ const Login = () => {
     onSubmit: (values) => {
       dispatch(loginAction(values, history));
     },
-    validationSchema: LoginSchema
+    validationSchema: LoginSchema,
   });
   return (
     <Container maxWidth="xs">
       <div className={classes.paper}>
         <Typography className={classes.typography}>Login</Typography>
-        <form className={classes.form} onSubmit={form.handleSubmit}>
+        <form className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
                 fullWidth
-                size="normal"
+                size="medium"
                 label="Username"
                 variant="outlined"
                 id="username"
@@ -49,12 +49,12 @@ const Login = () => {
                 value={form.values.username}
                 onChange={form.handleChange}
                 error={form.errors.username ? true : false}
-                helperText={form.errors.username ? form.errors.username : ''}
-                
+                helperText={form.errors.username ? form.errors.username : ""}
               />
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
+                size="medium"
                 variant="outlined"
                 label="Password"
                 type="password"
@@ -63,19 +63,20 @@ const Login = () => {
                 name="password"
                 value={form.values.password}
                 onChange={form.handleChange}
-                error={form.errors.password? true : false}
-                helperText={form.errors.password ? form.errors.password : ''}
+                error={form.errors.password ? true : false}
+                helperText={form.errors.password ? form.errors.password : ""}
               />
             </Grid>
           </Grid>
 
-          <Grid container spacing={2}>
-            <Grid item xs={12} alignItems="center">
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12}>
               <Button
                 className={classes.button}
                 type="submit"
                 variant="contained"
                 color="primary"
+                onClick={form.handleSubmit}
               >
                 Login
               </Button>

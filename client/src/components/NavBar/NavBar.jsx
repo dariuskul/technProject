@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import useStyles from "./style";
-import { Button, Toolbar, Typography } from "@material-ui/core";
+import { Toolbar, Typography } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserAction, logOut } from "../../redux/actions";
-import MenuIcon from "@material-ui/icons/Menu";
-import Buttons from "./Buttons";
 import MobileNavBar from "./MobileNavBar";
+import Buttons from "./Buttons";
 const NavBar = () => {
   const classes = useStyles();
   const user = useSelector((state) => state?.user);
@@ -16,9 +15,8 @@ const NavBar = () => {
   useEffect(() => {
     if (!user?.length > 0) {
       dispatch(getUserAction(history));
-      console.log("YE..");
     }
-  }, [dispatch]);
+  }, [dispatch, history, user?.length]);
   const handleClick = () => {
     dispatch(logOut(history));
   };
@@ -34,7 +32,7 @@ const NavBar = () => {
           >
             Coder<span>Media</span>
           </Typography>
-          {/* <Buttons role={user?.user?.role} handler={handleClick} /> */}
+          <Buttons role={user?.user?.role} handler={handleClick} />
           <MobileNavBar handler={handleClick} role={user?.user?.role} />
         </Toolbar>
       </AppBar>

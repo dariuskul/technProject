@@ -4,14 +4,16 @@ import App from "./App";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import "./App.css";
-import { SnackbarProvider } from 'notistack'
+import { SnackbarProvider } from "notistack";
 ReactDOM.render(
   <Provider store={store}>
-    <SnackbarProvider maxSnack={1}
-    anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-  }}>
+    <SnackbarProvider
+      maxSnack={1}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+    >
       <App />
     </SnackbarProvider>
   </Provider>,

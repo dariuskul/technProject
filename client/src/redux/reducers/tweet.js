@@ -1,7 +1,6 @@
 export default function communicationReducer(tweets = [], action) {
   switch (action.type) {
     case "GET_TWEETS":
-      console.log(action.payload);
       return [action.payload];
     case "GET_MORE":
       return [...tweets, action.payload];

@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { isLoggedIn } from "../../../utils/isLoggedIn";
 
@@ -18,7 +17,6 @@ const PrivateRoute = ({ component: Component, user, roles, ...rest }) => {
         if (user && roles.indexOf(user?.user?.role) === -1) {
           return <Redirect to={{ pathname: "/" }} />;
         }
-        console.log("AAAAAAA");
         return <Component {...props} />;
       }}
     />

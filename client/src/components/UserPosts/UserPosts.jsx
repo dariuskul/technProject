@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../redux/actions";
 import PostList from "../PostList/PostList";
-import ProfileDetails from "../ViewProfile/components/ProfileDetails";
 import useStyles from "./styles";
 const UserPosts = () => {
   const dispatch = useDispatch();
@@ -12,7 +11,7 @@ const UserPosts = () => {
 
   useEffect(() => {
     dispatch(getUserProfile(userId.id, userId.id));
-  }, [dispatch]);
+  }, [dispatch, userId.id]);
   return (
     <Container className={classes.container} maxWidth="md">
       <Paper style={{ paddingBottom: "4em" }} elevation={3}>

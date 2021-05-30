@@ -21,10 +21,6 @@ export default function postReducer(posts = [], action) {
           : post
       );
     case "REMOVE_REACTION":
-      let react = {};
-      if(action.payload.data){
-        react = action.payload.data;
-      }
       return posts.map((post) =>
         post.id === action.payload.postId
           ? {
@@ -34,9 +30,6 @@ export default function postReducer(posts = [], action) {
                   react.id !== action.payload.id &&
                   react.userId !== action.payload.userId
               ),
-              
-
-
             }
           : post
       );
@@ -44,14 +37,12 @@ export default function postReducer(posts = [], action) {
       return posts.filter((post) => post.id !== action.payload);
 
     case "SUSPEND_COMMENT":
-      console.log(action.payload.postId)
       return posts.map((post) => ({
-              ...post,
-              comments: post.comments.filter(
-                (comment) => comment.id !== action.payload.data.commentId
-              ),
-            })
-      );
+        ...post,
+        comments: post.comments.filter(
+          (comment) => comment.id !== action.payload.data.commentId
+        ),
+      }));
     default:
       // If this reducer doesn't recognize the action type, or doesn't
       // care about this specific action, return the existing state unchanged

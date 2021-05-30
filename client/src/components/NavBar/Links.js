@@ -32,5 +32,6 @@ export const Links = [
   {
     label: "Logout",
     role: ["User", "Admin"],
+    path: "/",
   },
 ];

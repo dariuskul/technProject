@@ -1,9 +1,8 @@
 import { Button, Drawer } from "@material-ui/core";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
 import useStyles from "./style";
-import Buttons from "./Buttons";
 import { Links } from "./Links";
 import { Link } from "react-router-dom";
 import Divider from "@material-ui/core/Divider";
@@ -28,16 +27,27 @@ const MobileNavBar = ({ role, handler }) => {
               link.role === "any" ||
               (!role && link.role === "notUser") ||
               (typeof link.role === "object" && link.role.includes(role))) && (
-              <div>
-                <Button
-                  className={classes.button}
-                  component={Link}
-                  to={link.path}
-                  key={i}
-                  onClick={link.label === "Logout" ? handler : ""}
-                >
-                  {link.label}
-                </Button>
+              <div key={i}>
+                {link.label === "Logout" ? (
+                  <Button
+                    className={classes.button}
+                    component={Link}
+                    to={link.path}
+                    key={i}
+                    onClick={handler}
+                  >
+                    {link.label}
+                  </Button>
+                ) : (
+                  <Button
+                    className={classes.button}
+                    component={Link}
+                    to={link.path}
+                    key={i}
+                  >
+                    {link.label}
+                  </Button>
+                )}
                 <Divider />
               </div>
             )

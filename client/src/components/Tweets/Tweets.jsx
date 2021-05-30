@@ -9,12 +9,12 @@ import { useHistory, useLocation } from "react-router";
 import queryString from "query-string";
 const Tweets = () => {
   const dispatch = useDispatch();
-  const { search, pathname } = useLocation();
+  const { search } = useLocation();
   const history = useHistory();
   const { searchquery, page, next } = queryString.parse(search);
   const [searchTweet, setSearchTweet] = useState(searchquery || "reactjs");
-  const [tweetPage, setTweetPage] = useState(2);
-  const [update, setUpdate] = useState("");
+  const [tweetPage] = useState(2);
+  const [setUpdate] = useState("");
   const classes = useStyles();
   useEffect(() => {
     if (searchquery && next && page) {
@@ -24,7 +24,7 @@ const Tweets = () => {
     } else {
       dispatch(fetchTweets(searchTweet, tweetPage, null));
     }
-  }, [dispatch, update, next, page]);
+  });
   const tweets = useSelector((state) => state?.tweets);
   const handleChange = (e) => {
     setSearchTweet(e.target.value);
@@ -40,7 +40,6 @@ const Tweets = () => {
     e.preventDefault();
     setUpdate(new Date());
     let lastIndexOfTweets = tweets.length - 1;
-    console.log(tweets[lastIndexOfTweets]?.search_metadata.next_id);
     history.push(
       `/tweets?searchquery=${searchTweet}&page=${tweetPage}&next=${tweets[lastIndexOfTweets]?.search_metadata.next_id}`
     );
@@ -48,24 +47,20 @@ const Tweets = () => {
   return (
     <Container style={{ marginTop: "3em" }} maxWidth="xl">
       <Search handleChange={handleChange} handleSubmit={handleSubmit} />
-      <Grid justify="center" alignItems="center" container xl={12} xs={12}>
-        {tweets?.map((index) =>
+      <Grid justify="center" alignItems="center" container>
+        {tweets?.map((index, i) =>
           index?.statuses?.map((tweet) => (
-            <Grid justify="center" alignItems="center" item xl={12} xs={12}>
-              <TwitterTweet id={tweet.id_str} />
+            <Grid key={i + tweet.id} item xl={12} xs={12}>
+              <TwitterTweet key={tweet.id} id={tweet.id_str} />
             </Grid>
           ))
         )}
-
-        {console.log(tweets[tweets.length - 1])}
-        {tweets[tweets?.length - 1]?.statuses.length > 0 ? (
-          <Button onClick={handleMore} className={classes.button}>
-            More
-          </Button>
-        ) : (
-          ""
-        )}
       </Grid>
+      {tweets[tweets?.length - 1]?.statuses.length > 0 && (
+        <Button onClick={handleMore} className={classes.button}>
+          More
+        </Button>
+      )}
     </Container>
   );
 };

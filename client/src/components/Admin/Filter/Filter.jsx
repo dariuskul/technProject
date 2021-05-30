@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPosts,
   fetchSuspendedPosts,
-  fetchSuspendedUsers,
   fetchUsers,
 } from "../../../redux/actions";
 import FilterTab from "./FilterTab";

@@ -8,7 +8,6 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addComent } from "../../redux/actions";
 import Comment from "./Comment/Comment";

@@ -49,12 +49,10 @@ const Post = ({ post, creator, role, removePost, created, userInfo }) => {
     },
     onSubmit: (values) => {
       const value = reactionIdByUser(user, post.reacts, values);
-      console.log(value);
       if (value === ADD_ONLY) {
         dispatch(addReaction(values));
       }
       if (value[1] === ADD_REMOVE) {
-        console.log(value);
         dispatch(removeReaction(value[0]));
         dispatch(addReaction(values));
       }

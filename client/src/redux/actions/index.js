@@ -38,7 +38,6 @@ export const REMOVE_SNACKBAR = "REMOVE_SNACKBAR";
 
 export const loginAction = (payload, history) => async (dispatch) => {
   try {
-    console.log("DASDASDASD", payload);
     await login(payload);
     const { data } = await getUserData();
     dispatch({ type: "LOGIN", payload: data });
@@ -174,7 +173,6 @@ export const addComent = (content, id) => async (dispatch) => {
 
 export const addReaction = (react) => async (dispatch) => {
   try {
-    console.log(react);
     const { data } = await addPostReactionRequest(react);
     dispatch({ type: "ADD_REACTION", payload: data });
   } catch (error) {
@@ -350,13 +348,12 @@ export const removeSnackbar = (key) => ({
 
 export const getUserProfile = (id, userId) => async (dispatch) => {
   try {
-    console.log("AADASDASDSD", userId);
     const { data } = await getUser(id);
     const {
       data: { posts },
     } = await getPostsById(id);
     const follows = await fetchFollowedUsers(userId);
-    console.log("FOLLOWS", follows);
+
     let fullProfile = {
       user: data,
       followers: follows.data,
@@ -371,7 +368,6 @@ export const getUserProfile = (id, userId) => async (dispatch) => {
 export const follow = (form, id) => async (dispatch) => {
   try {
     const { data } = await followUser(form);
-    console.log(id);
     dispatch({ type: "FOLLOW_USER", payload: { data, id } });
   } catch (error) {}
 };
@@ -381,7 +377,7 @@ export const searchBytitle = (query) => async (dispatch) => {
     const {
       data: { posts },
     } = await searchPost(query);
-    console.log(posts);
+
     if (posts.length > 0) {
       dispatch({ type: "FETCH_ALL", payload: posts });
     } else {

@@ -38,7 +38,6 @@ const SuspendedUsers = () => {
     }
   };
   const rows = makeRows(suspendedUsers);
-  console.log(suspendedUsers)
   return (
     <TableContainer component={Paper} size="large">
       <div>
