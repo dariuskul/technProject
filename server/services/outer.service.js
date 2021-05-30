@@ -30,7 +30,8 @@ async function getTweetsByHashtag({ search, date, count = 10, next_id = null }) 
     }
     return twitterAPI.get('search/tweets', searchParams).then(response => {
         if (!response.resp.statusCode) throw new RequestError(response.stack, 400)
-
+        if (response.data.statuses.length == 0) return { ...response.data, search_metadata: { ...response.data.search_metadata, next_id: null } }
+        
         const nextString = response.data.search_metadata.next_results
         let from = nextString.indexOf("=") + 1
         let to = nextString.indexOf("&")
