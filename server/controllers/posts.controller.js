@@ -32,7 +32,6 @@ function createSchema(req, res, next) {
     validateRequest(req, res, next, schema)
 }
 
-//TODO maybe get id from token, not body
 function create(req, res, next) {
     postService.createPost(req.body)
         .then(post => res.json({ post, message: 'Post created successfully'}))
@@ -84,7 +83,6 @@ function getByUser(req, res, next) {
         .catch(error => handleError(error, res))
 }
 
-//TODO Get data from token
 function changeVisibility(req, res, next) {
     postService.changePostVisibility(req.params.id, req.user.id)
         .then(post => res.json({ ...post }))

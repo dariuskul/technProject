@@ -16,7 +16,6 @@ router.get('/getByToken', authorize(), getByToken)
 router.delete('/logout', authorize(), logout)
 module.exports = router
 
-//TODO Add more validation parameters with custom messages, add email
 function registerSchema(req, res, next) {
     const schema = Joi.object({
         firstName: Joi.string().required().min(3).max(32),

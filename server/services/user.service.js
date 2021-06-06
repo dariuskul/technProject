@@ -17,8 +17,6 @@ async function register(params) {
   console.log(params);
   if (await db.user.findOne({ where: { username: params.username } }))
     throw new RequestError("Provided username is already taken", 400);
-  // if (await db.user.findOne({ where: { email: params.email } }))
-  //     throw 'Provided email is already taken'
   if (params.password)
     params.passwordHash = await bcrypt.hash(params.password, 10);
 
@@ -61,7 +59,6 @@ async function update(id, params) {
   return { ...omitHash(user.get()) };
 }
 
-//TODO use postService to delete posts and other post relationships...
 async function deleteUser(id) {
   const user = await getUser(id);
   await db.post.destroy({ where: { userId: id } });
