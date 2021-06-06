@@ -33,6 +33,11 @@ export default function postReducer(posts = [], action) {
             }
           : post
       );
+    case "CREATE_COMMENT":
+      return posts.map((post) => ({
+        ...post,
+        comments: [...post.comments, action.payload],
+      }));
     case "SUSPEND_POST":
       return posts.filter((post) => post.id !== action.payload);
 

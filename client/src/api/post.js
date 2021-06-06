@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const URL = "http://localhost:2000/post";
+const URL = "https://coder-media-backend.herokuapp.com/post";
 const transport = axios.create({
-  withCredentials: true
-})
+  withCredentials: true,
+});
 
-
-export const fetchAll = async() => axios.get(`${URL}/getAll`)
-export const getPostsById = async (id) => transport.get(`${URL}/getByUser/${id}`)
+export const fetchAll = async () => axios.get(`${URL}/getAll`);
+export const getPostsById = async (id) =>
+  transport.get(`${URL}/getByUser/${id}`);
 
 // export const newPost = async (data) => {
 //   const response = await fetch(`${URL}/create`, {
@@ -24,7 +24,7 @@ export const getPostsById = async (id) => transport.get(`${URL}/getByUser/${id}`
 //   return post;
 // };
 
-export const newPost = async(data) => transport.post(`${URL}/create`,data);
+export const newPost = async (data) => transport.post(`${URL}/create`, data);
 
 // export const updatePostRequest = async (data, id) => {
 //   const response = await fetch(`${URL}/update/${id}`, {
@@ -42,7 +42,8 @@ export const newPost = async(data) => transport.post(`${URL}/create`,data);
 //   return response.json();
 // };
 
-export const updatePostRequest = async(data,id) => transport.put(`${URL}/update/${id}`,data);
+export const updatePostRequest = async (data, id) =>
+  transport.put(`${URL}/update/${id}`, data);
 
 // export const removePostRequest = async (id) => {
 //   const response = await fetch(`${URL}/delete/${id}`, {
@@ -58,7 +59,8 @@ export const updatePostRequest = async(data,id) => transport.put(`${URL}/update/
 
 //   return response.json();
 // };
-export const removePostRequest = async(id) => transport.delete(`${URL}/delete/${id}`);
+export const removePostRequest = async (id) =>
+  transport.delete(`${URL}/delete/${id}`);
 
 // export const addPostReactionRequest = async (data) => {
 //   const response = await fetch(`${URL}/postReact`, {
@@ -75,7 +77,8 @@ export const removePostRequest = async(id) => transport.delete(`${URL}/delete/${
 //   return response.json();
 // };
 
-export const addPostReactionRequest = async (data) => transport.post(`${URL}/postreact`,data);
+export const addPostReactionRequest = async (data) =>
+  transport.post(`${URL}/postreact`, data);
 
 // export const removePostReactionRequest = async (id) => {
 //   const response = await fetch(`${URL}/postReact/${id}`, {
@@ -91,9 +94,10 @@ export const addPostReactionRequest = async (data) => transport.post(`${URL}/pos
 //   return response.json();
 // };
 
-export const removePostReactionRequest = async(id) => transport.delete(`${URL}/postReact/${id}`);
+export const removePostReactionRequest = async (id) =>
+  transport.delete(`${URL}/postReact/${id}`);
 
-export const searchPost = async(searchQuery) => axios.get(`${URL}/getBySearch?value=${searchQuery}`)
+export const searchPost = async (searchQuery) =>
+  axios.get(`${URL}/getBySearch?value=${searchQuery}`);
 
-export const hidePost = async(id) => transport.put(`${URL}/hide/${id}`);
- 
+export const hidePost = async (id) => transport.put(`${URL}/hide/${id}`);

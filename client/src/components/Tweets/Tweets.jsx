@@ -14,7 +14,8 @@ const Tweets = () => {
   const { searchquery, page, next } = queryString.parse(search);
   const [searchTweet, setSearchTweet] = useState(searchquery || "reactjs");
   const [tweetPage] = useState(2);
-  const [setUpdate] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [update, setUpdate] = useState("");
   const classes = useStyles();
   useEffect(() => {
     if (searchquery && next && page) {
@@ -24,7 +25,8 @@ const Tweets = () => {
     } else {
       dispatch(fetchTweets(searchTweet, tweetPage, null));
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, searchquery, tweetPage, next]);
   const tweets = useSelector((state) => state?.tweets);
   const handleChange = (e) => {
     setSearchTweet(e.target.value);

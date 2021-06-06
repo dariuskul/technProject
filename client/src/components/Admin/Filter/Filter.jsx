@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPosts,
+  fetchSuspendedComments,
   fetchSuspendedPosts,
   fetchUsers,
 } from "../../../redux/actions";
@@ -14,11 +15,13 @@ const Filter = () => {
     dispatch(fetchUsers());
     dispatch(fetchPosts());
     dispatch(fetchSuspendedPosts());
+    dispatch(fetchSuspendedComments());
   }, [dispatch]);
 
   const users = useSelector((state) => state.users);
   const posts = useSelector((state) => state.posts);
   const suspended = useSelector((state) => state.suspendedPosts);
+  const comments = useSelector((state) => state.suspendedComments);
   return (
     <div className={classes.filter}>
       <FilterTab title="Users" count={users.length} path={"/admin/users"} />
@@ -30,12 +33,12 @@ const Filter = () => {
       />
       <FilterTab
         title="User suspensions"
-        count={0}
+        count={users.length}
         path={"/admin/suspensions/user"}
       />
       <FilterTab
         title="Comments suspensions"
-        count={0}
+        count={comments.length}
         path={"/admin/suspensions/comments"}
       />
     </div>

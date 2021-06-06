@@ -22,7 +22,6 @@ const Comments = ({ comments, post, open, setOpen, created, user }) => {
     },
     onSubmit: (values) => {
       dispatch(addComent(values));
-      created(new Date());
     },
   });
   return (
