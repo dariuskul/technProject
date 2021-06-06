@@ -1,3 +1,4 @@
+require('dotenv').config
 const config = require("../config.json");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -32,7 +33,7 @@ async function login({ username, password }) {
   }
 
   if (user.isSuspended) throw new RequestError("User account is suspended", 403)
-  const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: "1d" });
+  const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
   return token;
 }
 

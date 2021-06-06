@@ -2,6 +2,7 @@ require('dotenv').config()
 const Twit = require('twit')
 const { RequestError } = require('../_helpers/request-error')
 const fetch = require('node-fetch')
+const { response } = require('express')
 
 module.exports = {
     getTweetsByHashtag,
@@ -44,6 +45,9 @@ async function getTweetsByHashtag({ search, date, count = 10, next_id = null }) 
                 next_id: nextId
             },
         }
+    }).catch(response => {
+        const message = response.allErrors.length > 0? response.allErrors[0].message : "Twitter Api error."
+        throw new RequestError(message ,response.statusCode)
     })
 }
 

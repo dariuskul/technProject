@@ -7,6 +7,15 @@ Api responses on success return data in json format or json objects with the att
 
 On bad requests or when an error occurs, the api returns a response with the appropriate status code and a json object with the attribute `message` which contains an error message. When an authentication error with a jwt occurs, the api returns a HTML response.
 
+## Environment variables
+
+For the api to function it requires these environment variables:
+
+-   `DB_CONNECTION_STRING` to connect to a database.
+-   `JWT_SECRET` for creating and verifying json web tokens.
+-   `API_KEY` twitter api key.
+-   `API_SECRET` twitter api key secret.
+
 ---
 
 ## User Controller

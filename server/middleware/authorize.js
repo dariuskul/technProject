@@ -1,5 +1,5 @@
+require('dotenv').config
 const jwt = require("express-jwt");
-const { secret } = require("../config.json");
 const db = require("../_helpers/db");
 module.exports = authorize;
 function authorize(roles = [], credentialsRequired = true) {
@@ -7,7 +7,7 @@ function authorize(roles = [], credentialsRequired = true) {
 
   return [
     jwt({
-      secret,
+      secret: process.env.JWT_SECRET,
       algorithms: ["HS256"],
       credentialsRequired,
       getToken: function getTokenFromCookie(req) {
