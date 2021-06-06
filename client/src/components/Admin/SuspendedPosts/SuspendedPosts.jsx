@@ -16,12 +16,13 @@ import {
   unsuspendPost,
 } from "../../../redux/actions";
 import { makeRows } from "../../../utils/createTableRows";
-
+import useStyles from "../styles";
 const SuspendedPosts = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchSuspendedPosts());
   }, [dispatch]);
+  const classes = useStyles();
   const suspendedPosts = useSelector((state) => state.suspendedPosts);
   const rows = makeRows(suspendedPosts);
 
@@ -41,7 +42,11 @@ const SuspendedPosts = () => {
     }
   };
   return (
-    <TableContainer component={Paper} size="large">
+    <TableContainer
+      className={classes.container}
+      component={Paper}
+      size="large"
+    >
       <div>
         <Table aria-label="simple table">
           <TableHead>
@@ -82,12 +87,20 @@ const SuspendedPosts = () => {
                   {row.admin.firstName + " " + row.admin.lastName}
                 </TableCell>
                 <TableCell align="center">
-                  <Button onClick={() => handleUnsuspend(row.id)}>
+                  <Button
+                    style={{ color: "red" }}
+                    onClick={() => handleUnsuspend(row.id)}
+                  >
                     Unsuspend
                   </Button>
                 </TableCell>
                 <TableCell align="center">
-                  <Button onClick={() => handleRemove(row.id)}>Remove</Button>
+                  <Button
+                    style={{ color: "red" }}
+                    onClick={() => handleRemove(row.id)}
+                  >
+                    Remove
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -27,7 +27,7 @@ const UsersList = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
   const users = useSelector((state) => state?.users);
-  const user = useSelector((state)=> state.user?.user);
+  const user = useSelector((state) => state.user?.user);
   const [open, setOpen] = useState(false);
   const closeModal = () => {
     setOpen(false);
@@ -67,7 +67,7 @@ const UsersList = () => {
       component={Paper}
       size="large"
     >
-      <Table className={classes} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="center">User id</TableCell>
@@ -80,7 +80,7 @@ const UsersList = () => {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow>
+            <TableRow key={row.id}>
               <TableCell component="th" scope="row" align="left">
                 {row.id}
               </TableCell>
@@ -89,12 +89,24 @@ const UsersList = () => {
               <TableCell align="center">{row.username}</TableCell>
               <TableCell align="center">{row.createdAt}</TableCell>
               <TableCell align="center">
-              {user?.id !== row.id &&                <Button onClick={() => toggleModal(row.id)}>
-                  {row.isSuspended ? "Unsuspend" : "Suspend"}
-                </Button>}
+                {user?.id !== row.id && (
+                  <Button
+                    style={{ color: "red" }}
+                    onClick={() => toggleModal(row.id)}
+                  >
+                    {row.isSuspended ? "Unsuspend" : "Suspend"}
+                  </Button>
+                )}
               </TableCell>
               <TableCell align="center">
-                {user?.id !== row.id &&<Button onClick={() => handleRemove(row.id)}>Remove</Button>}
+                {user?.id !== row.id && (
+                  <Button
+                    style={{ color: "red" }}
+                    onClick={() => handleRemove(row.id)}
+                  >
+                    Remove
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}
@@ -141,10 +153,10 @@ const UsersList = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={closeModal}>
+          <Button style={{ color: "red" }} onClick={closeModal}>
             Cancel
           </Button>
-          <Button color="primary" onClick={form.submitForm}>
+          <Button style={{ color: "red" }} onClick={form.submitForm}>
             Suspend
           </Button>
         </DialogActions>

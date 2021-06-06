@@ -1,9 +1,8 @@
 import React from "react";
-import { Route, Redirect, useLocation } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import { isLoggedIn } from "../../../utils/isLoggedIn";
 
 const PublicRoute = ({ component: Component, restricted, ...rest }) => {
-  const { pathname } = useLocation();
   return (
     <Route
       {...rest}

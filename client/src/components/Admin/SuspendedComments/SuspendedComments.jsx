@@ -10,22 +10,31 @@ import {
 } from "@material-ui/core";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSuspendedComments } from "../../../redux/actions";
+import {
+  fetchSuspendedComments,
+  unsuspendComment,
+} from "../../../redux/actions";
 import { makeRows } from "../../../utils/createTableRows";
-
+import useStyles from "../styles";
 const SuspendedComments = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchSuspendedComments());
   }, [dispatch]);
+  const classes = useStyles();
   const suspendedComments = useSelector((state) => state.suspendedComments);
 
   const rows = makeRows(suspendedComments);
-  const handleRemove = (id) => {};
 
-  const handleUnsuspend = (id) => {};
+  const handleUnsuspend = (id) => {
+    dispatch(unsuspendComment(id));
+  };
   return (
-    <TableContainer component={Paper} size="large">
+    <TableContainer
+      className={classes.container}
+      component={Paper}
+      size="large"
+    >
       <div>
         <Table aria-label="simple table">
           <TableHead>
@@ -47,7 +56,7 @@ const SuspendedComments = () => {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <TableRow>
+              <TableRow key={row.id}>
                 <TableCell component="th" scope="row" align="left">
                   {row.id}
                 </TableCell>
@@ -61,15 +70,14 @@ const SuspendedComments = () => {
                 </TableCell>
                 <TableCell align="center">{row?.content}</TableCell>
                 <TableCell align="center">
-                  <Button onClick={() => handleUnsuspend(row.id)}>
+                  <Button
+                    style={{ color: "red" }}
+                    onClick={() => handleUnsuspend(row.id)}
+                  >
                     Unsuspend
                   </Button>
                 </TableCell>
-                <TableCell align="center">
-                  <Button onClick={() => handleRemove(row.id)}>
-                    Remove user
-                  </Button>
-                </TableCell>
+                <TableCell align="center"></TableCell>
               </TableRow>
             ))}
           </TableBody>

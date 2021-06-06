@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const URL = "http://localhost:2000/post";
+const URL = "https://coder-media-backend.herokuapp.com/post";
 const transport = axios.create({
-  withCredentials: true
-})
+  withCredentials: true,
+});
 
-export const newComment = async (data) => transport.post(`${URL}/comment`,data);
+export const newComment = async (data) =>
+  transport.post(`${URL}/comment`, data);

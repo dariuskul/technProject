@@ -29,6 +29,7 @@ import {
   unsuspendUserRequest,
   suspendCommentRequest,
   fetchSuspendedCommentsRequest,
+  unsuspendCommentRequest,
 } from "../../api/admin";
 import { notification } from "../../utils/notification";
 import { getTweets } from "../../api/twitter";
@@ -160,7 +161,7 @@ export const removePost = (id) => async (dispatch) => {
 export const addComent = (content, id) => async (dispatch) => {
   try {
     const { data } = await newComment(content, id);
-    dispatch({ type: "UPDATE", payload: data });
+    dispatch({ type: "CREATE_COMMENT", payload: data?.comment });
     notification(
       "Comment added succesfully",
       "success",
@@ -168,7 +169,9 @@ export const addComent = (content, id) => async (dispatch) => {
       enqueueSnackbar,
       closeSnackbar
     );
-  } catch (error) {}
+  } catch (error) {
+    alert(error);
+  }
 };
 
 export const addReaction = (react) => async (dispatch) => {
@@ -304,14 +307,25 @@ export const suspendComment = (data, id) => async (dispatch) => {
       enqueueSnackbar,
       closeSnackbar
     );
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const unsuspendComment = (id) => async (dispatch) => {
+  try {
+    await unsuspendCommentRequest(id);
+    dispatch({ type: "UNSUSPEND_COMMENT", payload: { id } });
     notification(
-      "Comment suspended succesfully",
+      "Comment unsuspended",
       "success",
       dispatch,
       enqueueSnackbar,
       closeSnackbar
     );
-  } catch (error) {}
+  } catch (error) {
+    alert(error);
+  }
 };
 
 export const fetchSuspendedComments = () => async (dispatch) => {
