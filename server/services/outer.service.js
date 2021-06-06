@@ -2,7 +2,6 @@ require('dotenv').config()
 const Twit = require('twit')
 const { RequestError } = require('../_helpers/request-error')
 const fetch = require('node-fetch')
-const { response } = require('express')
 
 module.exports = {
     getTweetsByHashtag,
